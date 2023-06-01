@@ -1,9 +1,0 @@
-Studi Kasus Perancangan Sistem Aplikasi Rekomendasi Tempat Wisata dan Perencanaan Perjalanan
-
-Tim kami ingin membuat aplikasi yang dapat memberikan informasi serta merekomendasikan tempat wisata kepada para pengguna. Pada aplikasi ini ada dua
-fitur yang dapat digunakan oleh pengguna, antara lain:
-
-1. fitur pencarian tempat wisata dan tracking. Fitur ini akan membantu pengguna untuk menemukan tempat wisata sesuai dengan keinginannya. Fitur ini juga dilengkapi dengan filter lokasi (kota atau kabupaten), kategori wisata, dan rating. Selain itu, ada juga proses tracking yang merekam pencarian tempat wisata dan akan
-diproses oleh model ML untuk merekomendasikan tempat wisata. 
-
-2. fitur planning waktu dan lokasi wisata. Fitur ini dapat digunakan pengguna untuk menyimpan lokasi, tanggal dan waktu yang direncanakan pengguna serta deskripsi yang merupakan opsional.
