@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/v_divider2"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/secondary_text_color"/>
+
+    <TextView
+        android:id="@+id/infoTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Set your info here"
+        android:textColor="@color/main_text_color"
+        android:textSize="12sp"
+        app:drawableStartCompat="@drawable/ic_info"
+        app:drawableTint="@color/main_text_color"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="15dp"
+            android:layout_weight="1"
+            android:layout_marginVertical="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Button2"
+            android:backgroundTint="@color/danger_backgound"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="15dp"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:text="Button1"
+            android:backgroundTint="@color/custom_color_1"
+            />
+    </LinearLayout>
+</LinearLayout>
