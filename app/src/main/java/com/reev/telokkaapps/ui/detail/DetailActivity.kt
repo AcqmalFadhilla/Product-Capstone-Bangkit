@@ -1,4 +1,4 @@
-package com.reev.telokkaapps.ui.dashboard.detail
+package com.reev.telokkaapps.ui.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
