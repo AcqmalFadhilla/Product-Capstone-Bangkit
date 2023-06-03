@@ -13,7 +13,6 @@
         android:layout_marginHorizontal="15dp"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:textColor="#000000"
         android:text="Judul Sectionmu"
         android:paddingTop="8dp" />
 

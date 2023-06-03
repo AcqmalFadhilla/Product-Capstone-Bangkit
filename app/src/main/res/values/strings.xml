@@ -12,6 +12,7 @@
     <string name="planning_fragment">Planning Fragment</string>
     <string name="mini_map">Mini Map</string>
     <string name="select_your_city">Atau pilih Kota/Kabupaten</string>
+    <string name="location_not_found">Lokasi anda tidak ditemukan!</string>
 
     <string-array name="city_names">
         <item>Atau pilih Kota/Kabupaten!</item>
