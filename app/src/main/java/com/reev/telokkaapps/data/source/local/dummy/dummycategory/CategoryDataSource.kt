@@ -12,7 +12,7 @@ object CategoryDataSource {
         Category(R.drawable.img_6_religi, "Religi"),
         Category(R.drawable.img_7_hotel, "Hotel"),
         Category(R.drawable.img_8_danau, "Danau"),
-        Category(R.drawable.img_9_tempat_perbelanjaan, "Tempat Perbelanjaan"),
+        Category(R.drawable.img_9_tempat_perbelanjaan, "Belanja"),
         Category(R.drawable.img_10_alam, "Alam")
     )
 }
