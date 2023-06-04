@@ -12,7 +12,7 @@
         app:cardCornerRadius="15dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/placePhotoUrlImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="1.0"
@@ -34,6 +34,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/placeNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -43,6 +44,7 @@
                 android:textSize="32sp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/categoryTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -50,16 +52,32 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
-            <TextView
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="4,5 (12345)"
-                android:gravity="center_vertical"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:drawableTint="@color/warning_background"
-                app:drawableStartCompat="@drawable/ic_star"/>
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/ratingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:text="4,5"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:drawableTint="@color/warning_background"
+                    app:drawableStartCompat="@drawable/ic_star"/>
+                <TextView
+                    android:id="@+id/ratingCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(12345)"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -70,7 +88,7 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/languageBtn"
+            android:id="@+id/favoriteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -80,12 +98,10 @@
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/danger_backgound"
             app:cardCornerRadius="15dp">
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,13 +117,11 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/logoutBtn"
+            android:id="@+id/openMapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -118,12 +132,10 @@
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/custom_color_1"
             app:cardCornerRadius="15dp">
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -139,12 +151,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.cardview.widget.CardView>
-
-
     </LinearLayout>
 
     <View
@@ -163,79 +171,89 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tags"
-            android:textColor="@color/main_text_color"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tagsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sebuah tempat yang sangat cocok untuk menikmati sunrise"
-            android:textColor="@color/main_text_color"
             android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Alamat"
-            android:textColor="@color/main_text_color"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
         <TextView
+            android:id="@+id/addressTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Jl. Pantai Bira No. 123"
-            android:textColor="@color/main_text_color"
             android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Jam Operasi"
-            android:textColor="@color/main_text_color"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp" />
 
         <TextView
+            android:id="@+id/operationalHourTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Senin - Jumat: 09.00 - 18.00"
-            android:textColor="@color/main_text_color"
             android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Website"
-            android:textColor="@color/main_text_color"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp" />
 
         <TextView
+            android:id="@+id/websiteTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="www.example.com"
-            android:textColor="@color/main_text_color"
             android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Phone"
-            android:textColor="@color/main_text_color"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp" />
 
         <TextView
+            android:id="@+id/phoneTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="123-456-789"
-            android:textColor="@color/main_text_color"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deskripsi"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lorem"
             android:textSize="14sp" />
 
     </LinearLayout>

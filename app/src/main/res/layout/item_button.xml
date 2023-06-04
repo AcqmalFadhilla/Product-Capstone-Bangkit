@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <View
@@ -21,10 +20,8 @@
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="8dp"
         android:text="Set your info here"
-        android:textColor="@color/main_text_color"
         android:textSize="12sp"
         app:drawableStartCompat="@drawable/ic_info"
-        app:drawableTint="@color/main_text_color"
         android:visibility="visible"/>
 
     <LinearLayout
