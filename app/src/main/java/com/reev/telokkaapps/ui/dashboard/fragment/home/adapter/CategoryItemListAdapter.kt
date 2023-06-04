@@ -7,15 +7,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.Category
 import com.reev.telokkaapps.databinding.ItemCategoryBinding
 
-class CategoryListAdapter(private val categoryList: List<Category>) :
-    RecyclerView.Adapter<CategoryListAdapter.ViewHolder>() {
+class CategoryItemListAdapter(private val categoryList: List<Category>,  private val listener: OnCategoryItemClickListener) :
+    RecyclerView.Adapter<CategoryItemListAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemCategoryBinding.bind(itemView)
 
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val category = categoryList[position]
+                    listener.onCategoryClick(category)
+                }
+            }
+        }
         fun bind(item : Category) {
             binding.imageCategory.setImageResource(item.image)
             binding.textCategoryName.text = item.name
         }
+    }
+
+    interface OnCategoryItemClickListener {
+        fun onCategoryClick(category: Category)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

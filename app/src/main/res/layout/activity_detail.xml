@@ -10,7 +10,6 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <include
             android:id="@+id/layoutActivityDetail"
             layout="@layout/layout_activity_detail" />
@@ -26,7 +25,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/backBtn"
+        android:id="@+id/backButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="16dp"

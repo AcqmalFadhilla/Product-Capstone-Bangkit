@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -49,15 +50,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    //Maps
+    // Maps
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
-    //Glide
+    // Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     kapt 'com.github.bumptech.glide:compiler:4.15.1'
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.5"
-    implementation ('com.github.bumptech.glide:okhttp3-integration:4.7.1'){
-        exclude group: 'glide-parent'
-    }
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+
+    // Refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    // Parcelize
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.20'
+    implementation 'androidx.core:core-ktx:1.10.1'
 }
