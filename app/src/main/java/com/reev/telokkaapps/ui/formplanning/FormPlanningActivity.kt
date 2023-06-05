@@ -53,7 +53,15 @@ class FormPlanningActivity : AppCompatActivity() {
                     button2.isVisible = true
                     button2.text = "Batalkan"
                     button2.setOnClickListener {
-                        finish()
+                        val alertDialog = android.app.AlertDialog.Builder(this@FormPlanningActivity)
+                            .setTitle("Cancel Confirmation")
+                            .setMessage("Yakin untuk membatalkan pembuatan jadwal?\nData sebelumnya akan terhapus jika anda membatalkannya")
+                            .setPositiveButton("Ya, batalkan jadwal") { _, _ ->
+                                finish()
+                            }
+                            .setNegativeButton("lanjutkan penjadwalan", null)
+                            .create()
+                        alertDialog.show()
                     }
                 }
             }

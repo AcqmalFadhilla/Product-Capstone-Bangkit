@@ -3,6 +3,8 @@ package com.reev.telokkaapps.ui.detail
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -19,9 +21,30 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.backButton.setOnClickListener {
-            finish()
+        // untuk back button
+        binding.apply{
+            backButton.setOnClickListener {
+                finish()
+            }
+            val fadeDuration = 200 // Durasi animasi fade dalam milidetik
+            val fadeInAlpha = 1.0f // Nilai alpha saat fadeIn
+            val fadeOutAlpha = 0.0f // Nilai alpha saat fadeOut
+            scrollView.viewTreeObserver.addOnScrollChangedListener {
+                val scrollY = scrollView.scrollY
+                if (scrollY > 0 && backButton.visibility == View.VISIBLE) {
+                    val fadeOutAnimation = AlphaAnimation(fadeInAlpha, fadeOutAlpha)
+                    fadeOutAnimation.duration = fadeDuration.toLong()
+                    backButton.startAnimation(fadeOutAnimation)
+                    backButton.visibility = View.INVISIBLE
+                } else if (scrollY == 0 && backButton.visibility != View.VISIBLE) {
+                    val fadeInAnimation = AlphaAnimation(fadeOutAlpha, fadeInAlpha)
+                    fadeInAnimation.duration = fadeDuration.toLong()
+                    backButton.startAnimation(fadeInAnimation)
+                    backButton.visibility = View.VISIBLE
+                }
+            }
         }
+
 
         val place = intent.getParcelableExtra<Place>("PLACE_EXTRA")
         if (place != null) {
