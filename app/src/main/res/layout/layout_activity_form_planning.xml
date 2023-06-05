@@ -64,7 +64,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/openMapButton"
+        android:id="@+id/selectDateButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.1"
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
-                android:text="Set waktu untuk jadwal"
+                android:text="Set waktu"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -102,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Mei 30 2023"
+        android:text="Set waktu untuk jadwal"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginTop="8dp"/>
@@ -117,7 +117,7 @@
         android:hint="Tulis nama kegiatan anda">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/planningNameEditText"
+            android:id="@+id/planning_title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

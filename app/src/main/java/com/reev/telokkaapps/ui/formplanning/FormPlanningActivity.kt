@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.formplanning
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,15 +13,45 @@ import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityFormPlanningBinding
 import com.reev.telokkaapps.ui.dashboard.MainActivity
-import kotlinx.coroutines.MainScope
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FormPlanningActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormPlanningBinding
+    private var date : String = "date"
+    private var title : String = "title"
+    private var desc : String = "desc"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFormPlanningBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val myCalendar = Calendar.getInstance()
+        val datePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            myCalendar.set(Calendar.YEAR, year)
+            myCalendar.set(Calendar.MONTH, month)
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateLable(myCalendar)
+        }
+
+        binding.apply {
+            layoutActivityFormPlanning.apply {
+                selectDateButton.setOnClickListener {
+                    val datePickerDialog = DatePickerDialog(
+                        this@FormPlanningActivity,
+                        datePicker,
+                        myCalendar.get(Calendar.YEAR),
+                        myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)
+                    )
+                    // Batasi tanggal maksimum yang dapat dipilih
+                    datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+
+                    datePickerDialog.show()
+                }
+            }
+        }
 
         val place = intent.getParcelableExtra<Place>("PLACE_EXTRA")
         if (place != null) {
@@ -47,15 +78,15 @@ class FormPlanningActivity : AppCompatActivity() {
                     button1.setOnClickListener {
                         Toast.makeText(this@FormPlanningActivity, "Berhasil Membuat Jadwal", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@FormPlanningActivity, MainActivity::class.java)
-                        intent.putExtra("PLACE_EXTRA", place)
+//                        intent.putExtra("PLACE_EXTRA", place)
                         startActivity(intent)
                     }
                     button2.isVisible = true
                     button2.text = "Batalkan"
                     button2.setOnClickListener {
                         val alertDialog = android.app.AlertDialog.Builder(this@FormPlanningActivity)
-                            .setTitle("Cancel Confirmation")
-                            .setMessage("Yakin untuk membatalkan pembuatan jadwal?\nData sebelumnya akan terhapus jika anda membatalkannya")
+                            .setTitle("Yakin untuk membatalkan pembuatan jadwal?")
+                            .setMessage("Data sebelumnya akan terhapus jika anda membatalkannya")
                             .setPositiveButton("Ya, batalkan jadwal") { _, _ ->
                                 finish()
                             }
@@ -66,5 +97,11 @@ class FormPlanningActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun updateLable(myCalendar: Calendar) {
+        val myFormat = "dd-MM-yyyy"
+        val sdf = SimpleDateFormat(myFormat, Locale.UK)
+        binding.layoutActivityFormPlanning.planningDateTextView.setText(sdf.format(myCalendar.time))
     }
 }
