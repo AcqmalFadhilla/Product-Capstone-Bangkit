@@ -13,6 +13,5 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="drawableTint">@color/main_text_color</item>
-
     </style>
 </resources>
