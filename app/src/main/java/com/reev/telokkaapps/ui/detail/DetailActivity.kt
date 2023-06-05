@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.detail
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityDetailBinding
+import com.reev.telokkaapps.ui.formplanning.FormPlanningActivity
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -16,6 +18,10 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.backButton.setOnClickListener {
+            finish()
+        }
 
         val place = intent.getParcelableExtra<Place>("PLACE_EXTRA")
         if (place != null) {
@@ -45,6 +51,9 @@ class DetailActivity : AppCompatActivity() {
                     openMapButton.setOnClickListener {
                         Toast.makeText(this@DetailActivity, "Buka Map", Toast.LENGTH_SHORT).show()
                     }
+                    favoriteButton.setOnClickListener {
+                        Toast.makeText(this@DetailActivity, "Fitur ini belum dapat digunakan", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 itemButton.apply {
@@ -52,7 +61,9 @@ class DetailActivity : AppCompatActivity() {
                     button1.text = "Buat jadwal ke lokasi ini"
                     button1.setOnClickListener {
                         Toast.makeText(this@DetailActivity, "Buat jadwal", Toast.LENGTH_SHORT).show()
-
+                        val intent = Intent(this@DetailActivity, FormPlanningActivity::class.java)
+                        intent.putExtra("PLACE_EXTRA", place)
+                        startActivity(intent)
                     }
                 }
             }
