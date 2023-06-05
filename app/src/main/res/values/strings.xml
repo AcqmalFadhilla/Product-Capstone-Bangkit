@@ -3,9 +3,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_beranda">Beranda</string>
-    <string name="nav_explore">Explore</string>
-    <string name="nav_planning">Planning</string>
-    <string name="nav_collection">Collection</string>
+    <string name="nav_explore">Eksplorasi</string>
+    <string name="nav_planning">Penjadwalan</string>
+    <string name="nav_collection">Koleksi</string>
     <string name="collection_fragment">Collection Fragment</string>
     <string name="explore_fragment">Explore Fragment</string>
     <string name="home_fragment">Home Fragment</string>

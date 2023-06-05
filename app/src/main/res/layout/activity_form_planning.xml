@@ -6,4 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.formplanning.FormPlanningActivity">
 
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/layoutActivityFormPlanning"
+            layout="@layout/layout_activity_form_planning" />
+    </ScrollView>
+
+    <include
+        android:id="@+id/itemButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/item_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

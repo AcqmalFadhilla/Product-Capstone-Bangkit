@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?attr/colorOnPrimary">
 
     <View
         android:id="@+id/v_divider2"
@@ -48,6 +49,7 @@
             android:layout_weight="1"
             android:layout_margin="8dp"
             android:text="Button1"
+            android:textColor="@color/main_background"
             android:backgroundTint="@color/custom_color_1"
             />
     </LinearLayout>
