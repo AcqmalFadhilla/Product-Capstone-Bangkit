@@ -1,18 +1,32 @@
 package com.reev.telokkaapps
 
 import android.app.Application
+import android.view.View
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.reev.telokkaapps.data.local.database.LokasiRepository
 import com.reev.telokkaapps.data.local.database.WisataRepository
 import com.reev.telokkaapps.data.local.database.entity.KategoriWisata
 import com.reev.telokkaapps.data.local.database.entity.RencanaWisata
 import com.reev.telokkaapps.data.local.database.entity.RiwayatLokasi
 import com.reev.telokkaapps.data.local.database.entity.TempatWisata
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class OneViewModel(application: Application){
+class OneViewModel(application: Application) : ViewModel(){
     private val mWisataRepository: WisataRepository = WisataRepository(application)
     private val mLokasiRepository: LokasiRepository = LokasiRepository(application)
 
+
+    init {
+        insertAllData()
+    }
+
+    private fun insertAllData() = viewModelScope.launch(Dispatchers.IO) {
+        mWisataRepository.insertAllData()
+        mLokasiRepository.insertAllData()
+    }
 
 
     fun getAllKategoriWisata() : LiveData<List<KategoriWisata>> = mWisataRepository.getAllKategoriWisata()
@@ -45,6 +59,10 @@ class OneViewModel(application: Application){
         mWisataRepository.updateTempatWisata(tempatWisata)
     }
 
+    fun updateStatusFavoriteTempatWisata(id: Int, statusFavorite: Boolean){
+        mWisataRepository.updateStatusFavoriteTempatWisata(id, statusFavorite)
+    }
+
     fun deleteTempatWisata(tempatWisata: TempatWisata){
         mWisataRepository.deleteTempatWisata(tempatWisata)
     }
@@ -66,11 +84,15 @@ class OneViewModel(application: Application){
     fun deleteRencanaWisata(rencanaWisata: RencanaWisata){
         mWisataRepository.deleteRencanaWisata(rencanaWisata)
     }
+    fun deleteAllRencanaWisata(){
+        mWisataRepository.deleteAllRencanaWisata()
+    }
     // Riwayat Lokasi
 
     fun getAllRiwayatLokasi() : LiveData<List<RiwayatLokasi>> = mLokasiRepository.getAllRiwayatLokasi()
 
     fun getRiwayatLokasiWithId(idRiwayatLokasi: Int) = mLokasiRepository.getRiwayatLokasiWithId(idRiwayatLokasi)
+    fun getLokasiTerbaru() = mLokasiRepository.getLokasiTerbaru()
 
     fun insertRiwayatLokasi(riwayatLokasi: RiwayatLokasi){
         mLokasiRepository.insertRiwayatLokasi(riwayatLokasi)
@@ -83,5 +105,21 @@ class OneViewModel(application: Application){
     fun deleteRiwayatLokasi(riwayatLokasi: RiwayatLokasi){
         mLokasiRepository.deleteRiwayatLokasi(riwayatLokasi)
     }
+
+
+
+    // Relasi Many To One - Tempat dan Kategori Wisata
+    fun getAllTempatDanKategori() = mWisataRepository.getAllTempatDanKategori()
+    fun getTempatWithKategoriFavorite() = mWisataRepository.getTempatWithKategoriFavorite()
+    fun getTempatWisataFavorite() = mWisataRepository.getTempatWisataFavorite()
+    fun getDetailTempatWisataWithId(id : Int) = mWisataRepository.getDetailTempatWisataWithId(id)
+
+    // Relasi One To Many - Kategori dan Tempat Wisata
+    fun getAllKategoriDanTempatWisata() = mWisataRepository.getAllKategoriDanTempatWisata()
+
+    // Relasi Many To One - Rencana dan Tempat Kategori Wisata
+    fun getAllRencanaWithTempatDanKategoriWisata() = mWisataRepository.getAllRencanaWithTempatDanKategoriWisata()
+
+
 
 }

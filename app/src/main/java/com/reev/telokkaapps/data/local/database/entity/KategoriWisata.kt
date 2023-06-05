@@ -11,8 +11,8 @@ import kotlinx.parcelize.Parcelize
 data class KategoriWisata(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Int = 0,
+    @ColumnInfo(name = "idKategori")
+    var idKategori: Int = 0,
 
     @ColumnInfo(name = "nama")
     var nama : String = "",

@@ -11,19 +11,13 @@ import kotlinx.parcelize.Parcelize
 data class RiwayatLokasi(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id : Int = 0,
+    @ColumnInfo(name = "idRiwayat")
+    var idRiwayat : Int = 0,
 
     @ColumnInfo(name = "latitude")
     var latitude : Double = 0.0,
 
     @ColumnInfo(name = "longitude")
-    var longitude : Double = 0.0,
-
-    @ColumnInfo(name = "tanggal")
-    var tanggal : Long,
-
-    @ColumnInfo(name = "waktu")
-    var waktu : Long,
+    var longitude : Double = 0.0
 
     ) : Parcelable

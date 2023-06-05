@@ -1,0 +1,32 @@
+File ini berisi daftar query database yang digunakan di aplikasi Telokka
+
+Halaman Kategorisasi
+- Query getAllKategori() ++
+- Query update(kategori: Kategori)++
+
+Halaman Home
+- Query getLokasiTerkini() ++
+- Query getAllKategori() ++
+- Query getTempatWithKategoriFavorite(List<Kategori>) ++
+
+Halaman Explore (Tidak ada query)
+
+Halaman DetailTempatWisata
+- Query getDetailTempatWisataWithId(id: Int) ++
+- Query update(tempat : TempatWisata) ++
+
+Halaman Buat Rencana
+- Query insertRencanaWisata(rencana : RencanaWisata)++
+
+Halaman Edit Rencana
+- Query update(rencana: Rencana)++
+
+Halaman Daftar Rencana
+- Query getAllRencana() ++
+- Query deleteRencana(id : Int)  ++
+- Query deleteAllRencana() ++
+
+Halaman Favorite
+- Query getAllTempatWisataFavorite()++
+
+

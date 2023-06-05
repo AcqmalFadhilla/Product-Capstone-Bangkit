@@ -10,15 +10,18 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TempatWisata(
 
-    @PrimaryKey()
-    @ColumnInfo(name = "id")
-    var id : String = "",
+    @PrimaryKey
+    @ColumnInfo(name = "idTempat")
+    var idTempat : String = "",
 
     @ColumnInfo(name = "nama")
     var nama : String = "",
 
-    @ColumnInfo(name = "idKategori")
-    var idKategori : Int = 0,
+    @ColumnInfo(name = "kategoriId")
+    var kategoriId : Int = 0,
+
+    @ColumnInfo(name = "deskripsi")
+    var deskripsi : String,
 
     @ColumnInfo(name = "urlGambar")
     var urlGambar : String = "",
