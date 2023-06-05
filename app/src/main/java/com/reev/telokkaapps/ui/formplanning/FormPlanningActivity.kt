@@ -18,21 +18,28 @@ import java.util.*
 
 class FormPlanningActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormPlanningBinding
-    private var date : String = "date"
-    private var title : String = "title"
-    private var desc : String = "desc"
+    private lateinit var myCalendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFormPlanningBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val myCalendar = Calendar.getInstance()
+        myCalendar = Calendar.getInstance()
+
+        if (savedInstanceState != null) {
+            val selectedDate = savedInstanceState.getSerializable(KEY_SELECTED_DATE) as Date?
+            if (selectedDate != null) {
+                myCalendar.time = selectedDate
+                updateLabel(myCalendar)
+            }
+        }
+
         val datePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             myCalendar.set(Calendar.YEAR, year)
             myCalendar.set(Calendar.MONTH, month)
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateLable(myCalendar)
+            updateLabel(myCalendar)
         }
 
         binding.apply {
@@ -47,7 +54,6 @@ class FormPlanningActivity : AppCompatActivity() {
                     )
                     // Batasi tanggal maksimum yang dapat dipilih
                     datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
-
                     datePickerDialog.show()
                 }
             }
@@ -99,9 +105,18 @@ class FormPlanningActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateLable(myCalendar: Calendar) {
+    private fun updateLabel(myCalendar: Calendar) {
         val myFormat = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.UK)
         binding.layoutActivityFormPlanning.planningDateTextView.setText(sdf.format(myCalendar.time))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(KEY_SELECTED_DATE, myCalendar.time)
+    }
+
+    companion object {
+        private const val KEY_SELECTED_DATE = "selected_date"
     }
 }
