@@ -19,4 +19,7 @@
     <color name="secondary_warning_background">#FFF4E0</color>
     <color name="danger_backgound">#E15656</color>
     <color name="secondary_danger_backgorund">#FFF7F7</color>
+
+    <color name="custom_tint">#8A8A8A</color>
 </resources>
+
