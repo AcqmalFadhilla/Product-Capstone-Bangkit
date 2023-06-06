@@ -17,8 +17,11 @@ data class TourismCategory(
     @ColumnInfo(name = "categoryName")
     var categoryName : String = "",
 
+    @ColumnInfo(name = "")
+    var imageResource : Int,
+
     @ColumnInfo(name = "isFavorited")
-    var isFavotited : Boolean = false
+    var isFavorited : Boolean = false
 ) : Parcelable
 
 

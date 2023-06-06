@@ -12,7 +12,7 @@ data class TourismPlace(
 
     @PrimaryKey
     @ColumnInfo(name = "placeId")
-    var placeId : String = "",
+    var placeId : Int = "",
 
     @ColumnInfo(name = "placeName")
     var placeName : String = "",
