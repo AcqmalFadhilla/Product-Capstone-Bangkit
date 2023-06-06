@@ -82,10 +82,19 @@ class FormPlanningActivity : AppCompatActivity() {
                     infoTV.text = "klik tombol konfirmasi jika data sudah sesuai"
                     button1.text = "Konfirmasi"
                     button1.setOnClickListener {
-                        Toast.makeText(this@FormPlanningActivity, "Berhasil Membuat Jadwal", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@FormPlanningActivity, MainActivity::class.java)
-//                        intent.putExtra("PLACE_EXTRA", place)
-                        startActivity(intent)
+                        val alertDialog = android.app.AlertDialog.Builder(this@FormPlanningActivity)
+                            .setTitle("Pastikan data penjadwalan benar")
+                            .setMessage("Setelah klik konfirmasi, data akan tersimpan secara permanen")
+                            .setPositiveButton("Ya, Konfirmasi Penjadwalan") { _, _ ->
+                                Toast.makeText(this@FormPlanningActivity, "Berhasil Membuat Jadwal", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@FormPlanningActivity, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+                            .setNegativeButton("Edit kembali", null)
+                            .create()
+                        alertDialog.show()
                     }
                     button2.isVisible = true
                     button2.text = "Batalkan"
@@ -94,7 +103,6 @@ class FormPlanningActivity : AppCompatActivity() {
                             .setTitle("Yakin untuk membatalkan pembuatan jadwal?")
                             .setMessage("Data sebelumnya akan terhapus jika anda membatalkannya")
                             .setPositiveButton("Ya, batalkan jadwal") { _, _ ->
-                                //buat aksi disini
                                 finish()
                             }
                             .setNegativeButton("lanjutkan penjadwalan", null)
