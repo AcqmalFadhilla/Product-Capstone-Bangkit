@@ -1,22 +1,18 @@
 package com.reev.telokkaapps
 
 import android.app.Application
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reev.telokkaapps.data.local.database.LokasiRepository
-import com.reev.telokkaapps.data.local.database.WisataRepository
-import com.reev.telokkaapps.data.local.database.entity.KategoriWisata
-import com.reev.telokkaapps.data.local.database.entity.RencanaWisata
-import com.reev.telokkaapps.data.local.database.entity.RiwayatLokasi
-import com.reev.telokkaapps.data.local.database.entity.TempatWisata
+import com.reev.telokkaapps.data.local.database.LocationRepository
+import com.reev.telokkaapps.data.local.database.TourismRepository
+import com.reev.telokkaapps.data.local.database.entity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class OneViewModel(application: Application) : ViewModel(){
-    private val mWisataRepository: WisataRepository = WisataRepository(application)
-    private val mLokasiRepository: LokasiRepository = LokasiRepository(application)
+    private val mTourismRepository: TourismRepository = TourismRepository(application)
+    private val mLocationRepository: LocationRepository = LocationRepository(application)
 
 
     init {
@@ -24,101 +20,101 @@ class OneViewModel(application: Application) : ViewModel(){
     }
 
     private fun insertAllData() = viewModelScope.launch(Dispatchers.IO) {
-        mWisataRepository.insertAllData()
-        mLokasiRepository.insertAllData()
+        mTourismRepository.insertAllData()
+        mLocationRepository.insertAllData()
     }
 
 
-    fun getAllKategoriWisata() : LiveData<List<KategoriWisata>> = mWisataRepository.getAllKategoriWisata()
+    fun getAllTourismCategories() : LiveData<List<TourismCategory>> = mTourismRepository.getAllTourismCategories()
 
-    fun getKategoriWisataWithId(idKategoriWisata: Int) = mWisataRepository.getKategoriWisataWithId(idKategoriWisata)
+    fun getTourismCategoryWithId(categoryId: Int) = mTourismRepository.getTourismCategoryWithId(categoryId)
 
-    fun insertKategoriWisata(kategoriWisata: KategoriWisata){
-        mWisataRepository.insertKategoriWisata(kategoriWisata)
+    fun insertTourismCategory(tourismCategory: TourismCategory){
+        mTourismRepository.insertTourismCategory(tourismCategory)
     }
 
-    fun updateKategoriWisata(kategoriWisata: KategoriWisata){
-        mWisataRepository.updateKategoriWisata(kategoriWisata)
+    fun updateTourismCategory(tourismCategory: TourismCategory){
+        mTourismRepository.updateTourismCategory(tourismCategory)
     }
 
-    fun deleteKategoriWisata(kategoriWisata: KategoriWisata){
-        mWisataRepository.deleteKategoriWisata(kategoriWisata)
+    fun deleteTourismCategory(tourismCategory: TourismCategory){
+        mTourismRepository.deleteTourismCategory(tourismCategory)
     }
 
     // Tempat Wisata
 
-    fun getAllTempatWisata() : LiveData<List<TempatWisata>> = mWisataRepository.getAllTempatWisata()
+    fun getAllTourismPlace() : LiveData<List<TourismPlace>> = mTourismRepository.getAllTourismPlace()
 
-    fun getTempatWisataWithId(idTempatWisata: Int) = mWisataRepository.getTempatWisataWithId(idTempatWisata)
+    fun getTourismPlaceWithId(idTempatWisata: Int) = mTourismRepository.getTourismPlaceWithId(idTempatWisata)
 
-    fun insertTempatWisata(tempatWisata: TempatWisata){
-        mWisataRepository.insertTempatWisata(tempatWisata)
+    fun insertTourismPlace(tourismPlace: TourismPlace){
+        mTourismRepository.insertTourismPlace(tourismPlace)
     }
 
-    fun updateTempatWisata(tempatWisata: TempatWisata){
-        mWisataRepository.updateTempatWisata(tempatWisata)
+    fun updateTourismPlace(tourismPlace: TourismPlace){
+        mTourismRepository.updateTourismPlace(tourismPlace)
     }
 
-    fun updateStatusFavoriteTempatWisata(id: Int, statusFavorite: Boolean){
-        mWisataRepository.updateStatusFavoriteTempatWisata(id, statusFavorite)
+    fun updateFavoriteStatusOfTourismPlace(id: Int, statusFavorite: Boolean){
+        mTourismRepository.updateFavoriteStatusOfTourismPlace(id, statusFavorite)
     }
 
-    fun deleteTempatWisata(tempatWisata: TempatWisata){
-        mWisataRepository.deleteTempatWisata(tempatWisata)
+    fun deleteTourismPlace(tourismPlace: TourismPlace){
+        mTourismRepository.deleteTourismPlace(tourismPlace)
     }
 
     // Rencana Wisata
 
-    fun getAllRencanaWisata() : LiveData<List<RencanaWisata>> = mWisataRepository.getAllRencanaWisata()
+    fun getAllTourismPlan() : LiveData<List<TourismPlan>> = mTourismRepository.getAllTourismPlan()
 
-    fun getRencanaWisataWithId(idRencanaWisata: Int) = mWisataRepository.getRencanaWisataWithId(idRencanaWisata)
+    fun getTourismPlanWithId(id: Int) = mTourismRepository.getTourismPlanWithId(id)
 
-    fun insertRencanaWisata(rencanaWisata: RencanaWisata){
-        mWisataRepository.insertRencanaWisata(rencanaWisata)
+    fun insertTourismPlan(plan: TourismPlan){
+        mTourismRepository.insertTourismPlan(plan)
     }
 
-    fun updateRencanaWisata(rencanaWisata: RencanaWisata){
-        mWisataRepository.updateRencanaWisata(rencanaWisata)
+    fun updateTourismPlan(plan: TourismPlan){
+        mTourismRepository.updateTourismPlan(plan)
     }
 
-    fun deleteRencanaWisata(rencanaWisata: RencanaWisata){
-        mWisataRepository.deleteRencanaWisata(rencanaWisata)
+    fun deleteTourismPlan(rencanaWisata: TourismPlan){
+        mTourismRepository.deleteTourismPlan(rencanaWisata)
     }
-    fun deleteAllRencanaWisata(){
-        mWisataRepository.deleteAllRencanaWisata()
+    fun deleteAllTourismPlan(){
+        mTourismRepository.deleteAllTourismPlan()
     }
     // Riwayat Lokasi
 
-    fun getAllRiwayatLokasi() : LiveData<List<RiwayatLokasi>> = mLokasiRepository.getAllRiwayatLokasi()
+    fun getAllLocationHistory() : LiveData<List<LocationHistory>> = mLocationRepository.getAllLocationHistory()
 
-    fun getRiwayatLokasiWithId(idRiwayatLokasi: Int) = mLokasiRepository.getRiwayatLokasiWithId(idRiwayatLokasi)
-    fun getLokasiTerbaru() = mLokasiRepository.getLokasiTerbaru()
+    fun getLocationHistoryWithId(idRiwayatLokasi: Int) = mLocationRepository.getLocationHistoryWithId(idRiwayatLokasi)
+    fun getLatestLocation() = mLocationRepository.getLatestLocation()
 
-    fun insertRiwayatLokasi(riwayatLokasi: RiwayatLokasi){
-        mLokasiRepository.insertRiwayatLokasi(riwayatLokasi)
+    fun insertLocationHistory(locationHistory: LocationHistory){
+        mLocationRepository.insertLocationHistory(locationHistory)
     }
 
-    fun updateRiwayatLokasi(riwayatLokasi: RiwayatLokasi){
-        mLokasiRepository.updateRiwayatLokasi(riwayatLokasi)
+    fun updateLocationHistory(locationHistory: LocationHistory){
+        mLocationRepository.updateLocationHistory(locationHistory)
     }
 
-    fun deleteRiwayatLokasi(riwayatLokasi: RiwayatLokasi){
-        mLokasiRepository.deleteRiwayatLokasi(riwayatLokasi)
+    fun deleteLocationHistory(locationHistory: LocationHistory){
+        mLocationRepository.deleteLocationHistory(locationHistory)
     }
 
 
 
     // Relasi Many To One - Tempat dan Kategori Wisata
-    fun getAllTempatDanKategori() = mWisataRepository.getAllTempatDanKategori()
-    fun getTempatWithKategoriFavorite() = mWisataRepository.getTempatWithKategoriFavorite()
-    fun getTempatWisataFavorite() = mWisataRepository.getTempatWisataFavorite()
-    fun getDetailTempatWisataWithId(id : Int) = mWisataRepository.getDetailTempatWisataWithId(id)
+    fun getPlaceTourismAndCategory() = mTourismRepository.getPlaceTourismAndCategory()
+    fun getPlaceTourismAndFavoriteCategory() = mTourismRepository.getPlaceTourismAndFavoriteCategory()
+    fun getFavoritedTourismPlace() = mTourismRepository.getFavoritedTourismPlace()
+    fun getDetailTourismPlaceWithId(id : Int) = mTourismRepository.getDetailTourismPlaceWithId(id)
 
     // Relasi One To Many - Kategori dan Tempat Wisata
-    fun getAllKategoriDanTempatWisata() = mWisataRepository.getAllKategoriDanTempatWisata()
+    fun getCategoryAndTourismPlace() = mTourismRepository.getCategoryAndTourismPlace()
 
     // Relasi Many To One - Rencana dan Tempat Kategori Wisata
-    fun getAllRencanaWithTempatDanKategoriWisata() = mWisataRepository.getAllRencanaWithTempatDanKategoriWisata()
+    fun getAllPlanWithPlaceAndTourismCategory() = mTourismRepository.getAllPlanWithPlaceAndTourismCategory()
 
 
 

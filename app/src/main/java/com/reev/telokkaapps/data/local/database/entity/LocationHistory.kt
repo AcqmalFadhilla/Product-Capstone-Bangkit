@@ -6,13 +6,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "riwayat_lokasi")
+@Entity(tableName = "location_history")
 @Parcelize
-data class RiwayatLokasi(
+data class LocationHistory(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "idRiwayat")
-    var idRiwayat : Int = 0,
+    @ColumnInfo(name = "historyId")
+    var historyId : Int = 0,
 
     @ColumnInfo(name = "latitude")
     var latitude : Double = 0.0,
@@ -20,4 +20,4 @@ data class RiwayatLokasi(
     @ColumnInfo(name = "longitude")
     var longitude : Double = 0.0
 
-    ) : Parcelable
+) : Parcelable
