@@ -94,6 +94,7 @@ class FormPlanningActivity : AppCompatActivity() {
                             .setTitle("Yakin untuk membatalkan pembuatan jadwal?")
                             .setMessage("Data sebelumnya akan terhapus jika anda membatalkannya")
                             .setPositiveButton("Ya, batalkan jadwal") { _, _ ->
+                                //buat aksi disini
                                 finish()
                             }
                             .setNegativeButton("lanjutkan penjadwalan", null)

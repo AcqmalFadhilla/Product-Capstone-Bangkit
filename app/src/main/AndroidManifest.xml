@@ -19,6 +19,9 @@
         android:theme="@style/Theme.TelokkaApps"
         tools:targetApi="31">
         <activity
+            android:name=".ui.detailplanning.DetailPlanningActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.formplanning.FormPlanningActivity"
             android:exported="false" />
         <activity

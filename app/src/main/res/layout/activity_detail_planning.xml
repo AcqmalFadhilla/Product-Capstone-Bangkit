@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.DetailActivity">
+    tools:context=".ui.detailplanning.DetailPlanningActivity">
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include
-            android:id="@+id/layout_activity_detail"
-            layout="@layout/layout_activity_detail" />
+            android:id="@+id/layout_activity_detail_planning"
+            layout="@layout/layout_activity_detail_planning" />
     </ScrollView>
 
     <include
