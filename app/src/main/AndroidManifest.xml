@@ -19,13 +19,7 @@
         android:theme="@style/Theme.TelokkaApps"
         tools:targetApi="31">
         <activity
-            android:name=".ui.formplanning.FormPlanningActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.detail.DetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.dashboard.MainActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,6 +27,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.categoryzation.CategoryzationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detailplanning.DetailPlanningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.formplanning.FormPlanningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.dashboard.MainActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

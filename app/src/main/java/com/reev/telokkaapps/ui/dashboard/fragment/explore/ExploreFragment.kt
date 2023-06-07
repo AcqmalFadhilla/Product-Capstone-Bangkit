@@ -18,10 +18,6 @@ import com.reev.telokkaapps.ui.detail.DetailActivity
 class ExploreFragment : Fragment(),
     SearchItemListAdapter.OnPlaceItemClickListener{
     private lateinit var binding: FragmentExploreBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

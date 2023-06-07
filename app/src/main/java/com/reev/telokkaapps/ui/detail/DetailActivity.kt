@@ -1,6 +1,7 @@
 package com.reev.telokkaapps.ui.detail
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -74,6 +75,12 @@ class DetailActivity : AppCompatActivity() {
 
                     openMapButton.setOnClickListener {
                         Toast.makeText(this@DetailActivity, "Buka Map", Toast.LENGTH_SHORT).show()
+
+                        val mapUrl = place.placeMapUrl
+
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(mapUrl)
+                        startActivity(intent)
                     }
                     favoriteButton.setOnClickListener {
                         Toast.makeText(this@DetailActivity, "Fitur ini belum dapat digunakan", Toast.LENGTH_SHORT).show()
