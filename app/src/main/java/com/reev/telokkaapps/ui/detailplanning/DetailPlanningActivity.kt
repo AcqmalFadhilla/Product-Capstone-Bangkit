@@ -13,17 +13,21 @@ import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.model.TourismPlanItem
 import com.reev.telokkaapps.data.source.local.dummy.dummyplanning.PlanningPlace
 import com.reev.telokkaapps.databinding.ActivityDetailPlanningBinding
 import com.reev.telokkaapps.ui.formplanning.FormPlanningActivity
 
 class DetailPlanningActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPlanningBinding
+    private lateinit var viewModel : DetailPlanningViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailPlanningBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = DetailPlanningViewModel(application)
 
         // untuk back button
         binding.apply{
@@ -50,66 +54,82 @@ class DetailPlanningActivity : AppCompatActivity() {
         }
 
         // get data planning
-        val planningPlace = intent.getParcelableExtra<PlanningPlace>("PLANNING_EXTRA")
-        if (planningPlace != null) {
-            binding.apply {
-                layoutActivityDetailPlanning.apply{
-                    val color = ContextCompat.getColor(binding.root.context, R.color.blue_200)
-                    val drawable = CircularProgressDrawable(binding.root.context)
-                    drawable.strokeWidth = 10f
-                    drawable.centerRadius = 50f
-                    drawable.setColorSchemeColors(color)
-                    drawable.start()
-                    Glide.with(this@DetailPlanningActivity)
-                        .load(planningPlace.place.placePhotoUrl)
-                        .placeholder(drawable)
-                        .into(placePhotoUrlImageView)
+        val planningPlace = intent.getParcelableExtra<TourismPlanItem>("PLANNING_EXTRA")
+        planningPlace?.let {
+            viewModel.getDetailTourismPlanWithId(planningPlace.planId).observe(this) { plan ->
+                if (planningPlace != null) {
+                    binding.apply {
+                        layoutActivityDetailPlanning.apply {
+                            val color =
+                                ContextCompat.getColor(binding.root.context, R.color.blue_200)
+                            val drawable = CircularProgressDrawable(binding.root.context)
+                            drawable.strokeWidth = 10f
+                            drawable.centerRadius = 50f
+                            drawable.setColorSchemeColors(color)
+                            drawable.start()
+                            Glide.with(this@DetailPlanningActivity)
+                                .load(plan.placePhotoUrl)
+                                .placeholder(drawable)
+                                .into(placePhotoUrlImageView)
 
-                    nameTextView.text = planningPlace.place.placeName
-                    categoryTextView.text = planningPlace.place.placeCategory
+                            nameTextView.text = plan.placeName
+                            categoryTextView.text = plan.tourismCategory
+                            planningDescriptionTextView.text = plan.planDescription
+                            //untuk rating
+                            val rating = plan.placeRating.toString()
+                            val ratingCount = ""
+                            ratingTextView.text = "$rating ($ratingCount)"
+                            tagsTextView.text = plan.placeTags
+                            addressTextView.text = plan.placeAddress
+                            websiteTextView.text = plan.placeWebiste
+                            phoneTextView.text = plan.placePhone
+                            descriptionTextView.text = plan.placeDescription
 
-                    //untuk rating
-                    val rating = planningPlace.place.placeRating.toString()
-                    val ratingCount = planningPlace.place.placeRatingCount.toString()
-                    ratingTextView.text = "$rating ($ratingCount)"
+                            openMapButton.setOnClickListener {
+                                Toast.makeText(
+                                    this@DetailPlanningActivity,
+                                    "Buka Map",
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
-                    tagsTextView.text = planningPlace.place.placeTags
-                    addressTextView.text = planningPlace.place.placeAddress
-                    websiteTextView.text = planningPlace.place.placeWebsite
-                    phoneTextView.text = planningPlace.place.placePhone
-                    descriptionTextView.text = planningPlace.place.placeDescription
+                                val mapUrl = plan.placeMapUrl
 
-                    openMapButton.setOnClickListener {
-                        Toast.makeText(this@DetailPlanningActivity, "Buka Map", Toast.LENGTH_SHORT).show()
-
-                        val mapUrl = planningPlace.place.placeMapUrl
-
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse(mapUrl)
-                        startActivity(intent)
-                    }
-                }
-
-                itemButton.apply {
-                    infoTV.text = "klik tombol dibawah jika ingin mengakhiri wisata"
-                    button1.isGone = true
-                    button2.isVisible = true
-                    button2.text = "Akhiri Kegiatan Wisata"
-                    button2.setOnClickListener {
-                        val alertDialog = android.app.AlertDialog.Builder(this@DetailPlanningActivity)
-                            .setTitle("Yakin untuk mengakhiri wisata?")
-                            .setMessage("Data akan dihapuskan setelah anda mengakhiri wisata")
-                            .setPositiveButton("Ya, Akhiri wisata") { _, _ ->
-                                Toast.makeText(this@DetailPlanningActivity, "Akhiri Wisata berhasi", Toast.LENGTH_SHORT).show()
-                                //buat aksi disini
-                                finish()
+                                val intent = Intent(Intent.ACTION_VIEW)
+                                intent.data = Uri.parse(mapUrl)
+                                startActivity(intent)
                             }
-                            .setNegativeButton("batalkan", null)
-                            .create()
-                        alertDialog.show()
+                        }
+
+                        itemButton.apply {
+                            infoTV.text = "klik tombol dibawah jika ingin mengakhiri wisata"
+                            button1.isGone = true
+                            button2.isVisible = !plan.planStatus
+                            button2.text = "Akhiri Kegiatan Wisata"
+                            button2.setOnClickListener {
+                                val alertDialog =
+                                    android.app.AlertDialog.Builder(this@DetailPlanningActivity)
+                                        .setTitle("Yakin untuk mengakhiri wisata?")
+                                        .setMessage("Data akan dihapuskan setelah anda mengakhiri wisata")
+                                        .setPositiveButton("Ya, Akhiri wisata") { _, _ ->
+                                            Toast.makeText(
+                                                this@DetailPlanningActivity,
+                                                "Akhiri Wisata berhasi",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            viewModel.updateDoneStatusOfTourismPlan(plan.planId, true)
+                                            finish()
+                                        }
+                                        .setNegativeButton("batalkan", null)
+                                        .create()
+                                alertDialog.show()
+                            }
+                        }
                     }
                 }
             }
         }
+
+
+
     }
 }

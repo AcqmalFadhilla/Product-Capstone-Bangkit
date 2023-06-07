@@ -123,16 +123,16 @@ object InitialDataSource {
                 planId = 1,
                 planTitle = "Libur Semester Ganjil",
                 planDescription = "-",
-                planDate = 10L,
-                status = false,
+                planDate = "07-06-2023",
+                planStatus = false,
                 idPlace = 2
             ),
             TourismPlan(
                 planId = 2,
                 planTitle = "Refreshingg",
                 planDescription = "-",
-                planDate = 10L,
-                status = false,
+                planDate = "07-06-2023",
+                planStatus = false,
                 idPlace = 4
             )
         )

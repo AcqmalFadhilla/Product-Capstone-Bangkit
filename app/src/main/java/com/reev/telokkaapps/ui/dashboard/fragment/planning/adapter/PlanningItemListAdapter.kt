@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
-import com.reev.telokkaapps.data.source.local.dummy.dummyplanning.PlanningPlace
+import com.reev.telokkaapps.data.local.database.model.TourismPlanItem
 import com.reev.telokkaapps.databinding.ItemPlanningBinding
 
-class PlanningItemListAdapter(private val dataList: List<PlanningPlace>, private val listener: OnPlaceItemClickListener) :
+class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>, private val listener: OnPlaceItemClickListener) :
     RecyclerView.Adapter<PlanningItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -27,7 +27,7 @@ class PlanningItemListAdapter(private val dataList: List<PlanningPlace>, private
             }
         }
 
-        fun bind(item: PlanningPlace) {
+        fun bind(item: TourismPlanItem) {
             binding.apply{
 
                 val color = ContextCompat.getColor(binding.root.context , R.color.blue_200)
@@ -39,15 +39,15 @@ class PlanningItemListAdapter(private val dataList: List<PlanningPlace>, private
                 drawable.start()
 
                 Glide.with(itemView.context)
-                    .load(item.place.placePhotoUrl)
+                    .load(item.placeName)
                     .placeholder(drawable)
                     .into(placeImg)
 
-                planningTitleTextView.text = item.title
+                planningTitleTextView.text = item.planTitle
 
                 //set tujuan dan jadwal
-                val placeName = item.place.placeName
-                val date = item.date
+                val placeName = item.placeName
+                val date = item.planDate
                 placeNameTextView.text = "Tujuan : $placeName"
                 planningDateTextView.text = "Jadwal : $date"
             }
@@ -55,7 +55,7 @@ class PlanningItemListAdapter(private val dataList: List<PlanningPlace>, private
     }
 
     interface  OnPlaceItemClickListener {
-        fun onPlanningItemClick(planningPlace: PlanningPlace)
+        fun onPlanningItemClick(planningPlace: TourismPlanItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

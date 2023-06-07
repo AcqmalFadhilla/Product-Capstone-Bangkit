@@ -79,6 +79,9 @@ class OneViewModel(application: Application) : ViewModel(){
     fun updateTourismPlan(plan: TourismPlan){
         mTourismRepository.updateTourismPlan(plan)
     }
+    fun updateDoneStatusOfTourismPlan(id: Int, isDone: Boolean){
+        mTourismRepository.updateDoneStatusOfTourismPlan(id, isDone)
+    }
 
     fun deleteTourismPlan(rencanaWisata: TourismPlan){
         mTourismRepository.deleteTourismPlan(rencanaWisata)

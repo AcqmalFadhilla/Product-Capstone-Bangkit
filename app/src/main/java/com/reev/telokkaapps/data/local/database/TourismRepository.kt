@@ -119,6 +119,11 @@ class TourismRepository(application: Application) {
             mTourismPlanDao.update(plan)
         }
     }
+    fun updateDoneStatusOfTourismPlan(id: Int, isDone: Boolean){
+        executorService.execute{
+            mTourismPlanDao.updateDoneStatusOfTourismPlan(id, isDone)
+        }
+    }
 
     fun deleteTourismPlan(plan: TourismPlan){
         executorService.execute{
@@ -146,6 +151,7 @@ class TourismRepository(application: Application) {
 
     // Relasi Many To One - Rencana dan Tempat Kategori Wisata
     fun getAllPlanWithPlaceAndTourismCategory() = mTourismPlanDao.getAllPlanWithPlaceAndTourismCategory()
+    fun getDetailTourismPlanWithId(id : Int) = mTourismPlanDao.getDetailTourismPlanWithId(id)
 
 
 

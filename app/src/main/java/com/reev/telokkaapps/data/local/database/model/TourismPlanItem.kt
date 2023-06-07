@@ -1,8 +1,13 @@
 package com.reev.telokkaapps.data.local.database.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class TourismPlanItem(
-    val idRencana : Int,
-    val judul: String,
-    val namaTempat : String,
-    val kategori: String,
-)
+    val planId : Int,
+    val planTitle: String,
+    val placeName : String,
+    val tourismCategory: String,
+    val planDate : String
+) : Parcelable

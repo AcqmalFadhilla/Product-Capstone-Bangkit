@@ -20,10 +20,10 @@ data class TourismPlan(
     var planDescription : String,
 
     @ColumnInfo(name = "planDate")
-    var planDate : Long,
+    var planDate : String,
 
-    @ColumnInfo(name = "status")
-    var status : Boolean,
+    @ColumnInfo(name = "planStatus")
+    var planStatus : Boolean,
 
     @ColumnInfo(name = "idPlace")
     var idPlace : Int,

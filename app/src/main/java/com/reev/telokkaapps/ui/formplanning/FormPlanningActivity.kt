@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.entity.TourismPlan
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityFormPlanningBinding
@@ -19,12 +21,15 @@ import java.util.*
 
 class FormPlanningActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormPlanningBinding
+    private lateinit var viewModel : FormPlanningViewModel
     private lateinit var myCalendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFormPlanningBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = FormPlanningViewModel(application)
 
         myCalendar = Calendar.getInstance()
 
@@ -87,6 +92,14 @@ class FormPlanningActivity : AppCompatActivity() {
                             .setTitle("Pastikan data penjadwalan benar")
                             .setMessage("Setelah klik konfirmasi, data akan tersimpan secara permanen")
                             .setPositiveButton("Ya, Konfirmasi Penjadwalan") { _, _ ->
+                                var idPlan = 0
+                                var title : String = binding.layoutActivityFormPlanning.planningNameEditTextLayout.editText?.text.toString()
+                                var description : String = binding.layoutActivityFormPlanning.planningDescEditTextLayout.editText?.text.toString()
+                                var date : String = dateToString(myCalendar)
+                                var status : Boolean = false
+                                var idPlace : Int = place.tourismPlace.placeId
+
+                                viewModel.insertTourismPlan(TourismPlan(idPlan, title, description, date, status, idPlace))
                                 Toast.makeText(this@FormPlanningActivity, "Berhasil Membuat Jadwal", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this@FormPlanningActivity, MainActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -116,9 +129,13 @@ class FormPlanningActivity : AppCompatActivity() {
     }
 
     private fun updateLabel(myCalendar: Calendar) {
+        var date = dateToString(myCalendar)
+        binding.layoutActivityFormPlanning.planningDateTextView.setText(date)
+    }
+    private fun dateToString(myCalendar: Calendar) : String{
         val myFormat = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale.UK)
-        binding.layoutActivityFormPlanning.planningDateTextView.setText(sdf.format(myCalendar.time))
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        return sdf.format(myCalendar.time)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
