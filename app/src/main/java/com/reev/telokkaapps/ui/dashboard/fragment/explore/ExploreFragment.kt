@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
+import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentExploreBinding
@@ -44,7 +45,7 @@ class ExploreFragment : Fragment(),
         }
     }
 
-    override fun onPlaceItemClick(place: Place) {
+    override fun onPlaceItemClick(place: PlaceAndTourismCategory) {
         val intent = Intent(requireContext(), DetailActivity::class.java)
         intent.putExtra("PLACE_EXTRA", place)
         startActivity(intent)

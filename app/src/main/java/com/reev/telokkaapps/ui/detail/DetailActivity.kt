@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityDetailBinding
 import com.reev.telokkaapps.ui.formplanning.FormPlanningActivity
@@ -46,7 +47,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
 
-        val place = intent.getParcelableExtra<Place>("PLACE_EXTRA")
+        val place = intent.getParcelableExtra<PlaceAndTourismCategory>("PLACE_EXTRA")
         if (place != null) {
             binding.apply {
                 layoutActivityDetail.apply{
@@ -57,19 +58,19 @@ class DetailActivity : AppCompatActivity() {
                     drawable.setColorSchemeColors(color)
                     drawable.start()
                     Glide.with(this@DetailActivity)
-                        .load(place.placePhotoUrl)
+                        .load(place.tourismPlace.placePhotoUrl)
                         .placeholder(drawable)
                         .into(placePhotoUrlImageView)
 
-                    placeNameTextView.text = place.placeName
-                    categoryTextView.text = place.placeCategory
-                    ratingTextView.text = place.placeRating.toString()
-                    ratingCountTextView.text = place.placeRatingCount.toString()
-                    tagsTextView.text = place.placeTags
-                    addressTextView.text = place.placeAddress
-                    websiteTextView.text = place.placeWebsite
-                    phoneTextView.text = place.placePhone
-                    descriptionTextView.text = place.placeDescription
+                    placeNameTextView.text = place.tourismPlace.placeName
+                    categoryTextView.text = place.category?.categoryName
+                    ratingTextView.text = place.tourismPlace.placeRating.toString()
+                    ratingCountTextView.text = ""
+                    tagsTextView.text = place.tourismPlace.placeTags
+                    addressTextView.text = place.tourismPlace.placeAddress
+                    websiteTextView.text = place.tourismPlace.placeWebsite
+                    phoneTextView.text = place.tourismPlace.placePhone
+                    descriptionTextView.text = place.tourismPlace.placeDescription
 
                     openMapButton.setOnClickListener {
                         Toast.makeText(this@DetailActivity, "Buka Map", Toast.LENGTH_SHORT).show()

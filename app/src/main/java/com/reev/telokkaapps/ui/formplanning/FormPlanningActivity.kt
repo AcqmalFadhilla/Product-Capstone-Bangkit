@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityFormPlanningBinding
 import com.reev.telokkaapps.ui.dashboard.MainActivity
@@ -59,7 +60,7 @@ class FormPlanningActivity : AppCompatActivity() {
             }
         }
 
-        val place = intent.getParcelableExtra<Place>("PLACE_EXTRA")
+        val place = intent.getParcelableExtra<PlaceAndTourismCategory>("PLACE_EXTRA")
         if (place != null) {
             binding.apply {
                 layoutActivityFormPlanning.apply {
@@ -70,12 +71,12 @@ class FormPlanningActivity : AppCompatActivity() {
                     drawable.setColorSchemeColors(color)
                     drawable.start()
                     Glide.with(this@FormPlanningActivity)
-                        .load(place.placePhotoUrl)
+                        .load(place.tourismPlace.placePhotoUrl)
                         .placeholder(drawable)
                         .into(placePhotoUrlImageView)
 
-                    placeNameTextView.text = place.placeName
-                    placeCategoryTextView.text = place.placeCategory
+                    placeNameTextView.text = place.tourismPlace.placeName
+                    placeCategoryTextView.text = place.category?.categoryName
                 }
 
                 itemButton.apply {

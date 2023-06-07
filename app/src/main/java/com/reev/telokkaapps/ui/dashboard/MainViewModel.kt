@@ -1,4 +1,4 @@
-package com.reev.telokkaapps.ui.dashboard.fragment.home
+package com.reev.telokkaapps.ui.dashboard
 
 import android.app.Application
 import androidx.lifecycle.LiveData
@@ -7,13 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.reev.telokkaapps.data.local.database.LocationRepository
 import com.reev.telokkaapps.data.local.database.TourismRepository
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
-import com.reev.telokkaapps.data.repository.PlaceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-class HomeViewModel(app : Application) : ViewModel() {
-
+class MainViewModel(app : Application) : ViewModel() {
     private val mTourismRepository: TourismRepository = TourismRepository(app)
     private val mLocationRepository: LocationRepository = LocationRepository(app)
 
@@ -27,5 +24,6 @@ class HomeViewModel(app : Application) : ViewModel() {
     }
     fun getAllTourismCategories() : LiveData<List<TourismCategory>> = mTourismRepository.getAllTourismCategories()
     fun getPlaceTourismAndCategory() = mTourismRepository.getPlaceTourismAndCategory()
+
 
 }

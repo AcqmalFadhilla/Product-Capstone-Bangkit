@@ -10,10 +10,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.entity.TourismPlace
+import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
 
-class PlaceItemListAdapter(private val dataList: List<Place>, private val listener: OnPlaceItemClickListener) :
+class PlaceItemListAdapter(private val dataList: List<PlaceAndTourismCategory>, private val listener: OnPlaceItemClickListener) :
     RecyclerView.Adapter<PlaceItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -29,7 +31,7 @@ class PlaceItemListAdapter(private val dataList: List<Place>, private val listen
             }
         }
 
-        fun bind(item: Place) {
+        fun bind(item: PlaceAndTourismCategory) {
             binding.apply{
 
                 val color = ContextCompat.getColor(binding.root.context ,R.color.blue_200)
@@ -41,19 +43,19 @@ class PlaceItemListAdapter(private val dataList: List<Place>, private val listen
                 drawable.start()
 
                 Glide.with(itemView.context)
-                    .load(item.placePhotoUrl)
+                    .load(item.tourismPlace.placePhotoUrl)
                     .placeholder(drawable)
                     .into(placeImg)
 
-                placeName.text = item.placeName
-                placeCategory.text = item.placeCategory
-                placeRating.text = item.placeRating.toString()
+                placeName.text = item.tourismPlace.placeName
+                placeCategory.text = item.category?.categoryName
+                placeRating.text = item.tourismPlace.placeRating.toString()
             }
         }
     }
 
     interface  OnPlaceItemClickListener {
-        fun onPlaceItemClick(place: Place)
+        fun onPlaceItemClick(place: PlaceAndTourismCategory)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

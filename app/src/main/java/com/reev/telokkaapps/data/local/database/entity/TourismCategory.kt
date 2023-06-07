@@ -17,7 +17,7 @@ data class TourismCategory(
     @ColumnInfo(name = "categoryName")
     var categoryName : String = "",
 
-    @ColumnInfo(name = "")
+    @ColumnInfo(name = "imageResource")
     var imageResource : Int,
 
     @ColumnInfo(name = "isFavorited")

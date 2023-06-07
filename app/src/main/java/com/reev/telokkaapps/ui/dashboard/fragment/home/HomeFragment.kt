@@ -1,10 +1,12 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.home
 
 import android.Manifest
+import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
-import com.reev.telokkaapps.data.source.local.dummy.dummycategory.Category
+import com.reev.telokkaapps.data.local.database.entity.TourismCategory
+import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
+import com.reev.telokkaapps.ui.dashboard.MainViewModel
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
 import com.reev.telokkaapps.ui.detail.DetailActivity
@@ -31,6 +35,7 @@ class HomeFragment : Fragment(),
     CategoryItemListAdapter.OnCategoryItemClickListener{
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var viewModel: MainViewModel
 
 
     // variable untuk getCurLocation
@@ -48,6 +53,7 @@ class HomeFragment : Fragment(),
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        viewModel = MainViewModel(context?.applicationContext as Application)
         return binding.root
     }
 
@@ -90,7 +96,6 @@ class HomeFragment : Fragment(),
         }
 
 
-
         // untuk list kategori
         binding.layoutHomeFragment.listCategory.sectionTitle.text = getString(R.string.home_category_section)
         val dummyCategory = CategoryDataSource.dummyCategories
@@ -101,6 +106,18 @@ class HomeFragment : Fragment(),
             adapter = categoryItemListAdapter
         }
 
+        viewModel.getAllTourismCategories().observe(viewLifecycleOwner, {
+            it.forEach{category->
+                Log.i("kategoriData", "$category")
+            }
+
+            val categoryItemListAdapter = CategoryItemListAdapter(it, this)
+
+            binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = categoryItemListAdapter
+            }
+        })
         // untuk item list
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
 
@@ -112,14 +129,23 @@ class HomeFragment : Fragment(),
             adapter = placeListAdapter
         }
 
+        viewModel.getPlaceTourismAndCategory().observe( viewLifecycleOwner, {
+            val placeListAdapter = PlaceItemListAdapter(it, this)
+
+            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = placeListAdapter
+            }
+        })
+
     }
 
     // Listener untuk list kategori
-    override fun onCategoryClick(category: Category) {
+    override fun onCategoryClick(category: TourismCategory) {
     }
 
     // Listener untuk list wisata
-    override fun onPlaceItemClick(place: Place) {
+    override fun onPlaceItemClick(place: PlaceAndTourismCategory) {
         val intent = Intent(requireContext(), DetailActivity::class.java)
         intent.putExtra("PLACE_EXTRA", place)
         startActivity(intent)
