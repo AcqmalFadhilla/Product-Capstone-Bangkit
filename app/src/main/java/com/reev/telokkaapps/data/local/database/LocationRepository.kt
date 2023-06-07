@@ -19,7 +19,7 @@ class LocationRepository(application: Application) {
     }
 
     fun insertAllData() {
-        mLocationHistoryDao.insertAll(InitialDataSource.getLocationHistory())
+//        mLocationHistoryDao.insertAll(InitialDataSource.getLocationHistory())
     }
 
     fun getAllLocationHistory() : LiveData<List<LocationHistory>> = mLocationHistoryDao.getAllLocationHistory()

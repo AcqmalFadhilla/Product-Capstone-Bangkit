@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.entity.LocationHistory
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
@@ -38,13 +39,13 @@ class HomeFragment : Fragment(),
     private lateinit var viewModel: MainViewModel
 
 
-    // variable untuk getCurLocation
-    private var latitude: Double? = null
-    private var longitude: Double? = null
+    // variable untuk getLastLocation
     private lateinit var fusedLocation: FusedLocationProviderClient
+    private var latestLatitude: Double = 0.0
+    private var latestLongitude: Double = 0.0
 
     companion object {
-        private const val CUR_LOC_PERMISSION_REQUEST_CODE = 1001 // untuk getCurLocation
+        private const val CUR_LOC_PERMISSION_REQUEST_CODE = 1001 // untuk getLastLocation
     }
 
     override fun onCreateView(
@@ -61,7 +62,19 @@ class HomeFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         // Untuk track posisi user saat ini
-        fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+        viewModel.getLatestLocation().observe(viewLifecycleOwner, {
+            if (it != null) {
+                latestLatitude = it.latitude
+                latestLongitude = it.longitude
+
+                val locationText = StringBuilder().apply {
+                    append(latestLatitude)
+                    append(", ")
+                    append(latestLongitude)
+                }.toString()
+                binding.layoutHomeFragment.minimapLayout.curLocationTV.text = locationText
+            }
+        })
         binding.layoutHomeFragment.minimapLayout.btnUpdateLocation.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     requireActivity(),
@@ -74,16 +87,26 @@ class HomeFragment : Fragment(),
                     CUR_LOC_PERMISSION_REQUEST_CODE
                 )
             } else {
+                fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
                 fusedLocation.lastLocation.addOnSuccessListener { location: Location? ->
-                    if (location != null) {
-                        latitude = location.latitude
-                        longitude = location.longitude
-                        val locationText = StringBuilder().apply {
-                            append(latitude)
-                            append(", ")
-                            append(longitude)
-                        }.toString()
-                        binding.layoutHomeFragment.minimapLayout.curLocationTV.text = locationText
+                    if (location != null && location.latitude != null && location.longitude != null) {
+                        if (latestLatitude == location.latitude && latestLongitude == location.longitude){
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.location_is_up_to_date),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else{
+                            viewModel.insertNewLocationHistory(
+                                LocationHistory(
+                                    0,
+                                    latitude = location.latitude,
+                                    longitude = location.longitude,
+                                )
+                            )
+
+
+                        }
                     } else {
                         Toast.makeText(
                             requireContext(),
@@ -107,10 +130,6 @@ class HomeFragment : Fragment(),
         }
 
         viewModel.getAllTourismCategories().observe(viewLifecycleOwner, {
-            it.forEach{category->
-                Log.i("kategoriData", "$category")
-            }
-
             val categoryItemListAdapter = CategoryItemListAdapter(it, this)
 
             binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {

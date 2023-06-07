@@ -13,6 +13,9 @@
     <string name="mini_map">Mini Map</string>
     <string name="select_your_city">Atau pilih Kota/Kabupaten</string>
     <string name="location_not_found">Lokasi anda tidak ditemukan!</string>
+    <string name="location_is_up_to_date">Lokasi anda sudah diperbarui</string>
+    <string name="location_is_updated">Lokasi diperbarui</string>
+
 
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum, lectus ut vestibulum tincidunt, enim nisi volutpat felis, vitae congue arcu nunc et enim. In non ipsum in sem fringilla condimentum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin quis dolor in lorem tristique aliquam. Ut ac ultrices urna. Quisque eget varius lacus. Pellentesque ullamcorper magna eu nisl blandit, non posuere massa placerat. Morbi elementum malesuada sapien, vel iaculis dolor dignissim at. In at purus feugiat, dignissim diam a, lacinia velit. Vivamus lobortis nunc vel arcu suscipit, vel sollicitudin felis feugiat. Nunc elementum felis sit amet dolor gravida scelerisque. Proin finibus tincidunt lectus nec dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam ac efficitur eros, eu interdum tellus. Fusce nec nunc ut ipsum cursus feugiat.</string>
     <string name="home_category_section">Ingin menelusuri wisata lainnya?</string>
