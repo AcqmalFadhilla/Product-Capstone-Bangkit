@@ -76,7 +76,7 @@ class DetailActivity : AppCompatActivity() {
                     openMapButton.setOnClickListener {
                         Toast.makeText(this@DetailActivity, "Buka Map", Toast.LENGTH_SHORT).show()
 
-                        val mapUrl = place.placeMapUrl
+                        val mapUrl = place.tourismPlace.placeMapUrl
 
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.data = Uri.parse(mapUrl)

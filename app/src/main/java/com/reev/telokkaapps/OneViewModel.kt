@@ -36,6 +36,9 @@ class OneViewModel(application: Application) : ViewModel(){
     fun updateTourismCategory(tourismCategory: TourismCategory){
         mTourismRepository.updateTourismCategory(tourismCategory)
     }
+    fun updateFavoriteStatusOfTourismCategory(id: Int, isFavorited: Boolean){
+        mTourismRepository.updateFavoriteStatusOfTourismCategory(id, isFavorited)
+    }
 
     fun deleteTourismCategory(tourismCategory: TourismCategory){
         mTourismRepository.deleteTourismCategory(tourismCategory)

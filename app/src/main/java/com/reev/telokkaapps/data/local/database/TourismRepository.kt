@@ -53,6 +53,12 @@ class TourismRepository(application: Application) {
             mTourismCategoryDao.update(tourismCategory)
         }
     }
+    fun updateFavoriteStatusOfTourismCategory(id: Int, isFavorited : Boolean){
+        executorService.execute{
+            mTourismCategoryDao.updateFavoriteStatusOfTourismCategory(id, isFavorited)
+        }
+    }
+
 
     fun deleteTourismCategory(tourismCategory: TourismCategory){
         executorService.execute{

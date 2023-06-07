@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.Category
 import com.reev.telokkaapps.databinding.ItemCategoryzationBinding
 
-class CategoryzationItemListAdapter(private val categoryList: List<Category>, private val listener: OnCategoryItemClickListener) :
+class CategoryzationItemListAdapter(private val categoryList: List<TourismCategory>, private val listener: OnCategoryItemClickListener) :
     RecyclerView.Adapter<CategoryzationItemListAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemCategoryzationBinding.bind(itemView)
@@ -21,14 +22,14 @@ class CategoryzationItemListAdapter(private val categoryList: List<Category>, pr
                 }
             }
         }
-        fun bind(item : Category) {
-            binding.imageCategory.setImageResource(item.image)
-            binding.textCategoryName.text = item.name
+        fun bind(item : TourismCategory) {
+            binding.imageCategory.setImageResource(item.imageResource)
+            binding.textCategoryName.text = item.categoryName
         }
     }
 
     interface OnCategoryItemClickListener {
-        fun onCategoryClick(category: Category)
+        fun onCategoryClick(category: TourismCategory)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

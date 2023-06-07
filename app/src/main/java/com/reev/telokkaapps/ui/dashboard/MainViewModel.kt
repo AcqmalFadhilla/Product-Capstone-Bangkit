@@ -12,17 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(app : Application) : ViewModel() {
+
     private val mTourismRepository: TourismRepository = TourismRepository(app)
     private val mLocationRepository: LocationRepository = LocationRepository(app)
 
-    init {
-        insertAllData()
-    }
 
-    private fun insertAllData() = viewModelScope.launch(Dispatchers.IO) {
-        mTourismRepository.insertAllData()
-        mLocationRepository.insertAllData()
-    }
     fun getAllTourismCategories() : LiveData<List<TourismCategory>> = mTourismRepository.getAllTourismCategories()
     fun getPlaceTourismAndCategory() = mTourismRepository.getPlaceTourismAndCategory()
     fun getLatestLocation() = mLocationRepository.getLatestLocation()

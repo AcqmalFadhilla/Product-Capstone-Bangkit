@@ -37,13 +37,13 @@ class PlanningFragment : Fragment(),
         // untuk item list
         binding.listPlanningLayout.sectionTitle.text = "Jadwal Kegiatan Wisata Anda"
 
-        val dummyPlanning = DummyPlanning.dummyPlanning
-        val planningListAdapter = PlanningItemListAdapter(dummyPlanning, this)
+//        val dummyPlanning = DummyPlanning.dummyPlanning
+//        val planningListAdapter = PlanningItemListAdapter(dummyPlanning, this)
 
-        binding.listPlanningLayout.itemRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            adapter = planningListAdapter
-        }
+//        binding.listPlanningLayout.itemRecyclerView.apply {
+//            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+//            adapter = planningListAdapter
+//        }
     }
 
     override fun onPlanningItemClick(planningPlace: PlanningPlace) {

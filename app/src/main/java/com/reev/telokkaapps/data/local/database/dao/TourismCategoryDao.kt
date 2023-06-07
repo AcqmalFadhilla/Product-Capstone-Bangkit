@@ -24,6 +24,9 @@ interface TourismCategoryDao {
     @Update
     fun update(category: TourismCategory)
 
+    @Query("UPDATE tourism_category SET isFavorited = :isFavorited WHERE categoryId = :id")
+    fun updateFavoriteStatusOfTourismCategory(id: Int, isFavorited : Boolean)
+
     @Delete
     fun delete(category: TourismCategory)
 
