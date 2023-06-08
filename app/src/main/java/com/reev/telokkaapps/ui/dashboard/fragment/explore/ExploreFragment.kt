@@ -14,6 +14,7 @@ import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentExploreBinding
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.adapter.SearchItemListAdapter
+import com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering.FilteringFragment
 import com.reev.telokkaapps.ui.detail.DetailActivity
 
 
@@ -33,9 +34,12 @@ class ExploreFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         // untuk filter
+        val filteringFragment = FilteringFragment()
+
         binding.itemSearchBanner.filterButton.setOnClickListener {
             // buat aksi untuk memunculkan item filter
             Toast.makeText(requireContext(), "Buka Filter", Toast.LENGTH_SHORT).show()
+            filteringFragment.show(childFragmentManager, "FilteringDialog")
         }
 
         // untuk item list
