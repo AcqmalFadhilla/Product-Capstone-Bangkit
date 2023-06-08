@@ -20,6 +20,7 @@
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum, lectus ut vestibulum tincidunt, enim nisi volutpat felis, vitae congue arcu nunc et enim. In non ipsum in sem fringilla condimentum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin quis dolor in lorem tristique aliquam. Ut ac ultrices urna. Quisque eget varius lacus. Pellentesque ullamcorper magna eu nisl blandit, non posuere massa placerat. Morbi elementum malesuada sapien, vel iaculis dolor dignissim at. In at purus feugiat, dignissim diam a, lacinia velit. Vivamus lobortis nunc vel arcu suscipit, vel sollicitudin felis feugiat. Nunc elementum felis sit amet dolor gravida scelerisque. Proin finibus tincidunt lectus nec dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam ac efficitur eros, eu interdum tellus. Fusce nec nunc ut ipsum cursus feugiat.</string>
     <string name="home_category_section">Ingin menelusuri wisata lainnya?</string>
     <string name="home_place_list_section">Tempat rekomendasi untuk anda</string>
+    <string name="please_update_your_location">Silahkan update lokasi anda</string>
 
 
 </resources>

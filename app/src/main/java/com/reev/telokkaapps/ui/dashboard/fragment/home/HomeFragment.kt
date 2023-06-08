@@ -82,6 +82,20 @@ class HomeFragment : Fragment(),
                 binding.layoutHomeFragment.minimapLayout.curLocationTV.text = locationText
             }
         })
+
+        // update pin minimap
+        fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocation.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null && location.latitude != null && location.longitude != null) {
+                if (latestLatitude == location.latitude && latestLongitude == location.longitude){
+                    //buat update location di minimap
+                    minimapFragment.updateMapLocation(location.latitude, location.longitude)
+                }
+            }
+            Toast.makeText(requireContext(), getString(R.string.please_update_your_location), Toast.LENGTH_SHORT).show()
+        }
+
+
         binding.layoutHomeFragment.minimapLayout.btnUpdateLocation.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     requireActivity(),
@@ -103,6 +117,9 @@ class HomeFragment : Fragment(),
                                 getString(R.string.location_is_up_to_date),
                                 Toast.LENGTH_SHORT
                             ).show()
+                            //buat update location di minimap
+                            minimapFragment.updateMapLocation(location.latitude, location.longitude)
+
                         }else{
                             viewModel.insertNewLocationHistory(
                                 LocationHistory(
@@ -111,6 +128,7 @@ class HomeFragment : Fragment(),
                                     longitude = location.longitude,
                                 )
                             )
+                            //buat update location di minimap
                             minimapFragment.updateMapLocation(location.latitude, location.longitude)
                         }
                     } else {
