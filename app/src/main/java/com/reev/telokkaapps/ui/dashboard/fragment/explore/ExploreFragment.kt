@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
@@ -29,6 +31,13 @@ class ExploreFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // untuk filter
+        binding.itemSearchBanner.filterButton.setOnClickListener {
+            // buat aksi untuk memunculkan item filter
+            Toast.makeText(requireContext(), "Buka Filter", Toast.LENGTH_SHORT).show()
+        }
+
         // untuk item list
         binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
 
@@ -39,6 +48,7 @@ class ExploreFragment : Fragment(),
             layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
             adapter = placeListAdapter
         }
+
     }
 
     override fun onPlaceItemClick(place: PlaceAndTourismCategory) {
