@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +16,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.GoogleMap
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
 import com.reev.telokkaapps.ui.dashboard.MainViewModel
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
+import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
 import com.reev.telokkaapps.ui.detail.DetailActivity
 
 
@@ -38,6 +38,7 @@ class HomeFragment : Fragment(),
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: MainViewModel
 
+    private lateinit var minimapFragment: MinimapFragment
 
     // variable untuk getLastLocation
     private lateinit var fusedLocation: FusedLocationProviderClient
@@ -60,6 +61,12 @@ class HomeFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // set minimap
+        minimapFragment = MinimapFragment()
+        childFragmentManager.beginTransaction()
+            .add(R.id.fragmentContainer, minimapFragment)
+            .commit()
 
         // Untuk track posisi user saat ini
         viewModel.getLatestLocation().observe(viewLifecycleOwner, {
@@ -104,8 +111,7 @@ class HomeFragment : Fragment(),
                                     longitude = location.longitude,
                                 )
                             )
-
-
+                            minimapFragment.updateMapLocation(location.latitude, location.longitude)
                         }
                     } else {
                         Toast.makeText(

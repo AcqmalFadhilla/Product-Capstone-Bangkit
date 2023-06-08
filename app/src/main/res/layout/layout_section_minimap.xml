@@ -64,12 +64,10 @@
                     android:background="@drawable/shape_empty"
                     android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="minimap belum dapat di gunakan"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                    <FrameLayout
+                        android:id="@+id/fragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
 
                 </RelativeLayout>
 
