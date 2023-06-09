@@ -20,8 +20,7 @@ import com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering.FilteringFra
 import com.reev.telokkaapps.ui.detail.DetailActivity
 
 
-class ExploreFragment : Fragment(),
-    SearchItemListAdapter.OnPlaceItemClickListener{
+class ExploreFragment : Fragment(){
     private lateinit var binding: FragmentExploreBinding
 
     override fun onResume() {
@@ -57,19 +56,13 @@ class ExploreFragment : Fragment(),
         binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
 
         val dummyPlace = DummyPlacesData.dummyPlaces
-        val placeListAdapter = SearchItemListAdapter(dummyPlace, this)
+        val placeListAdapter = SearchItemListAdapter(dummyPlace)
 
         binding.listSearchPlaceLayout.itemRecyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
             adapter = placeListAdapter
         }
 
-    }
-
-    override fun onPlaceItemClick(place: PlaceAndTourismCategory) {
-        val intent = Intent(requireContext(), DetailActivity::class.java)
-        intent.putExtra("PLACE_EXTRA", place)
-        startActivity(intent)
     }
 
 }
