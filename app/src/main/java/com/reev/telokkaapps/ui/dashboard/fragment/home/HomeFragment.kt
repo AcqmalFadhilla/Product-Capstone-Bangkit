@@ -154,16 +154,9 @@ class HomeFragment : Fragment(){
                 adapter = categoryItemListAdapter
             }
         })
+
         // untuk item list
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
-
-        val dummyPlace = DummyPlacesData.dummyPlaces
-        val placeListAdapter = PlaceItemListAdapter(dummyPlace)
-
-        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = placeListAdapter
-        }
 
         viewModel.getPlaceTourismAndCategory().observe( viewLifecycleOwner, {
             val placeListAdapter = PlaceItemListAdapter(it)

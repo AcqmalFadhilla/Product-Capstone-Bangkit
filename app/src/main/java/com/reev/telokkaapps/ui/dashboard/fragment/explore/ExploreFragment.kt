@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.explore
 
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,11 +18,13 @@ import com.reev.telokkaapps.databinding.FragmentExploreBinding
 import com.reev.telokkaapps.helper.InitialDataSource
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.adapter.SearchItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering.FilteringFragment
+import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
 import com.reev.telokkaapps.ui.detail.DetailActivity
 
 
 class ExploreFragment : Fragment(){
     private lateinit var binding: FragmentExploreBinding
+    private lateinit var viewModel: ExploreViewModel
 
     override fun onResume() {
         super.onResume()
@@ -37,6 +40,7 @@ class ExploreFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentExploreBinding.inflate(inflater, container, false)
+        viewModel = ExploreViewModel(context?.applicationContext as Application)
         return binding.root
     }
 
@@ -55,13 +59,14 @@ class ExploreFragment : Fragment(){
         // untuk item list
         binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
 
-        val dummyPlace = DummyPlacesData.dummyPlaces
-        val placeListAdapter = SearchItemListAdapter(dummyPlace)
+        viewModel.getPlaceTourismAndCategory().observe(viewLifecycleOwner, {
+            val placeListAdapter = PlaceItemListAdapter(it)
 
-        binding.listSearchPlaceLayout.itemRecyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
-            adapter = placeListAdapter
-        }
+            binding.listSearchPlaceLayout.itemRecyclerView.apply {
+                layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+                adapter = placeListAdapter
+            }
+        })
 
     }
 
