@@ -17,11 +17,14 @@ class FilteringFragment : BottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
+        val citiesOptions = InitialDataSource.getCityNames()
+        val citiesAdapter = ArrayAdapter(requireContext(), R.layout.item_dropdown_filter, citiesOptions)
         val categoryOptions = InitialDataSource.getTourismCategoryNames()
         val categoryAdapter = ArrayAdapter(requireContext(), R.layout.item_dropdown_filter, categoryOptions)
 
         binding.apply {
             categoryFilter.setAdapter(categoryAdapter)
+            cityFilter.setAdapter(citiesAdapter)
         }
     }
 
@@ -40,6 +43,7 @@ class FilteringFragment : BottomSheetDialogFragment() {
 
             filterConfirmationButton.setOnClickListener {
                 Toast.makeText(requireContext(), "Berhasil menerapkan filter", Toast.LENGTH_SHORT).show()
+                dismiss()
             }
         }
     }

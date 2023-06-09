@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.reev.telokkaapps.R
@@ -13,6 +14,7 @@ import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismC
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentExploreBinding
+import com.reev.telokkaapps.helper.InitialDataSource
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.adapter.SearchItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering.FilteringFragment
 import com.reev.telokkaapps.ui.detail.DetailActivity
@@ -21,6 +23,15 @@ import com.reev.telokkaapps.ui.detail.DetailActivity
 class ExploreFragment : Fragment(),
     SearchItemListAdapter.OnPlaceItemClickListener{
     private lateinit var binding: FragmentExploreBinding
+
+    override fun onResume() {
+        super.onResume()
+        val placeNameOptions = InitialDataSource.getTourismPlaceNames()
+        val placeNameAdapter = ArrayAdapter(requireContext(), R.layout.item_dropdown_search, placeNameOptions)
+        binding.apply {
+            itemSearchBanner.searchTextField.setAdapter(placeNameAdapter)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

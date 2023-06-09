@@ -8,6 +8,10 @@ object InitialDataSource {
         val tourismCategories = getTourismCategory()
         return tourismCategories.map { it.categoryName }
     }
+    fun getTourismPlaceNames(): List<String> {
+        val tourismPlaceNames = getTourismPlace()
+        return tourismPlaceNames.map { it.placeName }
+    }
     fun getTourismCategory(): List<TourismCategory>{
         return listOf(
             TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
@@ -139,6 +143,35 @@ object InitialDataSource {
                 planStatus = false,
                 idPlace = 4
             )
+        )
+    }
+
+    fun getCityNames(): List<String> {
+        return listOf(
+            "Makassar",
+            "Bantaeng",
+            "Bone",
+            "Bulukumba",
+            "Barru",
+            "Enrekang",
+            "Gowa",
+            "Jeneponto",
+            "Kepulauan Selayar",
+            "Luwu",
+            "Luwu Timur",
+            "Luwu Utara",
+            "Maros",
+            "Pangkajene dan Kepulauan",
+            "Pinrang",
+            "Sidenreng Rappang",
+            "Sinjai",
+            "Soppeng",
+            "Takalar",
+            "Tana Toraja",
+            "Toraja Utara",
+            "Wajo",
+            "Palopo",
+            "Pare-Pare"
         )
     }
 

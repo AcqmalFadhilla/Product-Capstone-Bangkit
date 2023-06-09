@@ -42,7 +42,8 @@
             android:id="@+id/cityFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Pilih Kota / Kabupaten" />
+            android:hint="Pilih Kota / Kabupaten"
+            android:inputType="none"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 
