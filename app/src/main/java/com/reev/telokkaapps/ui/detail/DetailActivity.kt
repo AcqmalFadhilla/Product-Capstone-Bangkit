@@ -15,6 +15,7 @@ import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismC
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityDetailBinding
 import com.reev.telokkaapps.ui.formplanning.FormPlanningActivity
+import com.reev.telokkaapps.utility.Constant
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -48,7 +49,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
 
-        val place = intent.getParcelableExtra<PlaceAndTourismCategory>("PLACE_EXTRA")
+        val place = intent.getParcelableExtra<PlaceAndTourismCategory>(Constant.DETAIL_PLACE) as PlaceAndTourismCategory
         if (place != null) {
             binding.apply {
                 layoutActivityDetail.apply{

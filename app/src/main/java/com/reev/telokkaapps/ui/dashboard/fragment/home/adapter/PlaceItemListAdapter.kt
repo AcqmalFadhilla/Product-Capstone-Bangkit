@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.home.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,15 +8,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.reev.telokkaapps.R
-import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
+import com.reev.telokkaapps.ui.detail.DetailActivity
+import com.reev.telokkaapps.utility.Constant
 
-class PlaceItemListAdapter(private val dataList: List<PlaceAndTourismCategory>, private val listener: OnPlaceItemClickListener) :
+class PlaceItemListAdapter(private val dataList: List<PlaceAndTourismCategory>) :
     RecyclerView.Adapter<PlaceItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -26,7 +25,13 @@ class PlaceItemListAdapter(private val dataList: List<PlaceAndTourismCategory>, 
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val place = dataList[position]
-                    listener.onPlaceItemClick(place)
+                    place.let {
+                        // Update. Aksi intent dipindahkan kesini
+                        val intent = Intent(itemView.context, DetailActivity::class.java).apply {
+                            putExtra(Constant.DETAIL_PLACE, it)
+                        }
+                        itemView.context.startActivity(intent)
+                    }
                 }
             }
         }
@@ -52,10 +57,6 @@ class PlaceItemListAdapter(private val dataList: List<PlaceAndTourismCategory>, 
                 placeRating.text = item.tourismPlace.placeRating.toString()
             }
         }
-    }
-
-    interface  OnPlaceItemClickListener {
-        fun onPlaceItemClick(place: PlaceAndTourismCategory)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

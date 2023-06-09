@@ -2,7 +2,6 @@ package com.reev.telokkaapps.ui.dashboard.fragment.home
 
 import android.Manifest
 import android.app.Application
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -16,11 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.GoogleMap
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
-import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
@@ -28,11 +25,9 @@ import com.reev.telokkaapps.ui.dashboard.MainViewModel
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
-import com.reev.telokkaapps.ui.detail.DetailActivity
 
 
 class HomeFragment : Fragment(),
-    PlaceItemListAdapter.OnPlaceItemClickListener,
     CategoryItemListAdapter.OnCategoryItemClickListener{
 
     private lateinit var binding: FragmentHomeBinding
@@ -165,7 +160,7 @@ class HomeFragment : Fragment(),
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
 
         val dummyPlace = DummyPlacesData.dummyPlaces
-        val placeListAdapter = PlaceItemListAdapter(dummyPlace, this)
+        val placeListAdapter = PlaceItemListAdapter(dummyPlace)
 
         binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -173,7 +168,7 @@ class HomeFragment : Fragment(),
         }
 
         viewModel.getPlaceTourismAndCategory().observe( viewLifecycleOwner, {
-            val placeListAdapter = PlaceItemListAdapter(it, this)
+            val placeListAdapter = PlaceItemListAdapter(it)
 
             binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -185,13 +180,6 @@ class HomeFragment : Fragment(),
 
     // Listener untuk list kategori
     override fun onCategoryClick(category: TourismCategory) {
-    }
-
-    // Listener untuk list wisata
-    override fun onPlaceItemClick(place: PlaceAndTourismCategory) {
-        val intent = Intent(requireContext(), DetailActivity::class.java)
-        intent.putExtra("PLACE_EXTRA", place)
-        startActivity(intent)
     }
 
 }
