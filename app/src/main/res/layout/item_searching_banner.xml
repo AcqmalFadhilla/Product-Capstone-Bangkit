@@ -19,20 +19,28 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="center">
-
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/ShapeAppearanceOverlay.Material3.SearchBar"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginVertical="16dp"
+            android:paddingBottom="3dp"
             android:layout_marginStart="16dp"
-            android:gravity="center">
+            android:gravity="center"
+            app:startIconDrawable="@drawable/ic_search"
+            app:boxStrokeWidth="3dp"
+            app:endIconMode="clear_text">
             <AutoCompleteTextView
-                android:id="@+id/searchView"
+                android:id="@+id/cityFilter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Telusuri Tempat wisata lainnya"/>
+                android:hint="Telusuri tempat lainnya"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeActionLabel="Search"
+                android:imeOptions="actionDone"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.cardview.widget.CardView
