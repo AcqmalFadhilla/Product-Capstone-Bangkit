@@ -17,7 +17,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
-import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
@@ -27,8 +26,7 @@ import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdap
 import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
 
 
-class HomeFragment : Fragment(),
-    CategoryItemListAdapter.OnCategoryItemClickListener{
+class HomeFragment : Fragment(){
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: MainViewModel
@@ -141,7 +139,7 @@ class HomeFragment : Fragment(),
         // untuk list kategori
         binding.layoutHomeFragment.listCategory.sectionTitle.text = getString(R.string.home_category_section)
         val dummyCategory = CategoryDataSource.dummyCategories
-        val categoryItemListAdapter = CategoryItemListAdapter(dummyCategory, this)
+        val categoryItemListAdapter = CategoryItemListAdapter(dummyCategory)
 
         binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -149,7 +147,7 @@ class HomeFragment : Fragment(),
         }
 
         viewModel.getAllTourismCategories().observe(viewLifecycleOwner, {
-            val categoryItemListAdapter = CategoryItemListAdapter(it, this)
+            val categoryItemListAdapter = CategoryItemListAdapter(it)
 
             binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -176,10 +174,6 @@ class HomeFragment : Fragment(),
             }
         })
 
-    }
-
-    // Listener untuk list kategori
-    override fun onCategoryClick(category: TourismCategory) {
     }
 
 }
