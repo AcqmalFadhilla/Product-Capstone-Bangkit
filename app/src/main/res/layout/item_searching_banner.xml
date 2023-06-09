@@ -19,25 +19,22 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="center">
-        <androidx.cardview.widget.CardView
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/ShapeAppearanceOverlay.Material3.SearchBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginVertical="16dp"
             android:layout_marginStart="16dp"
-            app:cardCornerRadius="10dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground">
-            <SearchView
+            android:gravity="center">
+            <AutoCompleteTextView
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="-10dp"
-                android:iconifiedByDefault="false"
-                android:queryHint="Telusuri tempat wisata lain!"
-                tools:ignore="RtlSymmetry" />
-        </androidx.cardview.widget.CardView>
+                android:hint="Telusuri Tempat wisata lainnya"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/filterButton"
             android:layout_width="match_parent"

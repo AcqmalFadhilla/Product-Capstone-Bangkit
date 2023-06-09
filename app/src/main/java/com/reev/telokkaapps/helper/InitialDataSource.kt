@@ -4,6 +4,10 @@ import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.*
 
 object InitialDataSource {
+    fun getTourismCategoryNames(): List<String> {
+        val tourismCategories = getTourismCategory()
+        return tourismCategories.map { it.categoryName }
+    }
     fun getTourismCategory(): List<TourismCategory>{
         return listOf(
             TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
