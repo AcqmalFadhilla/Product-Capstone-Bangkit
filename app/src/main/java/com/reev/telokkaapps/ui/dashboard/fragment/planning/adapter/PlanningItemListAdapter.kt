@@ -39,7 +39,7 @@ class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>, priva
                 drawable.start()
 
                 Glide.with(itemView.context)
-                    .load(item.placeName)
+                    .load(item.placePhotoUrl)
                     .placeholder(drawable)
                     .into(placeImg)
 

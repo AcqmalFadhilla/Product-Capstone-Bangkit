@@ -59,6 +59,9 @@ data class TourismPlace(
     @ColumnInfo(name = "isFavorited")
     var isFavorited : Boolean = false,
 
+    @ColumnInfo(name = "isRecomended")
+    var isRecomended : Boolean,
+
     @ColumnInfo(name = "clickCount")
     var clickCount : Int = 0
 ) : Parcelable

@@ -36,6 +36,9 @@ interface TourismCategoryDao {
     @Query("SELECT * from tourism_category WHERE categoryId = :categoryId")
     fun getTourismCategoryWithId(categoryId: Int) : LiveData<TourismCategory>
 
+    @Query("SELECT * from tourism_category WHERE isFavorited = 1")
+    fun getTourismCategoriesFavorited() : LiveData<TourismCategory>
+
     @Transaction
     @Query("SELECT * from tourism_category ORDER BY categoryId ASC")
     fun getCategoryAndTourismPlace(): LiveData<List<CategoryAndTourismPlace>>

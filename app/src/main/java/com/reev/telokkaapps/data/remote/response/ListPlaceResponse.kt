@@ -9,10 +9,10 @@ import com.google.gson.annotations.SerializedName
 data class ListPlaceResponse(
 
 	@field:SerializedName("data")
-	val data: List<ListPlaceItem>? = null,
+	val data: List<ListPlaceItem>,
 
 	@field:SerializedName("success")
-	val success: Boolean? = null
+	val success: Boolean?
 ) : Parcelable
 
 @Entity(tableName = "list_place")
@@ -29,5 +29,9 @@ data class ListPlaceItem(
 	val headerImage: String? = null,
 
 	@field:SerializedName("Name")
-	val name: String? = null
+	val name: String? = null,
+
+	@field:SerializedName("Rating")
+	val rating: Double? = null,
+
 ) : Parcelable

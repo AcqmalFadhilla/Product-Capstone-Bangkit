@@ -2,7 +2,7 @@ package com.reev.telokkaapps.ui.detailplanning
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
-import com.reev.telokkaapps.data.local.database.TourismRepository
+import com.reev.telokkaapps.data.repository.TourismRepository
 
 class DetailPlanningViewModel(app: Application) : ViewModel() {
     private val mTourismRepository: TourismRepository = TourismRepository(app)

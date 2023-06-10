@@ -1,10 +1,10 @@
-package com.reev.telokkaapps.data.local.database
+package com.reev.telokkaapps.data.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.reev.telokkaapps.data.local.database.LocationRoomDatabase
 import com.reev.telokkaapps.data.local.database.dao.LocationHistoryDao
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
-import com.reev.telokkaapps.helper.InitialDataSource
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

@@ -37,6 +37,7 @@ object InitialDataSource {
                 placeWebsite = "-",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             TourismPlace(
@@ -56,6 +57,7 @@ object InitialDataSource {
                 placeWebsite = "http://lensamandalika.com/",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             TourismPlace(
@@ -75,6 +77,7 @@ object InitialDataSource {
                 placeWebsite = "http://lensamandalika.com/",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             TourismPlace(
@@ -94,6 +97,7 @@ object InitialDataSource {
                 placeWebsite = "http://lensamandalika.com/",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             TourismPlace(
@@ -113,6 +117,7 @@ object InitialDataSource {
                 placeWebsite = "http://lensamandalika.com/",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             )
         )

@@ -4,6 +4,7 @@ import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 
 object DummyPlacesData {
     val dummyPlaces = listOf(
@@ -25,6 +26,7 @@ object DummyPlacesData {
                 placeWebsite = "-",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
@@ -47,6 +49,7 @@ object DummyPlacesData {
                 placeWebsite = "-",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
@@ -69,6 +72,7 @@ object DummyPlacesData {
                 placeWebsite = "-",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
@@ -91,6 +95,7 @@ object DummyPlacesData {
                 placeWebsite = "-",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
@@ -113,9 +118,51 @@ object DummyPlacesData {
                 placeWebsite = "-",
                 placePhone = "-",
                 isFavorited = false,
+                isRecomended = true,
                 clickCount = 0,
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
         ),
+    )
+    val dummyPlaces2 = listOf(
+        TourismPlaceItem(
+            placeId = 1,
+            placeName = "Anjungan Pantai Losari",
+            placeCategory = "Pantai",
+            placeRating = 4.5,
+            isFavoritedPlace = false ,
+            placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+        ),TourismPlaceItem(
+            placeId = 2,
+            placeName = "Anjungan Pantai Losari",
+            placeCategory = "Pantai",
+            placeRating = 4.5,
+            isFavoritedPlace = false ,
+            placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+        ),
+        TourismPlaceItem(
+            placeId = 3,
+            placeName = "Anjungan Pantai Losari",
+            placeCategory = "Pantai",
+            placeRating = 4.5,
+            isFavoritedPlace = false ,
+            placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+        ),
+        TourismPlaceItem(
+            placeId = 4,
+            placeName = "Anjungan Pantai Losari",
+            placeCategory = "Pantai",
+            placeRating = 4.5,
+            isFavoritedPlace = false ,
+            placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+        ),
+        TourismPlaceItem(
+            placeId = 5,
+            placeName = "Anjungan Pantai Losari",
+            placeCategory = "Pantai",
+            placeRating = 4.5,
+            isFavoritedPlace = false ,
+            placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+        )
     )
 }

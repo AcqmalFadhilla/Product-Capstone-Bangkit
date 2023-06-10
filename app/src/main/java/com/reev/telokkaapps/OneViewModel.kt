@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reev.telokkaapps.data.local.database.LocationRepository
-import com.reev.telokkaapps.data.local.database.TourismRepository
+import com.reev.telokkaapps.data.repository.LocationRepository
+import com.reev.telokkaapps.data.repository.TourismRepository
 import com.reev.telokkaapps.data.local.database.entity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

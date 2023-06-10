@@ -9,5 +9,6 @@ data class TourismPlanItem(
     val planTitle: String,
     val placeName : String,
     val tourismCategory: String,
-    val planDate : String
+    val planDate : String,
+    val placePhotoUrl : String
 ) : Parcelable

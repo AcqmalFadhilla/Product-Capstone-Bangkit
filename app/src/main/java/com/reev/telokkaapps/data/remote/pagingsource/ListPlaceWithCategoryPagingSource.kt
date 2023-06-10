@@ -5,14 +5,13 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.reev.telokkaapps.data.remote.ApiService
 import com.reev.telokkaapps.data.remote.response.ListPlaceItem
-import okio.IOException
 import retrofit2.HttpException
+import java.io.IOException
 
-class ListPlaceNearestPagingSource(
+class ListPlaceWithCategoryPagingSource(
     private val apiService : ApiService,
-    private val longitude: Double,
-    private val latitide: Double
-    ) : PagingSource<Int, ListPlaceItem>() {
+    private val category: String
+) : PagingSource<Int, ListPlaceItem>() {
 
     private companion object{
         const val INITIAL_PAGE_INDEX = 1
@@ -26,12 +25,12 @@ class ListPlaceNearestPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListPlaceItem> {
         return try{
-            val position = params.key ?: ListPlaceNearestPagingSource.INITIAL_PAGE_INDEX
-            val responseData = apiService.getPlaceNearest(page = position, data = params.loadSize, latitude = latitide , longitude = longitude )
+            val position = params.key ?: ListPlaceWithCategoryPagingSource.INITIAL_PAGE_INDEX
+            val responseData = apiService.getPlaceWithCategory(page = position, data = params.loadSize, category = category )
 
             LoadResult.Page(
                 data = responseData.data,
-                prevKey = if (position == ListPlaceNearestPagingSource.INITIAL_PAGE_INDEX) null else position - 1,
+                prevKey = if (position == ListPlaceWithCategoryPagingSource.INITIAL_PAGE_INDEX) null else position - 1,
                 nextKey = if (responseData.data.isNullOrEmpty()) null else position + 1
             )
         }  catch (e: IOException) {

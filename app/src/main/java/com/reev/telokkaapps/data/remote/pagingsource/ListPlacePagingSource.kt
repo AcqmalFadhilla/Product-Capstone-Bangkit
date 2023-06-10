@@ -5,7 +5,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.reev.telokkaapps.data.remote.ApiService
 import com.reev.telokkaapps.data.remote.response.ListPlaceItem
-import com.reev.telokkaapps.data.remote.response.QuoteResponseItem
 
 class ListPlacePagingSource(private val apiService : ApiService, private val category: String) : PagingSource<Int, ListPlaceItem>() {
 
@@ -32,8 +31,6 @@ class ListPlacePagingSource(private val apiService : ApiService, private val cat
                 nextKey = if (responseData.data.isNullOrEmpty()) null else position + 1
             )
         } catch (exception: Exception){
-            Log.i("dataResponse", "Exception sih : $exception")
-
             return LoadResult.Error(exception)
         }
     }

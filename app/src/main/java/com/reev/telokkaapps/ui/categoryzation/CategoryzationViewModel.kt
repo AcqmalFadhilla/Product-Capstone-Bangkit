@@ -3,8 +3,8 @@ package com.reev.telokkaapps.ui.categoryzation
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reev.telokkaapps.data.local.database.LocationRepository
-import com.reev.telokkaapps.data.local.database.TourismRepository
+import com.reev.telokkaapps.data.repository.LocationRepository
+import com.reev.telokkaapps.data.repository.TourismRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

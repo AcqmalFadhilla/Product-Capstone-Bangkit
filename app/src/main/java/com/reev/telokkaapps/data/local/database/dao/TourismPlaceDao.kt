@@ -39,12 +39,18 @@ interface TourismPlaceDao {
     fun getPlaceTourismAndFavoriteCategory() : LiveData<List<TourismPlaceItem>>
 
     @Transaction
+    @Query("SELECT placeId as placeId, tourism_place.placeName as placeName, tourism_category.categoryName as placeCategory, placeRating as placeRating, tourism_place.isFavorited as isFavoritedPlace, placePhotoUrl as placePhotoUrl  from tourism_place LEFT JOIN tourism_category ON tourism_place.idCategory = tourism_category.categoryId WHERE tourism_place.isRecomended = 1 ORDER BY tourism_place.placeName ASC")
+    fun getTourismPlaceRecomended() : LiveData<List<TourismPlaceItem>>
+
+    @Transaction
     @Query("SELECT placeId as placeId, tourism_place.placeName as placeName, tourism_category.categoryName as placeCategory, placeRating as placeRating, tourism_place.isFavorited as isFavoritedPlace, placePhotoUrl as placePhotoUrl  from tourism_place LEFT JOIN tourism_category ON tourism_place.idCategory = tourism_category.categoryId WHERE tourism_place.isFavorited = 1 ORDER BY tourism_place.placeName ASC")
     fun getFavoritedTourismPlace() : LiveData<List<TourismPlaceItem>>
 
     @Transaction
     @Query("SELECT placeId as placeId, tourism_place.placeName as placeName, tourism_category.categoryName as placeCategory, placeDescription as placeDescription, placeRating as placeRating, placeTags as placeTags, placeAddress as placeAddress, placeWebsite as placeWebsite, placePhone as placePhone,  tourism_place.isFavorited as isFavoritedPlace, placePhotoUrl as placePhotoUrl, placeMapUrl as placeMapUrl from tourism_place LEFT JOIN tourism_category ON tourism_place.idCategory = tourism_category.categoryId WHERE placeId = :id")
     fun getDetailTourismPlaceWithId(id: Int) : LiveData<List<TourismPlaceDetail>>
+
+
 
 
 

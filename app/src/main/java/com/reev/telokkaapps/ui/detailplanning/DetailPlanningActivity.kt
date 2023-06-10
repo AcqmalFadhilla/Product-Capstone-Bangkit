@@ -100,6 +100,8 @@ class DetailPlanningActivity : AppCompatActivity() {
                             }
                         }
 
+
+
                         itemButton.apply {
                             infoTV.text = "klik tombol dibawah jika ingin mengakhiri wisata"
                             button1.isGone = true

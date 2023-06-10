@@ -2,15 +2,11 @@ package com.reev.telokkaapps.data.remote
 
 
 import com.reev.telokkaapps.data.remote.response.*
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
-    @GET("list")
-    suspend fun getQuote(
-        @Query("page") page : Int,
-        @Query("size") size : Int
-    ) : List<QuoteResponseItem>
-
     @GET("place/placeCategory/{category}")
     suspend fun getPlaceWithCategory(
         @Path("category") category : String,
@@ -29,6 +25,6 @@ interface ApiService {
         @Query("Data") data: Int,
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double,
-    ) :  ListPlaceNearestResponse
+    ) :  ListPlaceResponse
 
 }
