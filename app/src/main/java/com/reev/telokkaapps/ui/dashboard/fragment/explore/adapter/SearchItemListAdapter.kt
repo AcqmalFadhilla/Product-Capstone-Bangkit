@@ -10,7 +10,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
+import com.reev.telokkaapps.databinding.ItemPlaceBinding
 import com.reev.telokkaapps.databinding.ItemSearchingListBinding
 import com.reev.telokkaapps.ui.detail.DetailActivity
 import com.reev.telokkaapps.utility.Constant
@@ -19,7 +19,7 @@ class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>)
     RecyclerView.Adapter<SearchItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        private val binding = ItemSearchingListBinding.bind(itemView)
+        private val binding = ItemPlaceBinding.bind(itemView)
 
         init {
             itemView.setOnClickListener {
@@ -62,7 +62,7 @@ class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent. context)
-        val binding = ItemSearchingListBinding.inflate(inflater, parent, false)
+        val binding = ItemPlaceBinding.inflate(inflater, parent, false)
         return ViewHolder(binding.root)
     }
 

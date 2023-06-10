@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
@@ -60,10 +61,10 @@ class ExploreFragment : Fragment(){
         binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
 
         viewModel.getPlaceTourismAndCategory().observe(viewLifecycleOwner, {
-            val placeListAdapter = PlaceItemListAdapter(it)
+            val placeListAdapter = SearchItemListAdapter(it)
 
             binding.listSearchPlaceLayout.itemRecyclerView.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                 adapter = placeListAdapter
             }
         })

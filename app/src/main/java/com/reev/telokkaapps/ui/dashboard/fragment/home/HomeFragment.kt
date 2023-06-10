@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
@@ -158,11 +159,11 @@ class HomeFragment : Fragment(){
         // untuk item list
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
 
-        viewModel.getPlaceTourismAndCategory().observe( viewLifecycleOwner, {
-            val placeListAdapter = PlaceItemListAdapter(it)
+        viewModel.getPlaceTourismAndCategory().observe(viewLifecycleOwner, { list ->
+            val placeListAdapter = PlaceItemListAdapter(list)
 
             binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                 adapter = placeListAdapter
             }
         })

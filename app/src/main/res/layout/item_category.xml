@@ -26,6 +26,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="12sp"
-        android:text="Category Name" />
+        android:text="Category Name"
+        android:singleLine="true"
+        android:ellipsize="end" />
 
 </LinearLayout>
