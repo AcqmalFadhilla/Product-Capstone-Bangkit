@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
@@ -24,12 +25,14 @@ import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
+import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
 import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAdapter
 import com.reev.telokkaapps.ui.detail.DetailActivity
+import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
 
 
 class HomeFragment : Fragment(),
@@ -40,11 +43,12 @@ class HomeFragment : Fragment(),
     private lateinit var viewModel: HomeViewModel
     private lateinit var placePagingAdapter: PlaceItemPagingAdapter
 
+    private lateinit var minimapFragment: MinimapFragment
+
     // variable untuk getLastLocation
     private lateinit var fusedLocation: FusedLocationProviderClient
     private var latestLatitude: Double = 0.0
     private var latestLongitude: Double = 0.0
-
 
     companion object {
         private const val CUR_LOC_PERMISSION_REQUEST_CODE = 1001 // untuk getLastLocation
@@ -65,7 +69,40 @@ class HomeFragment : Fragment(),
 
         placePagingAdapter = PlaceItemPagingAdapter()
 
+        // set minimap
+        minimapFragment = MinimapFragment()
+        childFragmentManager.beginTransaction()
+            .add(R.id.fragmentContainer, minimapFragment)
+            .commit()
+
         // Untuk track posisi user saat ini
+        viewModel.getLatestLocation().observe(viewLifecycleOwner, {
+            if (it != null) {
+                latestLatitude = it.latitude
+                latestLongitude = it.longitude
+
+                val locationText = StringBuilder().apply {
+                    append(latestLatitude)
+                    append(", ")
+                    append(latestLongitude)
+                }.toString()
+                binding.layoutHomeFragment.minimapLayout.curLocationTV.text = locationText
+            }
+        })
+
+        // update pin minimap
+        fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocation.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null && location.latitude != null && location.longitude != null) {
+                if (latestLatitude == location.latitude && latestLongitude == location.longitude){
+                    //buat update location di minimap
+                    minimapFragment.updateMapLocation(location.latitude, location.longitude)
+                }
+            }
+            Toast.makeText(requireContext(), getString(R.string.please_update_your_location), Toast.LENGTH_SHORT).show()
+        }
+
+
         binding.layoutHomeFragment.minimapLayout.btnUpdateLocation.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     requireActivity(),
@@ -87,6 +124,9 @@ class HomeFragment : Fragment(),
                                 getString(R.string.location_is_up_to_date),
                                 Toast.LENGTH_SHORT
                             ).show()
+                            //buat update location di minimap
+                            minimapFragment.updateMapLocation(location.latitude, location.longitude)
+
                         }else{
                             viewModel.insertNewLocationHistory(
                                 LocationHistory(
@@ -95,6 +135,8 @@ class HomeFragment : Fragment(),
                                     longitude = location.longitude,
                                 )
                             )
+                            //buat update location di minimap
+                            minimapFragment.updateMapLocation(location.latitude, location.longitude)
                         }
                     } else {
                         Toast.makeText(
@@ -111,7 +153,7 @@ class HomeFragment : Fragment(),
         // untuk list kategori
         binding.layoutHomeFragment.listCategory.sectionTitle.text = getString(R.string.home_category_section)
         val dummyCategory = CategoryDataSource.dummyCategories
-        val categoryItemListAdapter = CategoryItemListAdapter(dummyCategory, this)
+        val categoryItemListAdapter = CategoryItemListAdapter(dummyCategory)
 
         binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -119,22 +161,20 @@ class HomeFragment : Fragment(),
         }
 
         viewModel.getAllTourismCategories().observe(viewLifecycleOwner, {
-            val categoryItemListAdapter = CategoryItemListAdapter(it, this)
+            val categoryItemListAdapter = CategoryItemListAdapter(it)
 
             binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 adapter = categoryItemListAdapter
             }
         })
-
         // untuk item list
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
 
         val dummyPlace = DummyPlacesData.dummyPlaces2
-
-        val placeListAdapter = PlaceItemListAdapter(dummyPlace, this)
+        val placeListAdapter = PlaceItemListAdapter(dummyPlace)
         binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = placeListAdapter
         }
         viewModel.getLatestLocation().observe(viewLifecycleOwner, {
@@ -151,10 +191,7 @@ class HomeFragment : Fragment(),
                 updateTourismPlaceRecomended()
             }
         })
-
-
     }
-
     private fun updateTourismPlaceRecomended() {
         Log.i("dataResponse", "Masuk ke  fungsi updateTourismPlaceRecomended()")
         if (InternetConnection.checkConnection(requireContext())){
@@ -165,7 +202,7 @@ class HomeFragment : Fragment(),
                     viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
                         viewModel.getNewTourismPlaceWithCategory(it.categoryName).observe(viewLifecycleOwner, { data->
                             placePagingAdapter.submitData(lifecycle, data)
-                            placePagingAdapter.addLoadStateListener {loadState->
+                            placePagingAdapter.addLoadStateListener { loadState ->
                                 val errorState = when {
                                     loadState.append is LoadState.Error -> loadState.append as LoadState.Error
                                     loadState.prepend is LoadState.Error ->  loadState.prepend as LoadState.Error
@@ -175,11 +212,7 @@ class HomeFragment : Fragment(),
                                 errorState?.let {
                                     if (errorState !is LoadState.Error) {
                                         binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                                            layoutManager = LinearLayoutManager(
-                                                requireContext(),
-                                                LinearLayoutManager.HORIZONTAL,
-                                                false
-                                            )
+                                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                                             adapter = placePagingAdapter
                                         }
                                     }
@@ -209,11 +242,7 @@ class HomeFragment : Fragment(),
                             errorState?.let {
                                 if (errorState !is LoadState.Error) {
                                     binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                                        layoutManager = LinearLayoutManager(
-                                            requireContext(),
-                                            LinearLayoutManager.HORIZONTAL,
-                                            false
-                                        )
+                                        layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                                         adapter = placePagingAdapter
                                     }
                                 }
@@ -230,11 +259,7 @@ class HomeFragment : Fragment(),
                     viewModel.getTourismPlaceRecomended().observe(viewLifecycleOwner, {
                         val placeListAdapter = PlaceItemListAdapter(it, this)
                         binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                            layoutManager = LinearLayoutManager(
-                                requireContext(),
-                                LinearLayoutManager.HORIZONTAL,
-                                false
-                            )
+                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                             adapter = placeListAdapter
                         }
                     })

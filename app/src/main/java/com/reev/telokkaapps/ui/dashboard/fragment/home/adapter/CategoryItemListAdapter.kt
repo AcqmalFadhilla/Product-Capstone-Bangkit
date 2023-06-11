@@ -3,11 +3,12 @@ package com.reev.telokkaapps.ui.dashboard.fragment.home.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.databinding.ItemCategoryBinding
 
-class CategoryItemListAdapter(private val categoryList: List<TourismCategory>,  private val listener: OnCategoryItemClickListener) :
+class CategoryItemListAdapter(private val categoryList: List<TourismCategory>) :
     RecyclerView.Adapter<CategoryItemListAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemCategoryBinding.bind(itemView)
@@ -17,7 +18,8 @@ class CategoryItemListAdapter(private val categoryList: List<TourismCategory>,  
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val category = categoryList[position]
-                    listener.onCategoryClick(category)
+                    // Pidahkan Aksi onClick disini
+                    Toast.makeText(itemView.context, "Anda klik ${category.categoryName}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -25,10 +27,6 @@ class CategoryItemListAdapter(private val categoryList: List<TourismCategory>,  
             binding.imageCategory.setImageResource(item.imageResource)
             binding.textCategoryName.text = item.categoryName
         }
-    }
-
-    interface OnCategoryItemClickListener {
-        fun onCategoryClick(category: TourismCategory)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

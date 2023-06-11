@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <include
+                android:id="@+id/itemSearchBanner"
                 layout="@layout/item_searching_banner" />
             <include
                 android:id="@+id/listSearchPlaceLayout"

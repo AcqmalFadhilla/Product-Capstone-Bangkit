@@ -11,9 +11,7 @@
         android:layout_height="match_parent">
         <include
             android:id="@+id/layoutHomeFragment"
-            layout="@layout/layout_fragment_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            layout="@layout/layout_fragment_home"/>
     </ScrollView>
 
 

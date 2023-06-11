@@ -7,11 +7,16 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
+import com.reev.telokkaapps.data.local.database.entity.TourismPlace
+import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
+import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
 
-class PlaceItemListAdapter(private val dataList: List<TourismPlaceItem>, private val listener: OnPlaceItemClickListener) :
+class PlaceItemListAdapter(private val dataList: List<TourismPlaceItem>) :
     RecyclerView.Adapter<PlaceItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -22,7 +27,13 @@ class PlaceItemListAdapter(private val dataList: List<TourismPlaceItem>, private
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val place = dataList[position]
-                    listener.onPlaceItemClick(place)
+                    place.let {
+                        // Update. Aksi intent dipindahkan kesini
+                        val intent = Intent(itemView.context, DetailActivity::class.java).apply {
+                            putExtra(Constant.DETAIL_PLACE, it)
+                        }
+                        itemView.context.startActivity(intent)
+                    }
                 }
             }
         }
@@ -48,10 +59,6 @@ class PlaceItemListAdapter(private val dataList: List<TourismPlaceItem>, private
                 placeRating.text = item.placeRating.toString()
             }
         }
-    }
-
-    interface  OnPlaceItemClickListener {
-        fun onPlaceItemClick(place: TourismPlaceItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

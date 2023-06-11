@@ -72,18 +72,23 @@ class DetailPlanningActivity : AppCompatActivity() {
                                 .placeholder(drawable)
                                 .into(placePhotoUrlImageView)
 
+                            planningTitleTextView.text = plan.planTitle
+                            planningDateTextView.text = plan.planDate
+
                             nameTextView.text = plan.placeName
                             categoryTextView.text = plan.tourismCategory
                             planningDescriptionTextView.text = plan.planDescription
                             //untuk rating
                             val rating = plan.placeRating.toString()
-                            val ratingCount = ""
+                            val ratingCount = "-" // belum difungsikan
                             ratingTextView.text = "$rating ($ratingCount)"
                             tagsTextView.text = plan.placeTags
                             addressTextView.text = plan.placeAddress
                             websiteTextView.text = plan.placeWebiste
                             phoneTextView.text = plan.placePhone
                             descriptionTextView.text = plan.placeDescription
+
+                            operationalHourTextView.text = "-" //belum difungsikan
 
                             openMapButton.setOnClickListener {
                                 Toast.makeText(

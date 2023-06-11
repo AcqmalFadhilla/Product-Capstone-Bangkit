@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.explore.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,21 +10,29 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
+import com.reev.telokkaapps.databinding.ItemPlaceBinding
 import com.reev.telokkaapps.databinding.ItemSearchingListBinding
+import com.reev.telokkaapps.ui.detail.DetailActivity
+import com.reev.telokkaapps.utility.Constant
 
-class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>, private val listener: OnPlaceItemClickListener) :
+class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>) :
     RecyclerView.Adapter<SearchItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        private val binding = ItemSearchingListBinding.bind(itemView)
+        private val binding = ItemPlaceBinding.bind(itemView)
 
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val place = dataList[position]
-                    listener.onPlaceItemClick(place)
+                    place.let {
+                        // Update. Aksi intent dipindahkan kesini
+                        val intent = Intent(itemView.context, DetailActivity::class.java).apply {
+                            putExtra(Constant.DETAIL_PLACE, it)
+                        }
+                        itemView.context.startActivity(intent)
+                    }
                 }
             }
         }
@@ -51,13 +60,9 @@ class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>,
         }
     }
 
-    interface  OnPlaceItemClickListener {
-        fun onPlaceItemClick(place: PlaceAndTourismCategory)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent. context)
-        val binding = ItemSearchingListBinding.inflate(inflater, parent, false)
+        val binding = ItemPlaceBinding.inflate(inflater, parent, false)
         return ViewHolder(binding.root)
     }
 
