@@ -34,6 +34,8 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+
         viewModel = DetailViewModel(application)
 
         val placeId = intent.getIntExtra(Constant.DETAIL_PLACE, 1)
