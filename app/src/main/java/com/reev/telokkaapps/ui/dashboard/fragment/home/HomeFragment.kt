@@ -158,21 +158,23 @@ class HomeFragment : Fragment(){
         })
 
 
-        // Mendapatkan
+        // Mendapatkan Data Rekomendasi
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
 
-        val dummyPlace = DummyPlacesData.dummyPlaces2
-        val placeListAdapter = PlaceItemListAdapter(dummyPlace)
-        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            adapter = placeListAdapter
-        }
+//        val dummyPlace = DummyPlacesData.dummyPlaces2
+//        val placeListAdapter = PlaceItemListAdapter(dummyPlace)
+//        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+//            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+//            adapter = placeListAdapter
+//        }
+        updateTourismPlaceRecomended()
 
     }
     private fun updateTourismPlaceRecomended() {
         Log.i("dataResponse", "Masuk ke  fungsi updateTourismPlaceRecomended()")
         if (InternetConnection.checkConnection(requireContext())){
-                Log.i("dataResponse", "Ada Akses Internet")
+            Toast.makeText(requireContext(), "Anda sedang online..", Toast.LENGTH_SHORT ).show()
+            Log.i("dataResponse", "Ada Akses Internet")
                 if (latestLongitude == 0.0 && latestLatitude == 0.0 ){
                     Log.i("dataResponse", "Ada Akses Internet dan lati dan long = 0")
                     // Mendapatkan tempat wisata berdasarkan kategori favorite dari Cloud API
@@ -185,6 +187,7 @@ class HomeFragment : Fragment(){
                 }
             }else{
                 Log.i("dataResponse", "Tidak Ada Akses Internet")
+                Toast.makeText(requireContext(), "Anda sedang offline..", Toast.LENGTH_SHORT ).show()
 
                 if (latestLongitude == 0.0 && latestLatitude == 0.0 ) {
                     Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon = 0")
@@ -219,7 +222,6 @@ class HomeFragment : Fragment(){
             latitude = latestLatitude,
             longitude = latestLongitude
         ).observe(viewLifecycleOwner, { data ->
-//                        Log.i("dataResponse", "Data : $data")
             placePagingAdapter.addLoadStateListener {loadState->
                 val isNotLoading = when {
                     loadState.append is LoadState.NotLoading -> true
@@ -238,7 +240,21 @@ class HomeFragment : Fragment(){
 
     }
     private fun getDataTourismPlaceWithFavoriteCategoryOffline(){
-        getDataTourismPlaceRecommendedOffline()
+        viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {favoritedCategory->
+            viewModel.getPlaceTourismWithCategory(favoritedCategory.categoryId).observe(viewLifecycleOwner, {
+                placeListAdapter = PlaceItemListAdapter(it)
+                binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                    adapter = placeListAdapter
+                }
+                Toast.makeText(
+                    requireContext(),
+                    "Berhasil mendapatkan data tempat wisata berdasarkan kategori favorite yaitu ${favoritedCategory.categoryName}",
+                    Toast.LENGTH_LONG
+                ).show()
+            })
+        })
+
     }
     private fun getDataTourismPlaceWithFavoriteCategoryOnline(){
         viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {

@@ -1,6 +1,7 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.home.adapter
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,8 @@ class PlaceItemListAdapter(private val dataList: List<TourismPlaceItem>) :
                     place.let {
                         // Update. Aksi intent dipindahkan kesini
                         val intent = Intent(itemView.context, DetailActivity::class.java).apply {
-                            putExtra(Constant.DETAIL_PLACE, it)
+                            Log.i("dataResponse", "tempat yang diklik ${it.placeName}")
+                            putExtra(Constant.DETAIL_PLACE, it.placeId)
                         }
                         itemView.context.startActivity(intent)
                     }

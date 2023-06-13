@@ -51,6 +51,10 @@ interface TourismPlaceDao {
     fun getDetailTourismPlaceWithId(id: Int) : LiveData<List<TourismPlaceDetail>>
 
 
+    @Query("SELECT placeId as placeId, tourism_place.placeName as placeName, tourism_category.categoryName as placeCategory, placeRating as placeRating, tourism_place.isFavorited as isFavoritedPlace, placePhotoUrl as placePhotoUrl  from tourism_place LEFT JOIN tourism_category ON tourism_place.idCategory = tourism_category.categoryId WHERE tourism_place.idCategory = :idCategory ORDER BY tourism_place.placeName ASC")
+    fun getPlaceTourismWithCategory(idCategory: Int) : LiveData<List<TourismPlaceItem>>
+
+
 
 
 

@@ -191,6 +191,7 @@ class TourismRepository(application: Application) {
     // Relasi Many To One - Tempat dan Kategori Wisata
     // Mendapatkan seluruh tempat wisata beserta data kategorinya
     fun getPlaceTourismAndCategory() = mTourismPlaceDao.getPlaceTourismAndCategory()
+    fun getPlaceTourismWithCategory(idCategory : Int) = mTourismPlaceDao.getPlaceTourismWithCategory(idCategory)
 
     // Mendapatkan seluruh tempat wisata beserta kategorinya berdasarkan kategori favorite user
     fun getPlaceTourismAndFavoriteCategory() = mTourismPlaceDao.getPlaceTourismAndFavoriteCategory()

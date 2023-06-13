@@ -20,16 +20,17 @@ class HomeViewModel(app : Application) : ViewModel() {
     private val mTourismRepository: TourismRepository = TourismRepository(app)
     private val mLocationRepository: LocationRepository = LocationRepository(app)
 
-    init {
-        insertAllData()
-    }
-
-    private fun insertAllData() = viewModelScope.launch(Dispatchers.IO) {
-        mTourismRepository.insertAllData()
-        mLocationRepository.insertAllData()
-    }
+//    init {
+//        insertAllData()
+//    }
+//
+//    private fun insertAllData() = viewModelScope.launch(Dispatchers.IO) {
+//        mTourismRepository.insertAllData()
+//        mLocationRepository.insertAllData()
+//    }
     fun getAllTourismCategories() : LiveData<List<TourismCategory>> = mTourismRepository.getAllTourismCategories()
     fun getPlaceTourismAndCategory() = mTourismRepository.getPlaceTourismAndCategory()
+    fun getPlaceTourismWithCategory(idCategory: Int) = mTourismRepository.getPlaceTourismWithCategory(idCategory)
 
     fun getLatestLocation() = mLocationRepository.getLatestLocation()
     fun insertNewLocationHistory(locationHistory: LocationHistory) = mLocationRepository.insertLocationHistory(locationHistory)
