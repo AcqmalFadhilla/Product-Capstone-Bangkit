@@ -1,6 +1,7 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,10 +50,10 @@ class FilteringFragment : BottomSheetDialogFragment() {
                 Toast.makeText(requireContext(), "Berhasil menerapkan filter", Toast.LENGTH_SHORT).show()
 
                 // Aksi untuk menyimpan kota/kabupaten yang dipilih
-                city = cityFilter.toString()
+                city = cityFilter.text.toString()
 
                 // Aksi untuk menyimpan kategori yang dipilih
-                category = categoryFilter.toString()
+                category = categoryFilter.text.toString()
 
                 // Aksi untuk menyimpan urutan rating yang dipilih
                 val selectedRadioButtonId = radioGroupRating.checkedRadioButtonId
@@ -60,12 +61,11 @@ class FilteringFragment : BottomSheetDialogFragment() {
                 if (isSelectedLowRating) {
                     orderRating = false
                 }
-
+                Log.i("dataFilter", "city = $city" )
+                Log.i("dataFilter", "category = $category" )
+                Log.i("dataFilter", "orderRating = $orderRating" )
                 dismiss()
             }
-
-
-
         }
     }
 }
