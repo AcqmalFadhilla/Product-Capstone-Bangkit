@@ -8,6 +8,7 @@
     android:layout_margin="8dp"
     android:clickable="true"
     android:focusable="true"
+    android:id="@+id/placeCardView"
     android:foreground="?attr/selectableItemBackground"
     android:background="@color/custom_color_1"
     android:orientation="vertical">

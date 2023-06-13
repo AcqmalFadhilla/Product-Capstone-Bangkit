@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.home.adapter
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.remote.response.ListPlaceItem
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
+import com.reev.telokkaapps.ui.detail.DetailActivity
+import com.reev.telokkaapps.utility.Constant
 
 class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
@@ -20,14 +23,11 @@ class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingA
         return MyViewHolder(binding)
     }
 
-    override fun getItemCount(): Int  = 20
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        if (position > 0) {
-            val data = getItem(position)
-            if (data != null) {
-                holder.bind(data)
-            }
+        val data = getItem(position)
+        if (data != null) {
+            holder.bind(data)
         }
     }
 
@@ -53,6 +53,13 @@ class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingA
                 placeName.text = item.name
                 placeCategory.text = item.category
                 placeRating.text = item.rating.toString()
+
+                placeCardView.setOnClickListener {
+                    val intent = Intent(itemView.context, DetailActivity::class.java).apply {
+                        putExtra(Constant.DETAIL_PLACE, item.id)
+                    }
+                    itemView.context.startActivity(intent)
+                }
             }
 
         }

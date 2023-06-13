@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -215,13 +216,11 @@ class HomeFragment : Fragment(){
 
     }
     private fun getDataTourismPlaceRecommendedOnline(){
-        placePagingAdapter = PlaceItemPagingAdapter()
-        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.adapter = placePagingAdapter
         viewModel.getNewTourismPlaceRecomended(
             latitude = latestLatitude,
             longitude = latestLongitude
-        ).observe(viewLifecycleOwner, { data ->
+        ).cachedIn(viewLifecycleOwner.lifecycleScope)
+            .observe(viewLifecycleOwner, { data ->
             placePagingAdapter.addLoadStateListener {loadState->
                 val isNotLoading = when {
                     loadState.append is LoadState.NotLoading -> true
@@ -231,7 +230,11 @@ class HomeFragment : Fragment(){
                 }
                 isNotLoading.let {
                     if (isNotLoading) {
-                        placePagingAdapter.submitData(lifecycle, data)
+                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                            adapter = placePagingAdapter
+                            placePagingAdapter.submitData(lifecycle, data)
+                        }
                     }
                 }
             }
@@ -258,7 +261,9 @@ class HomeFragment : Fragment(){
     }
     private fun getDataTourismPlaceWithFavoriteCategoryOnline(){
         viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
-            viewModel.getNewTourismPlaceWithCategory(it.categoryName).observe(viewLifecycleOwner, { data->
+            viewModel.getNewTourismPlaceWithCategory(it.categoryName)
+                .cachedIn(viewLifecycleOwner.lifecycleScope)
+                .observe(viewLifecycleOwner, { data->
                 placePagingAdapter.submitData(lifecycle, data)
                 placePagingAdapter.addLoadStateListener { loadState ->
                     val isNotLoading = when {
@@ -272,7 +277,6 @@ class HomeFragment : Fragment(){
                             binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
                                 layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                                 adapter = placePagingAdapter
-
                                 placePagingAdapter.submitData(lifecycle, data)
                             }
                         }
