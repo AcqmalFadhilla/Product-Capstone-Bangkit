@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
-import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
-import com.reev.telokkaapps.databinding.ItemSearchingListBinding
 import com.reev.telokkaapps.ui.detail.DetailActivity
 import com.reev.telokkaapps.utility.Constant
 
-class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>) :
+class SearchItemListAdapter(private val dataList: List<TourismPlaceItem>) :
     RecyclerView.Adapter<SearchItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -37,7 +36,7 @@ class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>)
             }
         }
 
-        fun bind(item: PlaceAndTourismCategory) {
+        fun bind(item: TourismPlaceItem) {
             binding.apply{
 
                 val color = ContextCompat.getColor(binding.root.context , R.color.blue_200)
@@ -49,13 +48,13 @@ class SearchItemListAdapter(private val dataList: List<PlaceAndTourismCategory>)
                 drawable.start()
 
                 Glide.with(itemView.context)
-                    .load(item.tourismPlace.placePhotoUrl)
+                    .load(item.placePhotoUrl)
                     .placeholder(drawable)
                     .into(placeImg)
 
-                placeName.text = item.tourismPlace.placeName
-                placeCategory.text = item.category?.categoryName
-                placeRating.text = item.tourismPlace.placeRating.toString()
+                placeName.text = item.placeName
+                placeCategory.text = item.placeCategory
+                placeRating.text = item.placeRating.toString()
             }
         }
     }

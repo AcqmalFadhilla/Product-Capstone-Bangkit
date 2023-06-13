@@ -1,7 +1,6 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.explore
 
 import android.app.Application
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,23 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.reev.telokkaapps.R
-import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentExploreBinding
 import com.reev.telokkaapps.helper.InitialDataSource
+import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.adapter.SearchItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering.FilteringFragment
-import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
-import com.reev.telokkaapps.ui.detail.DetailActivity
+import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAdapter
 
 
 class ExploreFragment : Fragment(){
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
+    private lateinit var placePagingAdapter: PlaceItemPagingAdapter
+    private lateinit var placeListAdapter : SearchItemListAdapter
+    private lateinit var filteringFragment : FilteringFragment
+
+
+
+    private var lastPage : Int = 0
 
     override fun onResume() {
         super.onResume()
@@ -48,8 +51,10 @@ class ExploreFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        placePagingAdapter = PlaceItemPagingAdapter()
+
         // untuk filter
-        val filteringFragment = FilteringFragment()
+        filteringFragment = FilteringFragment()
 
         binding.itemSearchBanner.filterButton.setOnClickListener {
             // buat aksi untuk memunculkan item filter
@@ -57,18 +62,65 @@ class ExploreFragment : Fragment(){
             filteringFragment.show(childFragmentManager, "FilteringDialog")
         }
 
+
         // untuk item list
         binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
 
-        viewModel.getPlaceTourismAndCategory().observe(viewLifecycleOwner, {
-            val placeListAdapter = SearchItemListAdapter(it)
+        // Aksi ketika ikon search diklik
+        binding.itemSearchBanner.searchField.setStartIconOnClickListener{
+            val city = filteringFragment.city
+            val category = filteringFragment.category
+            val orderRating = filteringFragment.orderRating
+            val searchText = binding.itemSearchBanner.searchTextField.text.toString()
 
-            binding.listSearchPlaceLayout.itemRecyclerView.apply {
-                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                adapter = placeListAdapter
-            }
-        })
+            getNewData(
+                query = searchText,
+                category = category,
+                city = city,
+                orderRating = orderRating
+            )
+        }
+
+
+
 
     }
+    private fun getNewData(query : String, category: String, city : String, orderRating: Boolean){
+        lastPage++
+        if (InternetConnection.checkConnection(requireContext())){
+            viewModel.getNewTourismPlaceSearched(query, category, city, orderRating)
+                .observe(viewLifecycleOwner, {data->
+                    placePagingAdapter.submitData(lifecycle, data)
+                    placePagingAdapter.addLoadStateListener { loadState ->
+                        val isError : Boolean = when {
+                            loadState.append is LoadState.Error -> true
+                            loadState.prepend is LoadState.Error ->  true
+                            loadState.refresh is LoadState.Error -> true
+                            else -> false
+                        }
+                        isError.let {
+                            if (!isError) {
+                                binding.listSearchPlaceLayout.itemRecyclerView.apply {
+                                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                                    adapter = placePagingAdapter
+                                }
+                            }
+                        }
+                    }
+                })
+        }else{
+            // Tampilan ketika offline
+            viewModel.getPlaceTourismAndCategory().observe(viewLifecycleOwner, {
+                placeListAdapter = SearchItemListAdapter(it)
+
+                binding.listSearchPlaceLayout.itemRecyclerView.apply {
+                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                    adapter = placeListAdapter
+                }
+            })
+        }
+
+    }
+
 
 }

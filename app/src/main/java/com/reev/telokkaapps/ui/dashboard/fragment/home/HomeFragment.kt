@@ -2,7 +2,6 @@ package com.reev.telokkaapps.ui.dashboard.fragment.home
 
 import android.Manifest
 import android.app.Application
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -14,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -21,27 +21,22 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
-import com.reev.telokkaapps.data.local.database.entity.TourismCategory
-import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
 import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAdapter
-import com.reev.telokkaapps.ui.detail.DetailActivity
 import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
 
 
-class HomeFragment : Fragment(),
-    PlaceItemListAdapter.OnPlaceItemClickListener,
-    CategoryItemListAdapter.OnCategoryItemClickListener{
+class HomeFragment : Fragment(){
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var placePagingAdapter: PlaceItemPagingAdapter
+    private lateinit var placeListAdapter : PlaceItemListAdapter
 
     private lateinit var minimapFragment: MinimapFragment
 
@@ -75,11 +70,14 @@ class HomeFragment : Fragment(),
             .add(R.id.fragmentContainer, minimapFragment)
             .commit()
 
-        // Untuk track posisi user saat ini
+        // Mendapatkan riwayat lokasi terakhir dari database
         viewModel.getLatestLocation().observe(viewLifecycleOwner, {
             if (it != null) {
                 latestLatitude = it.latitude
                 latestLongitude = it.longitude
+
+                minimapFragment.updateMapLocation(latestLatitude, latestLongitude)
+
 
                 val locationText = StringBuilder().apply {
                     append(latestLatitude)
@@ -87,22 +85,12 @@ class HomeFragment : Fragment(),
                     append(latestLongitude)
                 }.toString()
                 binding.layoutHomeFragment.minimapLayout.curLocationTV.text = locationText
+                updateTourismPlaceRecomended()
             }
         })
 
-        // update pin minimap
-        fusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
-        fusedLocation.lastLocation.addOnSuccessListener { location: Location? ->
-            if (location != null && location.latitude != null && location.longitude != null) {
-                if (latestLatitude == location.latitude && latestLongitude == location.longitude){
-                    //buat update location di minimap
-                    minimapFragment.updateMapLocation(location.latitude, location.longitude)
-                }
-            }
-            Toast.makeText(requireContext(), getString(R.string.please_update_your_location), Toast.LENGTH_SHORT).show()
-        }
 
-
+        // Menambahkan aksi ketika tombol update lokasi di klik
         binding.layoutHomeFragment.minimapLayout.btnUpdateLocation.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     requireActivity(),
@@ -150,7 +138,7 @@ class HomeFragment : Fragment(),
         }
 
 
-        // untuk list kategori
+        // Mendapatkan list kategori
         binding.layoutHomeFragment.listCategory.sectionTitle.text = getString(R.string.home_category_section)
         val dummyCategory = CategoryDataSource.dummyCategories
         val categoryItemListAdapter = CategoryItemListAdapter(dummyCategory)
@@ -168,7 +156,9 @@ class HomeFragment : Fragment(),
                 adapter = categoryItemListAdapter
             }
         })
-        // untuk item list
+
+
+        // Mendapatkan
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
 
         val dummyPlace = DummyPlacesData.dummyPlaces2
@@ -177,20 +167,7 @@ class HomeFragment : Fragment(),
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = placeListAdapter
         }
-        viewModel.getLatestLocation().observe(viewLifecycleOwner, {
-            if (it != null) {
-                latestLatitude = it.latitude
-                latestLongitude = it.longitude
 
-                val locationText = StringBuilder().apply {
-                    append(latestLatitude)
-                    append(", ")
-                    append(latestLongitude)
-                }.toString()
-                binding.layoutHomeFragment.minimapLayout.curLocationTV.text = locationText
-                updateTourismPlaceRecomended()
-            }
-        })
     }
     private fun updateTourismPlaceRecomended() {
         Log.i("dataResponse", "Masuk ke  fungsi updateTourismPlaceRecomended()")
@@ -198,87 +175,97 @@ class HomeFragment : Fragment(),
                 Log.i("dataResponse", "Ada Akses Internet")
                 if (latestLongitude == 0.0 && latestLatitude == 0.0 ){
                     Log.i("dataResponse", "Ada Akses Internet dan lati dan long = 0")
-                    // Mendapatkan tempat wisata berdasarkan kategori favorite
-                    viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
-                        viewModel.getNewTourismPlaceWithCategory(it.categoryName).observe(viewLifecycleOwner, { data->
-                            placePagingAdapter.submitData(lifecycle, data)
-                            placePagingAdapter.addLoadStateListener { loadState ->
-                                val errorState = when {
-                                    loadState.append is LoadState.Error -> loadState.append as LoadState.Error
-                                    loadState.prepend is LoadState.Error ->  loadState.prepend as LoadState.Error
-                                    loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
-                                    else -> null
-                                }
-                                errorState?.let {
-                                    if (errorState !is LoadState.Error) {
-                                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                                            adapter = placePagingAdapter
-                                        }
-                                    }
-                                }
-                            }
-                        })
-
-                    })
-
+                    // Mendapatkan tempat wisata berdasarkan kategori favorite dari Cloud API
+                    getDataTourismPlaceWithFavoriteCategoryOnline()
 
                 }else {
                     Log.i("dataResponse", "Ada Akses Internet dan lati dan long bukan 0")
-
-                    viewModel.getNewTourismPlaceRecomended(
-                        latitude = latestLatitude,
-                        longitude = latestLongitude
-                    ).observe(viewLifecycleOwner, { data ->
-//                        Log.i("dataResponse", "Data : $data")
-                        placePagingAdapter.submitData(lifecycle, data)
-                        placePagingAdapter.addLoadStateListener {loadState->
-                            val errorState = when {
-                                loadState.append is LoadState.Error -> loadState.append as LoadState.Error
-                                loadState.prepend is LoadState.Error ->  loadState.prepend as LoadState.Error
-                                loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
-                                else -> null
-                            }
-                            errorState?.let {
-                                if (errorState !is LoadState.Error) {
-                                    binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                                        layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                                        adapter = placePagingAdapter
-                                    }
-                                }
-                            }
-                        }
-                    })
+                    // Mendapatkan tempat wisata hasil rekomendasi dari Cloud API
+                    getDataTourismPlaceRecommendedOnline()
                 }
             }else{
                 Log.i("dataResponse", "Tidak Ada Akses Internet")
 
                 if (latestLongitude == 0.0 && latestLatitude == 0.0 ) {
                     Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon = 0")
+                    // mendapatkan tempat berdasarkan kategori favorite dari database
+                    getDataTourismPlaceWithFavoriteCategoryOffline()
 
-                    viewModel.getTourismPlaceRecomended().observe(viewLifecycleOwner, {
-                        val placeListAdapter = PlaceItemListAdapter(it, this)
-                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                            adapter = placeListAdapter
-                        }
-                    })
+
                 }else{
                     Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon bukan 0")
                     // mendapatkan tempat rekomendasi dari database
+                    getDataTourismPlaceRecommendedOffline()
                 }
             }
 
     }
+    private fun getDataTourismPlaceRecommendedOffline(){
+        Log.i("dataResponse", "Masuk ke getDataTourismPlaceRecommendedOffline()" )
+        viewModel.getTourismPlaceRecomended().observe(viewLifecycleOwner, {
+            placeListAdapter = PlaceItemListAdapter(it)
+            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                adapter = placeListAdapter
+            }
+        })
 
-    // Listener untuk list kategori
-    override fun onCategoryClick(category: TourismCategory) {
+    }
+    private fun getDataTourismPlaceRecommendedOnline(){
+        placePagingAdapter = PlaceItemPagingAdapter()
+        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.adapter = placePagingAdapter
+        viewModel.getNewTourismPlaceRecomended(
+            latitude = latestLatitude,
+            longitude = latestLongitude
+        ).observe(viewLifecycleOwner, { data ->
+//                        Log.i("dataResponse", "Data : $data")
+            placePagingAdapter.addLoadStateListener {loadState->
+                val isNotLoading = when {
+                    loadState.append is LoadState.NotLoading -> true
+                    loadState.prepend is LoadState.NotLoading ->  true
+                    loadState.refresh is LoadState.NotLoading -> true
+                    else -> false
+                }
+                isNotLoading.let {
+                    if (isNotLoading) {
+                        placePagingAdapter.submitData(lifecycle, data)
+                    }
+                }
+            }
+
+        })
+
+    }
+    private fun getDataTourismPlaceWithFavoriteCategoryOffline(){
+        getDataTourismPlaceRecommendedOffline()
+    }
+    private fun getDataTourismPlaceWithFavoriteCategoryOnline(){
+        viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
+            viewModel.getNewTourismPlaceWithCategory(it.categoryName).observe(viewLifecycleOwner, { data->
+                placePagingAdapter.submitData(lifecycle, data)
+                placePagingAdapter.addLoadStateListener { loadState ->
+                    val isNotLoading = when {
+                        loadState.append is LoadState.NotLoading -> true
+                        loadState.prepend is LoadState.NotLoading ->  true
+                        loadState.refresh is LoadState.NotLoading -> true
+                        else -> false
+                    }
+                    isNotLoading.let {
+                        if (isNotLoading) {
+                            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                                adapter = placePagingAdapter
+
+                                placePagingAdapter.submitData(lifecycle, data)
+                            }
+                        }
+                    }
+                }
+            })
+
+        })
+
     }
 
-    // Listener untuk list wisata
-    override fun onPlaceItemClick(place: TourismPlaceItem) {
-        val intent = Intent(requireContext(), DetailActivity::class.java)
-        intent.putExtra("PLACE_EXTRA", place)
-        startActivity(intent)
-    }
 }

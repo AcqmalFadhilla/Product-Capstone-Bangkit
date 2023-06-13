@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
+import com.reev.telokkaapps.data.remote.response.DetailTourismPlace
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityFormPlanningBinding
 import com.reev.telokkaapps.ui.dashboard.MainActivity
@@ -65,7 +66,7 @@ class FormPlanningActivity : AppCompatActivity() {
             }
         }
 
-        val place = intent.getParcelableExtra<PlaceAndTourismCategory>("PLACE_EXTRA")
+        val place = intent.getParcelableExtra<DetailTourismPlace>("PLACE_EXTRA")
         if (place != null) {
             binding.apply {
                 layoutActivityFormPlanning.apply {
@@ -76,17 +77,17 @@ class FormPlanningActivity : AppCompatActivity() {
                     drawable.setColorSchemeColors(color)
                     drawable.start()
                     Glide.with(this@FormPlanningActivity)
-                        .load(place.tourismPlace.placePhotoUrl)
+                        .load(place.headerImage)
                         .placeholder(drawable)
                         .into(placePhotoUrlImageView)
 
-                    placeNameTextView.text = place.tourismPlace.placeName
-                    placeCategoryTextView.text = place.category?.categoryName
+                    placeNameTextView.text = place.name
+                    placeCategoryTextView.text = place.category
                 }
 
                 itemButton.apply {
-                    infoTV.text = "klik tombol konfirmasi jika data sudah sesuai"
-                    button1.text = "Konfirmasi"
+                    infoTV.text = getString(R.string.labelConfirmationButton)
+                    button1.text = getString(R.string.confirmationButton)
                     button1.setOnClickListener {
                         val alertDialog = android.app.AlertDialog.Builder(this@FormPlanningActivity)
                             .setTitle("Pastikan data penjadwalan benar")
@@ -97,7 +98,7 @@ class FormPlanningActivity : AppCompatActivity() {
                                 var description : String = binding.layoutActivityFormPlanning.planningDescEditTextLayout.editText?.text.toString()
                                 var date : String = dateToString(myCalendar)
                                 var status : Boolean = false
-                                var idPlace : Int = place.tourismPlace.placeId
+                                var idPlace : Int = place.id
 
                                 viewModel.insertTourismPlan(TourismPlan(idPlan, title, description, date, status, idPlace))
                                 Toast.makeText(this@FormPlanningActivity, "Berhasil Membuat Jadwal", Toast.LENGTH_SHORT).show()

@@ -15,6 +15,10 @@ import com.reev.telokkaapps.helper.InitialDataSource
 class FilteringFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentFilteringBinding
 
+    public var category : String = ""
+    public var city : String = ""
+    public var orderRating : Boolean = true
+
     override fun onResume() {
         super.onResume()
         val citiesOptions = InitialDataSource.getCityNames()
@@ -45,6 +49,18 @@ class FilteringFragment : BottomSheetDialogFragment() {
                 Toast.makeText(requireContext(), "Berhasil menerapkan filter", Toast.LENGTH_SHORT).show()
                 dismiss()
             }
+
+            // Aksi untuk menyimpan kota/kabupaten yang dipilih
+            // city = citySelected
+
+
+            // Aksi untuk menyimpan kategori yang dipilih
+            // category = categorySelected
+
+
+            // Aksi untuk menyimpan urutan rating yang dipilih
+            // orderRating = orderRatingSelected
+
         }
     }
 }

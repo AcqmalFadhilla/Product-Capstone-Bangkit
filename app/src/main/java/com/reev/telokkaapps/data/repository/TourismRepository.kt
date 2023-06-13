@@ -2,6 +2,7 @@ package com.reev.telokkaapps.data.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -17,11 +18,18 @@ import com.reev.telokkaapps.data.local.database.entity.TourismPlan
 import com.reev.telokkaapps.data.remote.ApiConfig
 import com.reev.telokkaapps.data.remote.ApiService
 import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceNearestPagingSource
+import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceSearchedPagingSource
 import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceWithCategoryPagingSource
+import com.reev.telokkaapps.data.remote.response.DetailPlaceResponse
+import com.reev.telokkaapps.data.remote.response.DetailTourismPlace
 import com.reev.telokkaapps.data.remote.response.ListPlaceItem
 import com.reev.telokkaapps.helper.InitialDataSource
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.reev.telokkaapps.data.remote.Result
 
 class TourismRepository(application: Application) {
     private val mTourismCategoryDao : TourismCategoryDao
@@ -232,6 +240,43 @@ class TourismRepository(application: Application) {
             }
         ).liveData
     }
+
+    fun getNewTourismPlaceSearched(query: String, category: String, city: String, orderRating : Boolean) : LiveData<PagingData<ListPlaceItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                ListPlaceSearchedPagingSource(apiService = apiService, query = query, category =  category, city = city, orderRating = orderRating)
+            }
+        ).liveData
+    }
+
+    private val result = MediatorLiveData<Result<List<DetailTourismPlace>>>()
+
+    fun getNewDetailTourismPlace(id : Int) : LiveData<Result<List<DetailTourismPlace>>> {
+        result.value = Result.Loading
+        val client = ApiConfig.getApiService().getPlaceWithId(id)
+        client.enqueue(object : Callback<DetailPlaceResponse> {
+            override fun onResponse(
+                call: Call<DetailPlaceResponse>,
+                response: Response<DetailPlaceResponse>
+            ) {
+                if(response.isSuccessful){
+                    result.value = Result.Success(response.body()!!.data)
+                }
+            }
+
+            override fun onFailure(call: Call<DetailPlaceResponse>, t: Throwable) {
+                result.value = Result.Error(t.message.toString())
+            }
+
+        })
+
+        return result
+
+    }
+
 
 
 }

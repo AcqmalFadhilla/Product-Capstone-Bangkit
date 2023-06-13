@@ -13,7 +13,7 @@ import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.remote.response.ListPlaceItem
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
 
-class PlaceItemPagingAdapter() : PagingDataAdapter<ListPlaceItem, PlaceItemPagingAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemPlaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)

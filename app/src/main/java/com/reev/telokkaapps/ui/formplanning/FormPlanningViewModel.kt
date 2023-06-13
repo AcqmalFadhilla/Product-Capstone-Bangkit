@@ -12,6 +12,8 @@ class FormPlanningViewModel (app : Application) : ViewModel() {
 
     fun insertTourismPlan(newPlan : TourismPlan ) = mTourismRepository.insertTourismPlan(newPlan)
 
+    fun getNewDetailTourismPlace(id: Int) = mTourismRepository.getNewDetailTourismPlace(id = id)
+
 
 
 }

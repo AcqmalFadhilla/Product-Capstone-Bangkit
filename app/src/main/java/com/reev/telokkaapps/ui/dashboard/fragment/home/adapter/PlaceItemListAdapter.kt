@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.home.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
+import com.reev.telokkaapps.ui.detail.DetailActivity
+import com.reev.telokkaapps.utility.Constant
 
 class PlaceItemListAdapter(private val dataList: List<TourismPlaceItem>) :
     RecyclerView.Adapter<PlaceItemListAdapter.ViewHolder>() {

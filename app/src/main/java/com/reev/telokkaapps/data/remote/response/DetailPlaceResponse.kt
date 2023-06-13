@@ -10,60 +10,60 @@ import com.google.gson.annotations.SerializedName
 data class DetailPlaceResponse(
 
 	@field:SerializedName("data")
-	val data: List<DataItem?>? = null,
+	val data: List<DetailTourismPlace>,
 
 	@field:SerializedName("succes")
-	val succes: Boolean? = null
+	val succes: Boolean
 ) : Parcelable
 
 @Entity(tableName = "detail_place")
 
 @Parcelize
-data class DataItem(
+data class DetailTourismPlace(
 
 	@field:SerializedName("Category")
-	val category: String? = null,
+	val category: String,
 
 	@field:SerializedName("Description")
-	val description: String? = null,
+	val description: String,
 
 	@field:SerializedName("Address")
-	val address: String? = null,
+	val address: String,
 
 	@field:SerializedName("Rating")
-	val rating: Double? = null,
+	val rating: Double,
 
 	@field:SerializedName("Website")
-	val website: String? = null,
+	val website: String,
 
 	@field:SerializedName("Latitude")
-	val latitude: Double? = null,
+	val latitude: Double,
 
 	@field:SerializedName("Review")
-	val review: String? = null,
+	val review: String,
 
 	@field:SerializedName("Longitude")
-	val longitude: Double? = null,
+	val longitude: Double,
 
 	@field:SerializedName("Name")
-	val name: String? = null,
+	val name: String,
 
 	@field:SerializedName("Detail_URL")
-	val detailURL: String? = null,
+	val detailURL: String,
 
 	@field:SerializedName("Kota")
-	val kota: String? = null,
+	val kota: String,
 
 	@field:SerializedName("Phone")
-	val phone: String? = null,
+	val phone: String,
 
 	@PrimaryKey
 	@field:SerializedName("ID")
-	val id: Int? = null,
+	val id: Int,
 
 	@field:SerializedName("Header_image")
-	val headerImage: String? = null,
+	val headerImage: String,
 
 	@field:SerializedName("Tags")
-	val tags: String? = null
+	val tags: String
 ) : Parcelable

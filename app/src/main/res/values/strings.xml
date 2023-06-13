@@ -21,6 +21,8 @@
     <string name="home_category_section">Ingin menelusuri wisata lainnya?</string>
     <string name="home_place_list_section">Tempat rekomendasi untuk anda</string>
     <string name="please_update_your_location">Silahkan update lokasi anda</string>
+    <string name="labelConfirmationButton">klik tombol konfirmasi jika data sudah sesuai</string>
+    <string name="confirmationButton">Konfirmasi</string>
 
 
 </resources>
