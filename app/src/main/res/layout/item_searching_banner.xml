@@ -39,12 +39,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Telusuri tempat lainnya"
-                android:singleLine="true"
-                android:maxLines="1"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:imeActionLabel="Search"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionSearch"
                 android:background="@drawable/bg_text_field_item_filter"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <FrameLayout

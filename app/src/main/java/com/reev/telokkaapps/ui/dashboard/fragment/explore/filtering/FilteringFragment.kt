@@ -47,19 +47,24 @@ class FilteringFragment : BottomSheetDialogFragment() {
 
             filterConfirmationButton.setOnClickListener {
                 Toast.makeText(requireContext(), "Berhasil menerapkan filter", Toast.LENGTH_SHORT).show()
+
+                // Aksi untuk menyimpan kota/kabupaten yang dipilih
+                city = cityFilter.toString()
+
+                // Aksi untuk menyimpan kategori yang dipilih
+                category = categoryFilter.toString()
+
+                // Aksi untuk menyimpan urutan rating yang dipilih
+                val selectedRadioButtonId = radioGroupRating.checkedRadioButtonId
+                val isSelectedLowRating = selectedRadioButtonId == R.id.radioButtonLowRating
+                if (isSelectedLowRating) {
+                    orderRating = false
+                }
+
                 dismiss()
             }
 
-            // Aksi untuk menyimpan kota/kabupaten yang dipilih
-            // city = citySelected
 
-
-            // Aksi untuk menyimpan kategori yang dipilih
-            // category = categorySelected
-
-
-            // Aksi untuk menyimpan urutan rating yang dipilih
-            // orderRating = orderRatingSelected
 
         }
     }

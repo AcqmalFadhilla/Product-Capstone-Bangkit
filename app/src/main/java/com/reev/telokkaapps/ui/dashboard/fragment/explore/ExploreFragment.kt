@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.paging.LoadState
@@ -68,23 +69,37 @@ class ExploreFragment : Fragment(){
 
         // Aksi ketika ikon search diklik
         binding.itemSearchBanner.searchField.setStartIconOnClickListener{
-            val city = filteringFragment.city
-            val category = filteringFragment.category
-            val orderRating = filteringFragment.orderRating
-            val searchText = binding.itemSearchBanner.searchTextField.text.toString()
-
-            getNewData(
-                query = searchText,
-                category = category,
-                city = city,
-                orderRating = orderRating
-            )
+            searchingHandler()
         }
 
-
-
+        binding.itemSearchBanner.searchTextField.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                // Tambahkan aksi kustom di sini
+                searchingHandler()
+                true
+            } else {
+                false
+            }
+        }
 
     }
+
+    private fun searchingHandler(){
+        Toast.makeText(requireContext(), "Mencari...", Toast.LENGTH_SHORT).show()
+
+        val city = filteringFragment.city
+        val category = filteringFragment.category
+        val orderRating = filteringFragment.orderRating
+        val searchText = binding.itemSearchBanner.searchTextField.text.toString()
+
+        getNewData(
+            query = searchText,
+            category = category,
+            city = city,
+            orderRating = orderRating
+        )
+    }
+
     private fun getNewData(query : String, category: String, city : String, orderRating: Boolean){
         lastPage++
         if (InternetConnection.checkConnection(requireContext())){
