@@ -1,14 +1,17 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.explore
 
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.reev.telokkaapps.R
@@ -54,31 +57,38 @@ class ExploreFragment : Fragment(){
 
         placePagingAdapter = PlaceItemPagingAdapter()
 
-        // untuk filter
-        filteringFragment = FilteringFragment()
+        binding.apply{// untuk filter
+            filteringFragment = FilteringFragment()
 
-        binding.itemSearchBanner.filterButton.setOnClickListener {
-            // buat aksi untuk memunculkan item filter
-            Toast.makeText(requireContext(), "Buka Filter", Toast.LENGTH_SHORT).show()
-            filteringFragment.show(childFragmentManager, "FilteringDialog")
-        }
+            itemSearchBanner.filterButton.setOnClickListener {
+                // buat aksi untuk memunculkan item filter
+                Toast.makeText(requireContext(), "Buka Filter", Toast.LENGTH_SHORT).show()
+                filteringFragment.show(childFragmentManager, "FilteringDialog")
+            }
 
 
-        // untuk item list
-        binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
+            // untuk item list
+            listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
 
-        // Aksi ketika ikon search diklik
-        binding.itemSearchBanner.searchField.setStartIconOnClickListener{
-            searchingHandler()
-        }
-
-        binding.itemSearchBanner.searchTextField.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                // Tambahkan aksi kustom di sini
+            // Aksi ketika ikon search diklik
+            itemSearchBanner.searchField.setStartIconOnClickListener {
                 searchingHandler()
-                true
-            } else {
-                false
+            }
+
+            itemSearchBanner.searchTextField.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // Tambahkan aksi kustom di sini
+                    searchingHandler()
+
+                    // Menutup keyboard
+                    val inputMethodManager =
+                        requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+                    true
+                } else {
+                    false
+                }
             }
         }
 
