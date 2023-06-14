@@ -161,13 +161,6 @@ class HomeFragment : Fragment(){
 
         // Mendapatkan Data Rekomendasi
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
-
-//        val dummyPlace = DummyPlacesData.dummyPlaces2
-//        val placeListAdapter = PlaceItemListAdapter(dummyPlace)
-//        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-//            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-//            adapter = placeListAdapter
-//        }
         updateTourismPlaceRecomended()
 
     }
@@ -176,33 +169,31 @@ class HomeFragment : Fragment(){
         if (InternetConnection.checkConnection(requireContext())){
             Toast.makeText(requireContext(), "Anda sedang online..", Toast.LENGTH_SHORT ).show()
             Log.i("dataResponse", "Ada Akses Internet")
-                if (latestLongitude == 0.0 && latestLatitude == 0.0 ){
-                    Log.i("dataResponse", "Ada Akses Internet dan lati dan long = 0")
-                    // Mendapatkan tempat wisata berdasarkan kategori favorite dari Cloud API
-                    getDataTourismPlaceWithFavoriteCategoryOnline()
+            if (latestLongitude == 0.0 && latestLatitude == 0.0 ){
+                Log.i("dataResponse", "Ada Akses Internet dan lati dan long = 0")
+                // Mendapatkan tempat wisata berdasarkan kategori favorite dari Cloud API
+                getDataTourismPlaceWithFavoriteCategoryOnline()
 
-                }else {
-                    Log.i("dataResponse", "Ada Akses Internet dan lati dan long bukan 0")
-                    // Mendapatkan tempat wisata hasil rekomendasi dari Cloud API
-                    getDataTourismPlaceRecommendedOnline()
-                }
-            }else{
-                Log.i("dataResponse", "Tidak Ada Akses Internet")
-                Toast.makeText(requireContext(), "Anda sedang offline..", Toast.LENGTH_SHORT ).show()
-
-                if (latestLongitude == 0.0 && latestLatitude == 0.0 ) {
-                    Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon = 0")
-                    // mendapatkan tempat berdasarkan kategori favorite dari database
-                    getDataTourismPlaceWithFavoriteCategoryOffline()
-
-
-                }else{
-                    Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon bukan 0")
-                    // mendapatkan tempat rekomendasi dari database
-                    getDataTourismPlaceRecommendedOffline()
-                }
+            }else {
+                Log.i("dataResponse", "Ada Akses Internet dan lati dan long bukan 0")
+                // Mendapatkan tempat wisata hasil rekomendasi dari Cloud API
+                getDataTourismPlaceRecommendedOnline()
             }
+        }else{
+            Log.i("dataResponse", "Tidak Ada Akses Internet")
+            Toast.makeText(requireContext(), "Anda sedang offline..", Toast.LENGTH_SHORT ).show()
 
+            if (latestLongitude == 0.0 && latestLatitude == 0.0 ) {
+                Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon = 0")
+                // mendapatkan tempat berdasarkan kategori favorite dari database
+                getDataTourismPlaceWithFavoriteCategoryOffline()
+
+            }else{
+                Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon bukan 0")
+                // mendapatkan tempat rekomendasi dari database
+                getDataTourismPlaceRecommendedOffline()
+            }
+        }
     }
     private fun getDataTourismPlaceRecommendedOffline(){
         Log.i("dataResponse", "Masuk ke getDataTourismPlaceRecommendedOffline()" )

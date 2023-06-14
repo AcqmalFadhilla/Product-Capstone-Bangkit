@@ -1,21 +1,28 @@
 package com.reev.telokkaapps.ui.splash
 
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.databinding.ActivitySplashBinding
 import com.reev.telokkaapps.ui.categoryzation.CategoryzationActivity
 import com.reev.telokkaapps.ui.dashboard.MainActivity
 
+
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
+    private lateinit var viewModel : SplashViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = SplashViewModel(application)
+
 
         hideActBar()
 
@@ -27,13 +34,17 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun splashScreenHandler() {
-//        if() { //buat if untuk mengecek apakah user sudah mementukan kategorisasinya
-//            val intent = Intent(this, MainActivity::class.java)
-//            navigate(intent)
-//        } else {
-            val intent = Intent(this, CategoryzationActivity::class.java)
-            navigate(intent)
-//        }
+        viewModel.getAllTourismCategoryFavorited().observe(this, { category->
+
+            if(category is TourismCategory && category.categoryId >= 0) {
+                val intent = Intent(this, MainActivity::class.java)
+                navigate(intent)
+            } else {
+                val intent = Intent(this, CategoryzationActivity::class.java)
+                navigate(intent)
+            }
+
+    })
     }
 
     private fun navigate(intent: Intent) {
