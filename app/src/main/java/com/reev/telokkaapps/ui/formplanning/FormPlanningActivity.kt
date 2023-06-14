@@ -17,6 +17,7 @@ import com.reev.telokkaapps.data.remote.response.DetailTourismPlace
 import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
 import com.reev.telokkaapps.databinding.ActivityFormPlanningBinding
 import com.reev.telokkaapps.ui.dashboard.MainActivity
+import com.reev.telokkaapps.utility.notification.NotificationUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -100,7 +101,18 @@ class FormPlanningActivity : AppCompatActivity() {
                                 var status : Boolean = false
                                 var idPlace : Int = place.id
 
-                                viewModel.insertTourismPlan(TourismPlan(idPlan, title, description, date, status, idPlace))
+                                val tourismPlan = TourismPlan(idPlan, title, description, date, status, idPlace)
+                                val notificationId = tourismPlan.planId // Menggunakan planId sebagai ID notifikasi
+
+                                // Simpan data ke database
+                                viewModel.insertTourismPlan(tourismPlan)
+
+                                //Tampilkan Notifikasi berhasil simpan plan
+                                NotificationUtils.showNotification(this@FormPlanningActivity, title, date, notificationId)
+
+                                // Jadwalkan notifikasi
+                                NotificationUtils.scheduleNotification(this@FormPlanningActivity, title, date, notificationId) // untuk ID_PLACE sebenarnya mau diganti dengan id_Plan
+
                                 Toast.makeText(this@FormPlanningActivity, "Berhasil Membuat Jadwal", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this@FormPlanningActivity, MainActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

@@ -18,7 +18,7 @@ import com.reev.telokkaapps.ui.dashboard.fragment.planning.adapter.PlanningItemL
 import com.reev.telokkaapps.ui.detail.DetailActivity
 import com.reev.telokkaapps.ui.detailplanning.DetailPlanningActivity
 
-class PlanningFragment : Fragment(), PlanningItemListAdapter.OnPlaceItemClickListener{
+class PlanningFragment : Fragment(){
 
     private lateinit var binding: FragmentPlanningBinding
     private lateinit var viewModel: PlanningViewModel
@@ -42,20 +42,12 @@ class PlanningFragment : Fragment(), PlanningItemListAdapter.OnPlaceItemClickLis
         binding.listPlanningLayout.sectionTitle.text = "Jadwal Kegiatan Wisata Anda"
 
         viewModel.getAllPlanWithPlaceAndTourismCategory().observe(viewLifecycleOwner, {
-            val planningListAdapter = PlanningItemListAdapter(it, this)
+            val planningListAdapter = PlanningItemListAdapter(it)
 
             binding.listPlanningLayout.itemRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 adapter = planningListAdapter
             }
-
         })
     }
-
-    override fun onPlanningItemClick(planningPlace: TourismPlanItem) {
-        val intent = Intent(requireContext(), DetailPlanningActivity::class.java)
-        intent.putExtra("PLANNING_EXTRA", planningPlace)
-        startActivity(intent)
-    }
-
 }

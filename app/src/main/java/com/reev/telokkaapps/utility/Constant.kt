@@ -7,4 +7,7 @@ object Constant {
 
     //Untuk detail Place
     const val DETAIL_PLACE = "DETAIL_PLACE"
+
+    //Untuk detail Plan
+    const val DETAIL_PLAN = "DETAIL_PLAN"
 }

@@ -17,6 +17,7 @@ import com.reev.telokkaapps.data.local.database.model.TourismPlanItem
 import com.reev.telokkaapps.data.source.local.dummy.dummyplanning.PlanningPlace
 import com.reev.telokkaapps.databinding.ActivityDetailPlanningBinding
 import com.reev.telokkaapps.ui.formplanning.FormPlanningActivity
+import com.reev.telokkaapps.utility.Constant
 
 class DetailPlanningActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPlanningBinding
@@ -54,7 +55,7 @@ class DetailPlanningActivity : AppCompatActivity() {
         }
 
         // get data planning
-        val planningPlace = intent.getParcelableExtra<TourismPlanItem>("PLANNING_EXTRA")
+        val planningPlace = intent.getParcelableExtra<TourismPlanItem>(Constant.DETAIL_PLAN)
         planningPlace?.let {
             viewModel.getDetailTourismPlanWithId(planningPlace.planId).observe(this) { plan ->
                 if (planningPlace != null) {

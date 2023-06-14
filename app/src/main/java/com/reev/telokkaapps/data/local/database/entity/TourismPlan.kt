@@ -28,4 +28,4 @@ data class TourismPlan(
     @ColumnInfo(name = "idPlace")
     var idPlace : Int,
 
-    ): Parcelable
+): Parcelable

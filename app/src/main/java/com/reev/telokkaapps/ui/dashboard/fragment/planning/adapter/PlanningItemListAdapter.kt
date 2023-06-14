@@ -1,5 +1,7 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.planning.adapter
 
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +12,10 @@ import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.model.TourismPlanItem
 import com.reev.telokkaapps.databinding.ItemPlanningBinding
+import com.reev.telokkaapps.ui.detailplanning.DetailPlanningActivity
+import com.reev.telokkaapps.utility.Constant
 
-class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>, private val listener: OnPlaceItemClickListener) :
+class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>) :
     RecyclerView.Adapter<PlanningItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -22,7 +26,14 @@ class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>, priva
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val planningPlace = dataList[position]
-                    listener.onPlanningItemClick(planningPlace)
+                    planningPlace.let {
+                        val intent = Intent(itemView.context, DetailPlanningActivity::class.java).apply {
+                            Log.i("dataResponse", "tempat yang diklik ${it.placeName}")
+                            //butuh putExtra untuk Place ID
+                            putExtra(Constant.DETAIL_PLAN, it)
+                        }
+                        itemView.context.startActivity(intent)
+                    }
                 }
             }
         }
@@ -52,10 +63,6 @@ class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>, priva
                 planningDateTextView.text = "Jadwal : $date"
             }
         }
-    }
-
-    interface  OnPlaceItemClickListener {
-        fun onPlanningItemClick(planningPlace: TourismPlanItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

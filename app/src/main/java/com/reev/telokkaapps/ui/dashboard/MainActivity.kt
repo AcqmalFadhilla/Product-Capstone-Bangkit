@@ -9,6 +9,7 @@ import com.reev.telokkaapps.ui.dashboard.fragment.collection.CollectionFragment
 import com.reev.telokkaapps.ui.dashboard.fragment.explore.ExploreFragment
 import com.reev.telokkaapps.ui.dashboard.fragment.home.HomeFragment
 import com.reev.telokkaapps.ui.dashboard.fragment.planning.PlanningFragment
+import com.reev.telokkaapps.utility.notification.NotificationUtils
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -18,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         HomeFragment()
         supportActionBar?.hide()
+
+        //Buat notifikasi
+        NotificationUtils.createNotificationChannel(this)
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
