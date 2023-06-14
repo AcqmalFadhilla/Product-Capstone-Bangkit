@@ -4,14 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.reev.telokkaapps.data.local.database.dao.TourismCategoryDao
-import com.reev.telokkaapps.data.local.database.dao.TourismPlanDao
-import com.reev.telokkaapps.data.local.database.dao.TourismPlaceDao
-import com.reev.telokkaapps.data.local.database.dao.TourismPlaceNearestRemoteKeysDao
-import com.reev.telokkaapps.data.local.database.entity.TourismCategory
-import com.reev.telokkaapps.data.local.database.entity.TourismPlace
-import com.reev.telokkaapps.data.local.database.entity.TourismPlaceNearestRemoteKeys
-import com.reev.telokkaapps.data.local.database.entity.TourismPlan
+import com.reev.telokkaapps.data.local.database.dao.*
+import com.reev.telokkaapps.data.local.database.entity.*
 
 
 @Database(
@@ -19,15 +13,20 @@ import com.reev.telokkaapps.data.local.database.entity.TourismPlan
         TourismCategory::class,
         TourismPlan::class,
         TourismPlace::class,
-        TourismPlaceNearestRemoteKeys::class ],
-    version = 2
+        TourismPlaceInteraction::class,
+        TourismPlaceNearestRemoteKeys::class,
+        TourismPlaceSearchedRemoteKeys::class,
+        TourismPlaceWithCategoryRemoteKeys::class ],
+    version = 1
 )
 abstract class TourismRoomDatabase : RoomDatabase() {
     abstract fun tourismCategoryDao(): TourismCategoryDao
     abstract fun tourismPlanDao(): TourismPlanDao
     abstract fun tourismPlaceDao(): TourismPlaceDao
-
+    abstract fun tourismPlaceInteractionDao(): TourismPlaceInteractionDao
     abstract fun tourismPlaceNearestRemoteKeysDao(): TourismPlaceNearestRemoteKeysDao
+    abstract fun tourismPlaceSearchedRemoteKeysDao(): TourismPlaceSearchedRemoteKeysDao
+    abstract fun tourismPlaceWithCategoryRemoteKeysDao(): TourismPlaceWithCategoryRemoteKeysDao
 
     companion object {
         @Volatile

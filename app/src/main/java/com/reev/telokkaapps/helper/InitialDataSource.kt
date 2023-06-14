@@ -20,10 +20,8 @@ object InitialDataSource {
             TourismCategory(4, "Pantai",R.drawable.img_4_pantai,  false, ),
             TourismCategory(5, "Permandian", R.drawable.img_5_permandian, false),
             TourismCategory(6, "Religi", R.drawable.img_6_religi,false),
-            TourismCategory(7, "Hotel", R.drawable.img_7_hotel,false),
-            TourismCategory(8, "Danau", R.drawable.img_8_danau,false),
-            TourismCategory(9, "Belanja", R.drawable.img_9_tempat_perbelanjaan, false),
-            TourismCategory(10, "Alam", R.drawable.img_10_alam,false),
+            TourismCategory(7, "Danau", R.drawable.img_8_danau,false),
+            TourismCategory(8, "Alam", R.drawable.img_10_alam,false),
         )
     }
     fun getTourismPlace() : List<TourismPlace>{
@@ -44,9 +42,7 @@ object InitialDataSource {
                 placeReview = "pasar,keluarga,sore,kebersihan,sejuk,pantai,pagi,jogging",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 9,
@@ -64,9 +60,7 @@ object InitialDataSource {
                 placeReview = "pasar,keluarga,sore,kebersihan,sejuk,pantai,pagi,jogging",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 27,
@@ -84,9 +78,7 @@ object InitialDataSource {
                 placeReview = "sejuk,pemandangan,alam,tinggi,parkir,tiket,foto,bebatuan,hujan,anak",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 32,
@@ -104,9 +96,7 @@ object InitialDataSource {
                 placeReview = "pemandangan,alam,desa,bukit,daerah,parkir",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 43,
@@ -124,9 +114,7 @@ object InitialDataSource {
                 placeReview = "sejarah,lantai,foto,benda,kolonial,kantor,nama,dokumentasi,belajar,tahu",
                 placeWebsite = "http://makassar.go.id/",
                 placePhone = "(0411) 314077",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 47,
@@ -144,9 +132,7 @@ object InitialDataSource {
                 placeReview = "sejarah,rumah,belajar,museum,rakyat,tinggi,masjid,bunga,informasi",
                 placeWebsite = "-",
                 placePhone = "0812-8805-6050",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),TourismPlace(
                 placeId = 48,
                 placeName = "pantai bosowa tanjung",
@@ -163,9 +149,7 @@ object InitialDataSource {
                 placeReview = "pantainya,sunset,tiket,kebersihan,motor,toilet,gazebo,fasilitas,weekend,tempat duduk",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 59,
@@ -183,9 +167,7 @@ object InitialDataSource {
                 placeReview = "sunset,foto,pemandangan,malam,masjid,sampah,kebersihan,orang,laut,daerah",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 7,
@@ -203,9 +185,7 @@ object InitialDataSource {
                 placeReview = "laut,pemandangan,keluarga,air tawar,berenang,kebersihannya,orang",
                 placeWebsite = "-",
                 placePhone = "0853-4257-2550",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 17,
@@ -223,9 +203,7 @@ object InitialDataSource {
                 placeReview = "kolam renang,liburan,alam,keluarga,perempuan,orang",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 42,
@@ -243,9 +221,7 @@ object InitialDataSource {
                 placeReview = "umat,bangunan,agama,pagoda,tinggi,ibadah,dharma",
                 placeWebsite = "https://www.viharagirinaga.com/",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 69,
@@ -263,9 +239,7 @@ object InitialDataSource {
                 placeReview = "arsitektur,desain,ridwan kamil,foto,asma'ul husna,masyarakat,tangga,ikon,karya,gelap",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 89,
@@ -283,9 +257,7 @@ object InitialDataSource {
                 placeReview = "wifi,kolam renang",
                 placeWebsite = "-",
                 placePhone = "0811-4197-747",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 92,
@@ -303,9 +275,7 @@ object InitialDataSource {
                 placeReview = "sarapan, wifi",
                 placeWebsite = "http://lensamandalika.com/",
                 placePhone = "(0421) 26088",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 171,
@@ -322,10 +292,7 @@ object InitialDataSource {
                 placeTags = "Masih perlu banyak pembenahan sebagai objek wisata",
                 placeReview = "camping,alami,pemandangan,tanah,sampah,bukit,karst,hujan,toilet,motor",
                 placeWebsite = "-",
-                placePhone = "-",
-                isFavorited = false,
-                isRecomended = false,
-                clickCount = 0,
+                placePhone = "-"
             ),
             TourismPlace(
                 placeId = 184,
@@ -343,9 +310,7 @@ object InitialDataSource {
                 placeReview = "kupu-kupu,pemandangan,batu,air terjun",
                 placeWebsite = "-",
                 placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             ),
             TourismPlace(
                 placeId = 4,
@@ -363,9 +328,7 @@ object InitialDataSource {
                 placeReview = "pemandangan,mendaki,foto,sunrise,wc,keindahan",
                 placeWebsite = "-",
                 placePhone = "0822-9391-4225",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+
             )
         )
     }

@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
-import com.reev.telokkaapps.data.remote.response.ListPlaceItem
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.databinding.ItemPlaceBinding
 import com.reev.telokkaapps.ui.detail.DetailActivity
 import com.reev.telokkaapps.utility.Constant
 
-class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class PlaceItemPagingAdapter : PagingDataAdapter<TourismPlaceItem, PlaceItemPagingAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemPlaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -34,7 +34,7 @@ class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingA
 
     class MyViewHolder(private val binding: ItemPlaceBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListPlaceItem) {
+        fun bind(item: TourismPlaceItem) {
             binding.apply{
 
                 val color = ContextCompat.getColor(binding.root.context ,R.color.blue_200)
@@ -46,17 +46,17 @@ class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingA
                 drawable.start()
 
                 Glide.with(itemView.context)
-                    .load(item.headerImage)
+                    .load(item.placePhotoUrl)
                     .placeholder(drawable)
                     .into(placeImg)
 
-                placeName.text = item.name
-                placeCategory.text = item.category
-                placeRating.text = item.rating.toString()
+                placeName.text = item.placeName
+                placeCategory.text = item.placeCategory
+                placeRating.text = item.placeRating.toString()
 
                 placeCardView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java).apply {
-                        putExtra(Constant.DETAIL_PLACE, item.id)
+                        putExtra(Constant.DETAIL_PLACE, item.placeId)
                     }
                     itemView.context.startActivity(intent)
                 }
@@ -66,15 +66,15 @@ class PlaceItemPagingAdapter : PagingDataAdapter<ListPlaceItem, PlaceItemPagingA
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListPlaceItem>() {
-            override fun areItemsTheSame(oldItem: ListPlaceItem, newItem: ListPlaceItem): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<TourismPlaceItem>() {
+            override fun areItemsTheSame(oldItem: TourismPlaceItem, newItem: TourismPlaceItem): Boolean {
                 Log.i("dataResponse", "DIFF_CALLBACK  areItemsTheSame : ${oldItem == newItem}")
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: ListPlaceItem, newItem: ListPlaceItem): Boolean {
-                Log.i("dataResponse", "DIFF_CALLBACK  areItemsTheSame : ${oldItem.id == newItem.id}")
-                return oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: TourismPlaceItem, newItem: TourismPlaceItem): Boolean {
+                Log.i("dataResponse", "DIFF_CALLBACK  areItemsTheSame : ${oldItem.placeId == newItem.placeId}")
+                return oldItem.placeId == newItem.placeId
             }
         }
     }

@@ -11,11 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
-import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
-import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
-import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
-import com.reev.telokkaapps.data.remote.response.DetailTourismPlace
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
+import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import com.reev.telokkaapps.databinding.ActivityDetailBinding
 import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.formplanning.FormPlanningActivity
@@ -27,7 +23,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var viewModel: DetailViewModel
 
     private var placeId : Int?  = null
-    private var dataDetailTourismPlace : DetailTourismPlace?  = null
+    private var dataTourismPlaceResponse : TourismPlaceResponse?  = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +68,7 @@ class DetailActivity : AppCompatActivity() {
             button1.setOnClickListener {
                 Toast.makeText(this@DetailActivity, "Buat jadwal", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this@DetailActivity, FormPlanningActivity::class.java)
-                intent.putExtra("PLACE_EXTRA", dataDetailTourismPlace)
+                intent.putExtra("PLACE_EXTRA", dataTourismPlaceResponse)
                 startActivity(intent)
             }
         }
@@ -93,7 +89,7 @@ class DetailActivity : AppCompatActivity() {
                         is Result.Success ->{
 
                                 placeId = result.data[0].id
-                                dataDetailTourismPlace = result.data[0]
+                                dataTourismPlaceResponse = result.data[0]
                                 binding.apply {
                                 layoutActivityDetail.apply{
 

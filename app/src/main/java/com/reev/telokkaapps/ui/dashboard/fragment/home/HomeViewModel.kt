@@ -10,7 +10,9 @@ import com.reev.telokkaapps.data.local.database.entity.LocationHistory
 import com.reev.telokkaapps.data.repository.LocationRepository
 import com.reev.telokkaapps.data.repository.TourismRepository
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.data.remote.response.ListPlaceItem
+import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -36,13 +38,13 @@ class HomeViewModel(app : Application) : ViewModel() {
     fun insertNewLocationHistory(locationHistory: LocationHistory) = mLocationRepository.insertLocationHistory(locationHistory)
 
 //    fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double)=  mTourismRepository.getNewTourismPlaceRecomended(latitude = latitude, longitude = longitude)
-    fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double) : LiveData<PagingData<ListPlaceItem>> {
+    fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double) : LiveData<PagingData<TourismPlaceItem>> {
         Log.i("dataResponse", "Masuk ke view Model")
         return mTourismRepository.getNewTourismPlaceRecomended(latitude = latitude, longitude = longitude)
     }
 
-    fun getNewTourismPlaceWithCategory(category: String) : LiveData<PagingData<ListPlaceItem>>{
-        return mTourismRepository.getNewTourismPlaceWithCategory(category = category)
+    fun getNewTourismPlaceWithCategory(category: String, idCategory: Int) : LiveData<PagingData<TourismPlaceItem>> {
+        return mTourismRepository.getNewTourismPlaceWithCategory(category = category, idCategory = idCategory)
     }
     fun getTourismPlaceRecomended()=  mTourismRepository.getTourismPlaceRecomended()
 

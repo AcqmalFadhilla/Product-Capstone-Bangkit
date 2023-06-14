@@ -6,15 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
-import com.reev.telokkaapps.data.local.database.entity.relation.PlaceAndTourismCategory
-import com.reev.telokkaapps.data.remote.response.DetailTourismPlace
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.Place
+import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import com.reev.telokkaapps.databinding.ActivityFormPlanningBinding
 import com.reev.telokkaapps.ui.dashboard.MainActivity
 import java.text.SimpleDateFormat
@@ -66,7 +63,7 @@ class FormPlanningActivity : AppCompatActivity() {
             }
         }
 
-        val place = intent.getParcelableExtra<DetailTourismPlace>("PLACE_EXTRA")
+        val place = intent.getParcelableExtra<TourismPlaceResponse>("PLACE_EXTRA")
         if (place != null) {
             binding.apply {
                 layoutActivityFormPlanning.apply {

@@ -1,10 +1,9 @@
 package com.reev.telokkaapps.data.remote.pagingsource
 
-import android.media.Rating
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.reev.telokkaapps.data.remote.ApiService
-import com.reev.telokkaapps.data.remote.response.ListPlaceItem
+import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import okio.IOException
 import retrofit2.HttpException
 
@@ -14,23 +13,23 @@ class ListPlaceSearchedPagingSource(
     private val category : String,
     private val city: String,
     private val orderRating : Boolean
-) : PagingSource<Int, ListPlaceItem>(){
+) : PagingSource<Int, TourismPlaceResponse>(){
 
     private companion object{
         const val INITIAL_PAGE_INDEX = 1
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ListPlaceItem>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, TourismPlaceResponse>): Int? {
         return state.anchorPosition?.let { anchorPosition->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListPlaceItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TourismPlaceResponse> {
         return try{
             val position = params.key ?: ListPlaceSearchedPagingSource.INITIAL_PAGE_INDEX
-            val responseData = apiService.search(page = position, data = params.loadSize, query = query , category = category, city =  city, orderRating = orderRating )
+            val responseData = apiService.search(page = position, data = params.loadSize, query = query)
 
             LoadResult.Page(
                 data = responseData.data,

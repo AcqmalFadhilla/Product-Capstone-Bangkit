@@ -23,7 +23,6 @@ import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
 import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
@@ -196,14 +195,14 @@ class HomeFragment : Fragment(){
         }
     }
     private fun getDataTourismPlaceRecommendedOffline(){
-        Log.i("dataResponse", "Masuk ke getDataTourismPlaceRecommendedOffline()" )
-        viewModel.getTourismPlaceRecomended().observe(viewLifecycleOwner, {
-            placeListAdapter = PlaceItemListAdapter(it)
-            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                adapter = placeListAdapter
-            }
-        })
+//        Log.i("dataResponse", "Masuk ke getDataTourismPlaceRecommendedOffline()" )
+//        viewModel.getTourismPlaceRecomended().ob(viewLifecycleOwner, {
+//            placeListAdapter = PlaceItemListAdapter(it)
+//            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+//                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+//                adapter = placeListAdapter
+//            }
+//        })
 
     }
     private fun getDataTourismPlaceRecommendedOnline(){
@@ -251,11 +250,18 @@ class HomeFragment : Fragment(){
 
     }
     private fun getDataTourismPlaceWithFavoriteCategoryOnline(){
+        Log.i("dataResponse", "Masuk ke fungsi getDataTourismPlaceWithFavoriteCategoryOnline() ")
+
         viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
-            viewModel.getNewTourismPlaceWithCategory(it.categoryName)
+            Log.i("dataResponse", "Kategori yang disukai yaitu : ${it.categoryName}")
+            viewModel.getNewTourismPlaceWithCategory(it.categoryName, it.categoryId)
                 .cachedIn(viewLifecycleOwner.lifecycleScope)
                 .observe(viewLifecycleOwner, { data->
-                placePagingAdapter.submitData(lifecycle, data)
+
+                    Log.i("dataResponse", "ada indikasi observe pada getNewTourismPlaceWithCategory()")
+                    Log.i("dataResponse", "paging data : $data")
+
+                    placePagingAdapter.submitData(lifecycle, data)
                 placePagingAdapter.addLoadStateListener { loadState ->
                     val isNotLoading = when {
                         loadState.append is LoadState.NotLoading -> true

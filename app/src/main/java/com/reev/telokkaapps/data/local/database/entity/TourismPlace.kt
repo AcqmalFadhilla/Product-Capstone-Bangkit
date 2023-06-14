@@ -54,14 +54,5 @@ data class TourismPlace(
     var placeWebsite : String = "",
 
     @ColumnInfo(name = "placePhone")
-    var placePhone : String = "",
-
-    @ColumnInfo(name = "isFavorited")
-    var isFavorited : Boolean = false,
-
-    @ColumnInfo(name = "isRecomended")
-    var isRecomended : Boolean,
-
-    @ColumnInfo(name = "clickCount")
-    var clickCount : Int = 0
+    var placePhone : String = ""
 ) : Parcelable
