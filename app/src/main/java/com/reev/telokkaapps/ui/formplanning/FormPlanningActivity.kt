@@ -74,7 +74,7 @@ class FormPlanningActivity : AppCompatActivity() {
                     drawable.setColorSchemeColors(color)
                     drawable.start()
                     Glide.with(this@FormPlanningActivity)
-                        .load(place.headerImage)
+                        .load(place.image)
                         .placeholder(drawable)
                         .into(placePhotoUrlImageView)
 

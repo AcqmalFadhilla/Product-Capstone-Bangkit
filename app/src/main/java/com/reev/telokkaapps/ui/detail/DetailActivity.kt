@@ -100,7 +100,7 @@ class DetailActivity : AppCompatActivity() {
                                     drawable.setColorSchemeColors(color)
                                     drawable.start()
                                     Glide.with(this@DetailActivity)
-                                        .load(result.data[0].headerImage)
+                                        .load(result.data[0].image)
                                         .placeholder(drawable)
                                         .into(placePhotoUrlImageView)
 

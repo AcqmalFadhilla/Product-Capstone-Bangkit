@@ -2,7 +2,6 @@ package com.reev.telokkaapps.data.remote.response
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -26,8 +25,8 @@ data class TourismPlaceResponse(
 	@field:SerializedName("Category")
 	val category: String,
 
-	@field:SerializedName("Description")
-	val description: String,
+	@field:SerializedName("Deskripsi")
+	val description: String? = null,
 
 	@field:SerializedName("Address")
 	val address: String,
@@ -54,7 +53,7 @@ data class TourismPlaceResponse(
 	val detailURL: String,
 
 	@field:SerializedName("Kota")
-	val kota: String,
+	val kota: String?,
 
 	@field:SerializedName("Phone")
 	val phone: String,
@@ -63,8 +62,8 @@ data class TourismPlaceResponse(
 	@field:SerializedName("ID")
 	val id: Int,
 
-	@field:SerializedName("Header_image")
-	val headerImage: String,
+	@field:SerializedName("image")
+	val image: String,
 
 	@field:SerializedName("Tags")
 	val tags: String
@@ -92,7 +91,7 @@ data class TourismPlaceResponse(
 			placeName = name,
 			idCategory = categoryId,
 			placeDescription = description,
-			placePhotoUrl  = headerImage,
+			placePhotoUrl  = image,
 			city = kota ,
 			placeAddress = address,
 			placeMapUrl  = detailURL,

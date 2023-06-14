@@ -21,13 +21,13 @@ data class TourismPlace(
     var idCategory : Int = 0,
 
     @ColumnInfo(name = "placeDescription")
-    var placeDescription : String,
+    var placeDescription : String? = null,
 
     @ColumnInfo(name = "placePhotoUrl")
     var placePhotoUrl : String = "",
 
     @ColumnInfo(name = "city")
-    var city : String = "",
+    var city : String? = null,
 
     @ColumnInfo(name = "placeAddress")
     var placeAddress : String = "",

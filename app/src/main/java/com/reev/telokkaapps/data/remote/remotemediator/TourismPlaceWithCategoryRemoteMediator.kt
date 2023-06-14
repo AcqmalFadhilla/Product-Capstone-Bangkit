@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.data.remote.remotemediator
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -53,6 +54,7 @@ class TourismPlaceWithCategoryRemoteMediator(
             val endOfPaginationReached = data.isEmpty()
 
             db.withTransaction {
+                Log.i("dataResponse", "masuk ke db.withTransaction")
                 if (loadType == LoadType.REFRESH) {
                     db.tourismPlaceWithCategoryRemoteKeysDao().deleteRemoteKeys()
                 }
@@ -82,6 +84,10 @@ class TourismPlaceWithCategoryRemoteMediator(
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: Exception) {
+
+            Log.i("dataResponse", "exception : ${exception.message}")
+
+
             return MediatorResult.Error(exception)
         }
 
