@@ -7,16 +7,28 @@ import androidx.room.RoomDatabase
 import com.reev.telokkaapps.data.local.database.dao.TourismCategoryDao
 import com.reev.telokkaapps.data.local.database.dao.TourismPlanDao
 import com.reev.telokkaapps.data.local.database.dao.TourismPlaceDao
+import com.reev.telokkaapps.data.local.database.dao.TourismPlaceNearestRemoteKeysDao
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
+import com.reev.telokkaapps.data.local.database.entity.TourismPlaceNearestRemoteKeys
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
 
 
-@Database(entities = [TourismCategory::class, TourismPlan::class, TourismPlace::class], version = 1)
+@Database(
+    entities = [
+        TourismCategory::class,
+        TourismPlan::class,
+        TourismPlace::class,
+        TourismPlaceNearestRemoteKeys::class ],
+    version = 2
+)
 abstract class TourismRoomDatabase : RoomDatabase() {
     abstract fun tourismCategoryDao(): TourismCategoryDao
     abstract fun tourismPlanDao(): TourismPlanDao
     abstract fun tourismPlaceDao(): TourismPlaceDao
+
+    abstract fun tourismPlaceNearestRemoteKeysDao(): TourismPlaceNearestRemoteKeysDao
+
     companion object {
         @Volatile
         private var INSTANCE: RoomDatabase? = null

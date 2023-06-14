@@ -3,15 +3,9 @@ package com.reev.telokkaapps.data.repository
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
+import androidx.paging.*
 import com.reev.telokkaapps.data.local.database.TourismRoomDatabase
-import com.reev.telokkaapps.data.local.database.dao.DeleteAllTourismPlansAsyncTask
-import com.reev.telokkaapps.data.local.database.dao.TourismCategoryDao
-import com.reev.telokkaapps.data.local.database.dao.TourismPlanDao
-import com.reev.telokkaapps.data.local.database.dao.TourismPlaceDao
+import com.reev.telokkaapps.data.local.database.dao.*
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
@@ -30,11 +24,13 @@ import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import com.reev.telokkaapps.data.remote.Result
+import com.reev.telokkaapps.data.remote.TourismPlaceNearestRemoteMediator
 
 class TourismRepository(application: Application) {
     private val mTourismCategoryDao : TourismCategoryDao
     private val mTourismPlanDao : TourismPlanDao
     private val mTourismPlaceDao : TourismPlaceDao
+    private val mTourismPlaceNearestRemoteKeysDao : TourismPlaceNearestRemoteKeysDao
     private val apiService : ApiService
 
     private val executorService : ExecutorService = Executors.newSingleThreadExecutor()
@@ -44,6 +40,7 @@ class TourismRepository(application: Application) {
         mTourismCategoryDao = db.tourismCategoryDao()
         mTourismPlanDao = db.tourismPlanDao()
         mTourismPlaceDao = db.tourismPlaceDao()
+        mTourismPlaceNearestRemoteKeysDao = db.tourismPlaceNearestRemoteKeysDao()
         apiService = ApiConfig.getApiService()
     }
 
@@ -220,13 +217,17 @@ class TourismRepository(application: Application) {
     fun getDetailTourismPlanWithId(id : Int) = mTourismPlanDao.getDetailTourismPlanWithId(id)
 
     //////// Remote (API) ////////
-    fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double) : LiveData<PagingData<ListPlaceItem>> {
+    @OptIn(ExperimentalPagingApi::class)
+    fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double) : LiveData<PagingData<TourismPlace>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
+            remoteMediator = TourismPlaceNearestRemoteMediator(mTourismPlaceDao, mTourismPlaceNearestRemoteKeysDao, apiService),
+
             pagingSourceFactory = {
                 ListPlaceNearestPagingSource(apiService = apiService, latitide = latitude, longitude = longitude)
+//                mTourismPlaceDao.getAllTourismPlace()
             }
         ).liveData
     }
@@ -277,6 +278,7 @@ class TourismRepository(application: Application) {
         return result
 
     }
+
 
 
 
