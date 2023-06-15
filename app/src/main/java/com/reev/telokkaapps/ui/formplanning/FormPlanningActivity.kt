@@ -6,14 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
-import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import com.reev.telokkaapps.databinding.ActivityFormPlanningBinding
 import com.reev.telokkaapps.ui.dashboard.MainActivity
 import com.reev.telokkaapps.utility.notification.NotificationUtils
@@ -97,69 +95,64 @@ class FormPlanningActivity : AppCompatActivity() {
                     infoTV.text = getString(R.string.labelConfirmationButton)
                     button1.text = getString(R.string.confirmationButton)
                     button1.setOnClickListener {
+                        val title = binding.layoutActivityFormPlanning.planningNameEditTextLayout.editText?.text.toString()
+                        val description = binding.layoutActivityFormPlanning.planningDescEditTextLayout.editText?.text.toString()
+                        val date = dateToString(myCalendar)
+                        val status = false
+                        val idPlace = place.placeId
 
-                        title  = binding.layoutActivityFormPlanning.planningNameEditTextLayout.editText?.text.toString()
-                        description  = binding.layoutActivityFormPlanning.planningDescEditTextLayout.editText?.text.toString()
-                        date  = dateToString(myCalendar)
-                        status = false
-                        idPlace  = place.placeId
+                        if (!title.isNullOrBlank() && !date.isNullOrBlank() && isSetCalendar) {
+                            if (idPlace != null && idPlace >= 0) {
+                                val alertDialog = android.app.AlertDialog.Builder(this@FormPlanningActivity)
+                                    .setTitle("Pastikan data penjadwalan benar")
+                                    .setMessage("Setelah klik konfirmasi, data akan tersimpan secara permanen")
+                                    .setPositiveButton("Ya, Konfirmasi Penjadwalan") { _, _ ->
+                                        val tourismPlan = TourismPlan(
+                                            0,
+                                            title,
+                                            description,
+                                            date,
+                                            status,
+                                            idPlace
+                                        )
+                                        val notificationId = tourismPlan.planId
 
-                        if (title != null && !title.equals("null") && date != null && !date.equals("null") && isSetCalendar) {
-                            if (idPlace != null && idPlace!! >= 0) {
-                                val alertDialog =
-                                    android.app.AlertDialog.Builder(this@FormPlanningActivity)
-                                        .setTitle("Pastikan data penjadwalan benar")
-                                        .setMessage("Setelah klik konfirmasi, data akan tersimpan secara permanen")
-                                        .setPositiveButton("Ya, Konfirmasi Penjadwalan") { _, _ ->
+                                        // insert data ke database
+                                        viewModel.insertTourismPlan(tourismPlan)
+                                        Toast.makeText(
+                                            this@FormPlanningActivity,
+                                            "Berhasil Membuat Jadwal",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
 
-                                            val tourismPlan = TourismPlan(
-                                                0,
-                                                title!!,
-                                                description!!,
-                                                date!!,
-                                                status!!,
-                                                idPlace!!
-                                            )
-                                            val notificationId = tourismPlan.planId
+                                        // Tampilkan Notifikasi berhasil simpan plan
+                                        NotificationUtils.showNotification(this@FormPlanningActivity, title, date, notificationId)
 
-                                            // insert data ke database
-                                            viewModel.insertTourismPlan(tourismPlan)
-                                            Toast.makeText(
-                                                this@FormPlanningActivity,
-                                                "Berhasil Membuat Jadwal",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                        // Jadwalkan notifikasi
+                                        NotificationUtils.scheduleNotification(this@FormPlanningActivity, title, date, notificationId) // untuk ID_PLACE sebenarnya mau diganti dengan id_Plan
 
-                                            //Tampilkan Notifikasi berhasil simpan plan
-                                            NotificationUtils.showNotification(this@FormPlanningActivity, title!!, date!!, notificationId)
-
-                                            // Jadwalkan notifikasi
-                                            NotificationUtils.scheduleNotification(this@FormPlanningActivity, title!!, date!!, notificationId) // untuk ID_PLACE sebenarnya mau diganti dengan id_Plan
-
-                                            val intent = Intent(
-                                                this@FormPlanningActivity,
-                                                MainActivity::class.java
-                                            )
-                                            intent.flags =
-                                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                            startActivity(intent)
-                                            finish()
-                                        }
-                                        .setNegativeButton("Edit kembali", null)
-                                        .create()
+                                        val intent = Intent(
+                                            this@FormPlanningActivity,
+                                            MainActivity::class.java
+                                        )
+                                        intent.flags =
+                                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                    .setNegativeButton("Edit kembali", null)
+                                    .create()
                                 alertDialog.show()
-                            }else{
+                            } else {
                                 Toast.makeText(this@FormPlanningActivity, "Tempat wisata tidak valid!", Toast.LENGTH_SHORT).show()
-
                             }
-                        } else{
+                        } else {
                             Toast.makeText(this@FormPlanningActivity, "Silahkan lengkapi jadwal dan judul rencana wisata Anda!", Toast.LENGTH_SHORT).show()
                         }
                     }
                     button2.isVisible = true
                     button2.text = "Batalkan"
                     button2.setOnClickListener {
-
                         val alertDialog = android.app.AlertDialog.Builder(this@FormPlanningActivity)
                             .setTitle("Yakin untuk membatalkan pembuatan jadwal?")
                             .setMessage("Data sebelumnya akan terhapus jika anda membatalkannya")
