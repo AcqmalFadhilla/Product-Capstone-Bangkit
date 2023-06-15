@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
 import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import com.reev.telokkaapps.databinding.ActivityDetailBinding
 import com.reev.telokkaapps.helper.InternetConnection
@@ -23,7 +24,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var viewModel: DetailViewModel
 
     private var placeId : Int?  = null
-    private var dataTourismPlaceResponse : TourismPlaceResponse?  = null
+    private var dataTourismPlace : TourismPlaceDetail?  = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +69,7 @@ class DetailActivity : AppCompatActivity() {
             button1.setOnClickListener {
                 Toast.makeText(this@DetailActivity, "Buat jadwal", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this@DetailActivity, FormPlanningActivity::class.java)
-                intent.putExtra("PLACE_EXTRA", dataTourismPlaceResponse)
+                intent.putExtra("PLACE_EXTRA", dataTourismPlace)
                 startActivity(intent)
             }
         }
@@ -87,58 +88,66 @@ class DetailActivity : AppCompatActivity() {
                             binding.itemButton.button2.isClickable = false
                         }
                         is Result.Success ->{
-
-                                placeId = result.data[0].id
-                                dataTourismPlaceResponse = result.data[0]
-                                binding.apply {
-                                layoutActivityDetail.apply{
-
-                                    val color = ContextCompat.getColor(binding.root.context, R.color.blue_200)
-                                    val drawable = CircularProgressDrawable(binding.root.context)
-                                    drawable.strokeWidth = 10f
-                                    drawable.centerRadius = 50f
-                                    drawable.setColorSchemeColors(color)
-                                    drawable.start()
-                                    Glide.with(this@DetailActivity)
-                                        .load(result.data[0].image)
-                                        .placeholder(drawable)
-                                        .into(placePhotoUrlImageView)
-
-                                    placeNameTextView.text = result.data[0].name
-                                    categoryTextView.text = result.data[0].category
-                                    ratingTextView.text = result.data[0].rating.toString()
-                                    ratingCountTextView.text = "" // belum difungsikan
-                                    tagsTextView.text = result.data[0].tags
-                                    addressTextView.text = result.data[0].address
-                                    operationalHourTextView.text = "-" // belum difungsikan
-                                    websiteTextView.text = result.data[0].website
-                                    phoneTextView.text = result.data[0].phone
-                                    descriptionTextView.text = result.data[0].description
-
-                                    openMapButton.setOnClickListener {
-                                        Toast.makeText(this@DetailActivity, "Buka Map", Toast.LENGTH_SHORT).show()
-
-                                    val mapUrl = result.data[0].detailURL
-
-                                    val intent = Intent(Intent.ACTION_VIEW)
-                                    intent.data = Uri.parse(mapUrl)
-                                    startActivity(intent)
-                                    }
-                                    favoriteButton.setOnClickListener {
-                                        Toast.makeText(this@DetailActivity, "Fitur ini belum dapat digunakan", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                            }
-
+                            val data = result.data[0]
+                            placeId = data.placeId
+                            dataTourismPlace = data
+                            updateInformation(data)
                             binding.itemButton.button2.isClickable = false
-
                         }
                         is Result.Error -> {
-                            Toast.makeText(this, "Terjadi kesalahan ${result.error}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Terjadi kesalahan ${result.error}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
             })
+        }else{
+            viewModel.getDetailTourismPlace(id).observe(this,{list->
+                var data = list.get(0)
+                dataTourismPlace = data
+                updateInformation(data)
+            })
+
+        }
+
+    }
+    private fun updateInformation(data: TourismPlaceDetail){
+
+        binding.apply {
+            layoutActivityDetail.apply{
+
+                val color = ContextCompat.getColor(binding.root.context, R.color.blue_200)
+                val drawable = CircularProgressDrawable(binding.root.context)
+                drawable.strokeWidth = 10f
+                drawable.centerRadius = 50f
+                drawable.setColorSchemeColors(color)
+                drawable.start()
+                Glide.with(this@DetailActivity)
+                    .load(data.placePhotoUrl)
+                    .placeholder(drawable)
+                    .into(placePhotoUrlImageView)
+
+                placeNameTextView.text = data.placeName
+                categoryTextView.text = data.placeCategory
+                ratingTextView.text = data.placeRating.toString()
+                ratingCountTextView.text = "" // belum difungsikan
+                tagsTextView.text = data.placeTags
+                addressTextView.text = data.placeAddress
+                operationalHourTextView.text = "-" // belum difungsikan
+                websiteTextView.text = data.placeWebsite
+                phoneTextView.text = data.placePhone
+                descriptionTextView.text = data.placeDescription
+
+                openMapButton.setOnClickListener {
+                    Toast.makeText(this@DetailActivity, "Buka Map", Toast.LENGTH_SHORT).show()
+                    val mapUrl = data.placeMapUrl
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(mapUrl)
+                    startActivity(intent)
+                }
+                favoriteButton.setOnClickListener {
+                    Toast.makeText(this@DetailActivity, "Fitur ini belum dapat digunakan", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
     }

@@ -1,14 +1,18 @@
 package com.reev.telokkaapps.data.repository
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import androidx.paging.*
 import com.reev.telokkaapps.data.local.database.TourismRoomDatabase
 import com.reev.telokkaapps.data.local.database.dao.*
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.data.remote.ApiConfig
 import com.reev.telokkaapps.data.remote.ApiService
@@ -56,7 +60,7 @@ class TourismRepository(application: Application) {
     fun insertAllData() {
         mTourismPlaceDao.insertAll(InitialDataSource.getTourismPlace())
         mTourismCategoryDao.insertAll(InitialDataSource.getTourismCategory())
-        mTourismPlanDao.insertAll(InitialDataSource.getTourismPlan())
+//        mTourismPlanDao.insertAll(InitialDataSource.getTourismPlan())
     }
 
     //////// Query ke database ////////
@@ -269,29 +273,18 @@ class TourismRepository(application: Application) {
         ).liveData
     }
 
-    private val result = MediatorLiveData<Result<List<TourismPlaceResponse>>>()
-
-    fun getNewDetailTourismPlace(id : Int) : LiveData<Result<List<TourismPlaceResponse>>> {
-        result.value = Result.Loading
-        val client = ApiConfig.getApiService().getPlaceWithId(id)
-        client.enqueue(object : Callback<PlaceResponse> {
-            override fun onResponse(
-                call: Call<PlaceResponse>,
-                response: Response<PlaceResponse>
-            ) {
-                if(response.isSuccessful){
-                    result.value = Result.Success(response.body()!!.data)
-                }
-            }
-
-            override fun onFailure(call: Call<PlaceResponse>, t: Throwable) {
-                result.value = Result.Error(t.message.toString())
-            }
-
-        })
-
-        return result
-
+    fun getNewDetailTourismPlace(id : Int) : LiveData<Result<List<TourismPlaceDetail>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getPlaceWithId(id)
+            val data = response.data[0].toTourismPlace()
+            mTourismPlaceDao.insert(data)
+        } catch (e: Exception) {
+            Log.d("TourismRepository", "getNewDetailTourismPlace: ${e.message.toString()} ")
+            emit(Result.Error(e.message.toString()))
+        }
+        val localData: LiveData<Result<List<TourismPlaceDetail>>> = mTourismPlaceDao.getDetailTourismPlaceWithId(id).map { Result.Success(it) }
+        emitSource(localData)
     }
 
 

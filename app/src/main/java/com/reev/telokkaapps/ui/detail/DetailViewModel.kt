@@ -13,6 +13,8 @@ class DetailViewModel (
 
     fun getNewDetailTourismPlace(id : Int)= mTourismRepository.getNewDetailTourismPlace(id)
 
+    fun getDetailTourismPlace(id: Int) = mTourismRepository.getDetailTourismPlaceWithId(id)
+
 
 
 }

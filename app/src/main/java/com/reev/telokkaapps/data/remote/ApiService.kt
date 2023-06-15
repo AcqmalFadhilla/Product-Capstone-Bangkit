@@ -17,7 +17,7 @@ interface ApiService {
     @GET("place/placeId/{id}")
     fun getPlaceWithId(
         @Path("id") id : Int,
-    ) : Call<PlaceResponse>
+    ) : DetailPlaceResponse
 
     @GET("place/placeNearest")
     suspend fun getPlaceNearest(

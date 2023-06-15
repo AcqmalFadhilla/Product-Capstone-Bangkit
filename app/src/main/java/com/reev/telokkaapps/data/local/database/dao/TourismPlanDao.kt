@@ -34,7 +34,7 @@ interface TourismPlanDao{
     fun getAllTourismPlan() : LiveData<List<TourismPlan>>
 
     @Transaction
-    @Query("SELECT tourism_plan.planId as planId, tourism_plan.planTitle as planTitle, tourism_place.placeName as placeName, tourism_category.categoryName as tourismCategory, tourism_plan.planDate as planDate, tourism_place.placePhotoUrl as placePhotoUrl FROM tourism_plan " +
+    @Query("SELECT tourism_plan.planId as planId, tourism_plan.planTitle as planTitle, tourism_place.placeName as placeName, tourism_category.categoryName as tourismCategory, tourism_plan.planDate as planDate, tourism_place.placePhotoUrl as placePhotoUrl, tourism_place.placeId as placeId FROM tourism_plan " +
             "LEFT JOIN tourism_place ON tourism_plan.idPlace = tourism_place.placeId \n" +
             "LEFT JOIN tourism_category ON tourism_place.idCategory = tourism_category.categoryId")
     fun getAllPlanWithPlaceAndTourismCategory() : LiveData<List<TourismPlanItem>>

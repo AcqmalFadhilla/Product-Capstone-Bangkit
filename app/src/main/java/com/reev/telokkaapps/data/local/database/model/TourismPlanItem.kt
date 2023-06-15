@@ -8,6 +8,7 @@ data class TourismPlanItem(
     val planId : Int,
     val planTitle: String,
     val placeName : String,
+    val placeId: Int,
     val tourismCategory: String,
     val planDate : String,
     val placePhotoUrl : String

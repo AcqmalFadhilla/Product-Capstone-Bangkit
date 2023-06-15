@@ -1,5 +1,9 @@
 package com.reev.telokkaapps.data.local.database.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class TourismPlaceDetail(
     val placeId : Int,
     val placeName: String,
@@ -13,4 +17,4 @@ data class TourismPlaceDetail(
     val isFavoritedPlace: Boolean,
     val placePhotoUrl: String,
     val placeMapUrl : String,
-)
+) : Parcelable
