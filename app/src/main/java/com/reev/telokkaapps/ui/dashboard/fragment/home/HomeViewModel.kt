@@ -48,6 +48,9 @@ class HomeViewModel(app : Application) : ViewModel() {
     }
     fun getTourismPlaceRecomended()=  mTourismRepository.getTourismPlaceRecomended()
 
+    fun getAllTourismPlaceNearestSaved(limit: Int) = mTourismRepository.getAllTourismPlaceNearestSaved(limit)
+
+
     fun getTourismCategoriesFavorited() = mTourismRepository.getTourismCategoriesFavorited()
 
 

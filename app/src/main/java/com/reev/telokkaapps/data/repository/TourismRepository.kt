@@ -35,6 +35,7 @@ class TourismRepository(application: Application) {
     private val mTourismPlaceInteractionDao : TourismPlaceInteractionDao
     private val mTourismPlaceNearestRemoteKeysDao : TourismPlaceNearestRemoteKeysDao
     private val mTourismPlaceSearchedRemoteKeysDao : TourismPlaceSearchedRemoteKeysDao
+    private val mTourismPlaceWithCategoryRemoteKeysDao : TourismPlaceWithCategoryRemoteKeysDao
     private val apiService : ApiService
     private val mTourismRoomDatabase : TourismRoomDatabase
 
@@ -48,6 +49,7 @@ class TourismRepository(application: Application) {
         mTourismPlaceInteractionDao = mTourismRoomDatabase.tourismPlaceInteractionDao()
         mTourismPlaceNearestRemoteKeysDao = mTourismRoomDatabase.tourismPlaceNearestRemoteKeysDao()
         mTourismPlaceSearchedRemoteKeysDao = mTourismRoomDatabase.tourismPlaceSearchedRemoteKeysDao()
+        mTourismPlaceWithCategoryRemoteKeysDao = mTourismRoomDatabase.tourismPlaceWithCategoryRemoteKeysDao()
         apiService = ApiConfig.getApiService()
     }
 
@@ -113,6 +115,9 @@ class TourismRepository(application: Application) {
 
     // Mendapatkan tempat wisata yang direkomendasikan
     fun getTourismPlaceRecomended() = mTourismPlaceDao.getTourismPlaceRecomended()
+
+    // Mendapatkan tempat wisata rekomendasi yang disimpan
+    fun getAllTourismPlaceNearestSaved(limit: Int) = mTourismPlaceNearestRemoteKeysDao.getAllTourismPlaceNearestSaved(limit)
 
     // Menambahkan tempat wisata
     fun insertTourismPlace(tourismPlace: TourismPlace){
@@ -233,7 +238,7 @@ class TourismRepository(application: Application) {
             remoteMediator = TourismPlaceNearestRemoteMediator(mTourismRoomDatabase, apiService, latitude = latitude, longitude = longitude),
 
             pagingSourceFactory = {
-                mTourismPlaceDao.getTourismPlaceRecomended()
+                mTourismPlaceNearestRemoteKeysDao.getTourismPlaceNearest()
             }
         ).liveData
     }
@@ -246,7 +251,7 @@ class TourismRepository(application: Application) {
             ),
             remoteMediator = TourismPlaceWithCategoryRemoteMediator(mTourismRoomDatabase, apiService, category, idCategory),
             pagingSourceFactory = {
-                mTourismPlaceDao.getPlaceTourismWithCategoryPaged(idCategory)
+                mTourismPlaceWithCategoryRemoteKeysDao.getPlaceTourismWithCategoryPaged(idCategory)
             }
         ).liveData
     }

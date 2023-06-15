@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -196,15 +195,20 @@ class HomeFragment : Fragment(){
         }
     }
     private fun getDataTourismPlaceRecommendedOffline(){
-//        Log.i("dataResponse", "Masuk ke getDataTourismPlaceRecommendedOffline()" )
-//        viewModel.getTourismPlaceRecomended().ob(viewLifecycleOwner, {
-//            placeListAdapter = PlaceItemListAdapter(it)
-//            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-//                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-//                adapter = placeListAdapter
-//            }
-//        })
+        viewModel.getAllTourismPlaceNearestSaved(10).observe(viewLifecycleOwner, {
+            placeListAdapter = PlaceItemListAdapter(it)
+            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                adapter = placeListAdapter
+            }
+            Toast.makeText(
+                requireContext(),
+                "Berhasil mendapatkan data tempat wisata berdasarkan lokasi terdekat!",
+                Toast.LENGTH_LONG
+            ).show()
 
+
+        })
     }
     private fun getDataTourismPlaceRecommendedOnline(){
         viewModel.getNewTourismPlaceRecomended(
@@ -212,28 +216,16 @@ class HomeFragment : Fragment(){
             longitude = latestLongitude
         ).cachedIn(viewLifecycleOwner.lifecycleScope)
             .observe(viewLifecycleOwner, { data ->
-            placePagingAdapter.addLoadStateListener {loadState->
-                val isNotLoading = when {
-                    loadState.append is LoadState.NotLoading -> true
-                    loadState.prepend is LoadState.NotLoading ->  true
-                    loadState.refresh is LoadState.NotLoading -> true
-                    else -> false
-                }
-                isNotLoading.let {
-                    if (isNotLoading) {
-                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                            placePagingAdapter.withLoadStateFooter(
-                                footer = LoadingStateAdapter{
-                                    placePagingAdapter.retry()
-                                }
-                            )
-                            adapter = placePagingAdapter
-                            placePagingAdapter.submitData(lifecycle, data)
+                binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                    placePagingAdapter.withLoadStateFooter(
+                        footer = LoadingStateAdapter{
+                            placePagingAdapter.retry()
                         }
-                    }
+                    )
+                    adapter = placePagingAdapter
+                    placePagingAdapter.submitData(lifecycle, data)
                 }
-            }
 
         })
 
@@ -257,43 +249,26 @@ class HomeFragment : Fragment(){
     }
     private fun getDataTourismPlaceWithFavoriteCategoryOnline(){
         Log.i("dataResponse", "Masuk ke fungsi getDataTourismPlaceWithFavoriteCategoryOnline() ")
-//        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.adapter = placePagingAdapter.withLoadStateFooter(
-//            footer = LoadingStateAdapter{
-//                placePagingAdapter.retry()
-//            }
-//        )
         viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
             Log.i("dataResponse", "Kategori yang disukai yaitu : ${it.categoryName}")
             viewModel.getNewTourismPlaceWithCategory(it.categoryName, it.categoryId)
                 .cachedIn(viewLifecycleOwner.lifecycleScope)
                 .observe(viewLifecycleOwner, { data->
 
-                    Log.i("dataResponse", "ada indikasi observe pada getNewTourismPlaceWithCategory()")
-                    Log.i("dataResponse", "paging data : $data")
+                Log.i("dataResponse", "ada indikasi observe pada getNewTourismPlaceWithCategory()")
+                Log.i("dataResponse", "paging data : $data")
 
-                    placePagingAdapter.submitData(lifecycle, data)
-                    placePagingAdapter.addLoadStateListener { loadState ->
-                    val isNotLoading = when {
-                        loadState.append is LoadState.NotLoading -> true
-                        loadState.prepend is LoadState.NotLoading ->  true
-                        loadState.refresh is LoadState.NotLoading -> true
-                        else -> false
-                    }
-                    isNotLoading.let {
-                        if (isNotLoading) {
-                            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                                placePagingAdapter.withLoadStateFooter(
-                                    footer = LoadingStateAdapter{
-                                        placePagingAdapter.retry()
-                                    }
-                                )
-                                adapter = placePagingAdapter
-                                placePagingAdapter.submitData(lifecycle, data)
-                            }
+                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                            placePagingAdapter.withLoadStateFooter(
+                                footer = LoadingStateAdapter{
+                                    placePagingAdapter.retry()
+                                }
+                            )
+                            adapter = placePagingAdapter
+                            placePagingAdapter.submitData(lifecycle, data)
                         }
-                    }
-                }
+
             })
 
         })

@@ -50,7 +50,7 @@ class PlaceItemPagingAdapter : PagingDataAdapter<TourismPlaceItem, PlaceItemPagi
                     .placeholder(drawable)
                     .into(placeImg)
 
-                placeName.text = item.placeDistance.toString() +" -  "+item.placeName
+                placeName.text = item.placeName
                 placeCategory.text = item.placeCategory
                 placeRating.text = item.placeRating.toString()
 
