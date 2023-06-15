@@ -26,6 +26,7 @@ import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSo
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
 import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
+import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.LoadingStateAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
@@ -222,6 +223,11 @@ class HomeFragment : Fragment(){
                     if (isNotLoading) {
                         binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
                             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                            placePagingAdapter.withLoadStateFooter(
+                                footer = LoadingStateAdapter{
+                                    placePagingAdapter.retry()
+                                }
+                            )
                             adapter = placePagingAdapter
                             placePagingAdapter.submitData(lifecycle, data)
                         }
@@ -251,7 +257,11 @@ class HomeFragment : Fragment(){
     }
     private fun getDataTourismPlaceWithFavoriteCategoryOnline(){
         Log.i("dataResponse", "Masuk ke fungsi getDataTourismPlaceWithFavoriteCategoryOnline() ")
-
+//        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.adapter = placePagingAdapter.withLoadStateFooter(
+//            footer = LoadingStateAdapter{
+//                placePagingAdapter.retry()
+//            }
+//        )
         viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
             Log.i("dataResponse", "Kategori yang disukai yaitu : ${it.categoryName}")
             viewModel.getNewTourismPlaceWithCategory(it.categoryName, it.categoryId)
@@ -262,7 +272,7 @@ class HomeFragment : Fragment(){
                     Log.i("dataResponse", "paging data : $data")
 
                     placePagingAdapter.submitData(lifecycle, data)
-                placePagingAdapter.addLoadStateListener { loadState ->
+                    placePagingAdapter.addLoadStateListener { loadState ->
                     val isNotLoading = when {
                         loadState.append is LoadState.NotLoading -> true
                         loadState.prepend is LoadState.NotLoading ->  true
@@ -273,6 +283,11 @@ class HomeFragment : Fragment(){
                         if (isNotLoading) {
                             binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
                                 layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                                placePagingAdapter.withLoadStateFooter(
+                                    footer = LoadingStateAdapter{
+                                        placePagingAdapter.retry()
+                                    }
+                                )
                                 adapter = placePagingAdapter
                                 placePagingAdapter.submitData(lifecycle, data)
                             }

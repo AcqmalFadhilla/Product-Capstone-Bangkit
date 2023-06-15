@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.data.remote.remotemediator
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -26,16 +27,20 @@ class TourismPlaceNearestRemoteMediator(
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH ->{
+                Log.i("dataResponse", "TourismPlaceNearestRemoteMediator - LoadType = Refresh")
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKeys?.nextKey?.minus(1) ?: INITIAL_PAGE_INDEX
             }
             LoadType.PREPEND -> {
+                Log.i("dataResponse", "TourismPlaceNearestRemoteMediator - LoadType = Prefend")
+
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 prevKey
             }
             LoadType.APPEND -> {
+                Log.i("dataResponse", "TourismPlaceNearestRemoteMediator - LoadType = Append")
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
@@ -70,6 +75,10 @@ class TourismPlaceNearestRemoteMediator(
                     )
                 }
                 db.tourismPlaceInteractionDao().insertAll(newInteractionData)
+
+                if (page == 1){
+                    db.tourismPlaceInteractionDao().unRecommendAllTourismPlace()
+                }
 
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1

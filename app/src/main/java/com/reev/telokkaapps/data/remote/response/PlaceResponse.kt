@@ -21,6 +21,12 @@ data class PlaceResponse(
 
 @Parcelize
 data class TourismPlaceResponse(
+	@PrimaryKey
+	@field:SerializedName("ID")
+	val id: Int,
+
+	@field:SerializedName("Name")
+	val name: String,
 
 	@field:SerializedName("Category")
 	val category: String,
@@ -28,45 +34,41 @@ data class TourismPlaceResponse(
 	@field:SerializedName("Deskripsi")
 	val description: String? = null,
 
+	@field:SerializedName("image")
+	val image: String,
+
+	@field:SerializedName("Kota")
+	val kota: String? = null,
+
 	@field:SerializedName("Address")
 	val address: String,
-
-	@field:SerializedName("Rating")
-	val rating: Double,
-
-	@field:SerializedName("Website")
-	val website: String,
-
-	@field:SerializedName("Latitude")
-	val latitude: Double,
-
-	@field:SerializedName("Review")
-	val review: String,
-
-	@field:SerializedName("Longitude")
-	val longitude: Double,
-
-	@field:SerializedName("Name")
-	val name: String,
 
 	@field:SerializedName("Detail_URL")
 	val detailURL: String,
 
-	@field:SerializedName("Kota")
-	val kota: String?,
+	@field:SerializedName("Latitude")
+	val latitude: Double,
 
-	@field:SerializedName("Phone")
-	val phone: String,
+	@field:SerializedName("Longitude")
+	val longitude: Double,
 
-	@PrimaryKey
-	@field:SerializedName("ID")
-	val id: Int,
-
-	@field:SerializedName("image")
-	val image: String,
+	@field:SerializedName("Rating")
+	val rating: Double,
 
 	@field:SerializedName("Tags")
-	val tags: String
+	val tags: String? = null,
+
+	@field:SerializedName("Review")
+	val review: String? = null,
+
+	@field:SerializedName("Website")
+	val website: String? = null,
+
+	@field:SerializedName("Phone")
+	val phone: String? = null,
+
+	@field:SerializedName("jarak")
+	val distance: Double? = null
 ) : Parcelable {
 
 	fun toTourismPlace() : TourismPlace{
@@ -102,6 +104,7 @@ data class TourismPlaceResponse(
 			placeReview = review,
 			placeWebsite = website,
 			placePhone = phone,
+			placeDistance = distance
 		)
 	}
 }

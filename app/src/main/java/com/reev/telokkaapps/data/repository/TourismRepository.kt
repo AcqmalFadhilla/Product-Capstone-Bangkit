@@ -242,9 +242,9 @@ class TourismRepository(application: Application) {
     fun getNewTourismPlaceWithCategory(category: String, idCategory: Int) : LiveData<PagingData<TourismPlaceItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 5
+                pageSize = 10
             ),
-            remoteMediator = TourismPlaceWithCategoryRemoteMediator(mTourismRoomDatabase, apiService, category),
+            remoteMediator = TourismPlaceWithCategoryRemoteMediator(mTourismRoomDatabase, apiService, category, idCategory),
             pagingSourceFactory = {
                 mTourismPlaceDao.getPlaceTourismWithCategoryPaged(idCategory)
             }

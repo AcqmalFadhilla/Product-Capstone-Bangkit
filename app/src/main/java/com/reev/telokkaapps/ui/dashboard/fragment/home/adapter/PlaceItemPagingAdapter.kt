@@ -50,7 +50,7 @@ class PlaceItemPagingAdapter : PagingDataAdapter<TourismPlaceItem, PlaceItemPagi
                     .placeholder(drawable)
                     .into(placeImg)
 
-                placeName.text = item.placeName
+                placeName.text = item.placeDistance.toString() +" -  "+item.placeName
                 placeCategory.text = item.placeCategory
                 placeRating.text = item.placeRating.toString()
 
@@ -68,12 +68,10 @@ class PlaceItemPagingAdapter : PagingDataAdapter<TourismPlaceItem, PlaceItemPagi
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<TourismPlaceItem>() {
             override fun areItemsTheSame(oldItem: TourismPlaceItem, newItem: TourismPlaceItem): Boolean {
-                Log.i("dataResponse", "DIFF_CALLBACK  areItemsTheSame : ${oldItem == newItem}")
                 return oldItem == newItem
             }
 
             override fun areContentsTheSame(oldItem: TourismPlaceItem, newItem: TourismPlaceItem): Boolean {
-                Log.i("dataResponse", "DIFF_CALLBACK  areItemsTheSame : ${oldItem.placeId == newItem.placeId}")
                 return oldItem.placeId == newItem.placeId
             }
         }

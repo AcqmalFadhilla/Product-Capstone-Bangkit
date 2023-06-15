@@ -45,14 +45,18 @@ data class TourismPlace(
     var placeRating : Double = 0.0,
 
     @ColumnInfo(name = "placeTags")
-    var placeTags : String = "",
+    var placeTags : String? = null,
 
     @ColumnInfo(name = "placeReview")
-    var placeReview : String,
+    var placeReview : String? = null,
 
     @ColumnInfo(name = "placeWebsite")
-    var placeWebsite : String = "",
+    var placeWebsite : String? = null,
 
     @ColumnInfo(name = "placePhone")
-    var placePhone : String = ""
-) : Parcelable
+    var placePhone : String? = null,
+
+    @ColumnInfo(name = "placeDistance")
+    var placeDistance : Double? = null,
+
+    ) : Parcelable

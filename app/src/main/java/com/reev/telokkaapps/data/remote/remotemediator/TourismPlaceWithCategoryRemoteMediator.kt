@@ -7,10 +7,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.reev.telokkaapps.data.local.database.TourismRoomDatabase
-import com.reev.telokkaapps.data.local.database.entity.TourismPlace
-import com.reev.telokkaapps.data.local.database.entity.TourismPlaceInteraction
-import com.reev.telokkaapps.data.local.database.entity.TourismPlaceNearestRemoteKeys
-import com.reev.telokkaapps.data.local.database.entity.TourismPlaceSearchedRemoteKeys
+import com.reev.telokkaapps.data.local.database.entity.*
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.data.remote.ApiService
 
@@ -18,7 +15,8 @@ import com.reev.telokkaapps.data.remote.ApiService
 class TourismPlaceWithCategoryRemoteMediator(
     private val db: TourismRoomDatabase,
     private val apiService: ApiService,
-    private val category: String
+    private val category: String,
+    private val categoryId: Int
 ) : RemoteMediator<Int, TourismPlaceItem>() {
 
     override suspend fun load(
@@ -27,19 +25,24 @@ class TourismPlaceWithCategoryRemoteMediator(
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH ->{
+                Log.i("dataResponse1", "Ini LoadType.REFRESH dieksekusi")
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKeys?.nextKey?.minus(1) ?: INITIAL_PAGE_INDEX
             }
             LoadType.PREPEND -> {
+                Log.i("dataResponse2", "Ini LoadType.PREPEND dieksekusi")
+
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 prevKey
             }
             LoadType.APPEND -> {
+                Log.i("dataResponse", "Ini LoadType.APPEND dieksekusi")
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                Log.i("dataResponse", "next key = $nextKey")
                 nextKey
             }
         }
@@ -51,33 +54,38 @@ class TourismPlaceWithCategoryRemoteMediator(
                 data.add(it.toTourismPlace())
             }
 
-            val endOfPaginationReached = data.isEmpty()
+            val endOfPaginationReached = responseData.isEmpty()
 
             db.withTransaction {
                 Log.i("dataResponse", "masuk ke db.withTransaction")
                 if (loadType == LoadType.REFRESH) {
                     db.tourismPlaceWithCategoryRemoteKeysDao().deleteRemoteKeys()
+                    db.tourismPlaceDao().deleteTourismPlaceWithCategoryId(categoryId)
                 }
-
                 val newInteractionData = mutableListOf<TourismPlaceInteraction>()
                 for (j in data){
                     newInteractionData.add(
                         TourismPlaceInteraction(
-                        placeId = j.placeId,
-                        isFavorited = false,
-                        isRecommended = false,
-                        isSearched = false,
-                        clickCount = 0
+                            placeId = j.placeId,
+                            isFavorited = false,
+                            isRecommended = false,
+                            isSearched = false,
+                            clickCount = 0
                         )
                     )
                 }
 
+                if (page == 1){
+                    db.tourismPlaceDao().deleteTourismPlaceWithCategoryId(categoryId)
+                }
+
+
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = responseData.map {
-                    TourismPlaceSearchedRemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
+                    TourismPlaceWithCategoryRemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
-                db.tourismPlaceSearchedRemoteKeysDao().insertAll(keys)
+                db.tourismPlaceWithCategoryRemoteKeysDao().insertAll(keys)
                 db.tourismPlaceDao().insertAll(data)
                 db.tourismPlaceInteractionDao().insertAll(newInteractionData)
 
@@ -97,22 +105,25 @@ class TourismPlaceWithCategoryRemoteMediator(
         return InitializeAction.LAUNCH_INITIAL_REFRESH
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceNearestRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceWithCategoryRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
-            db.tourismPlaceNearestRemoteKeysDao().getRemoteKeysId(data.placeId)
+            Log.i("dataResponse", "TourismPlaceWithCategoryRK : lastData = ${data.placeId}")
+            var remoteKeyForLastItem =  db.tourismPlaceWithCategoryRemoteKeysDao().getRemoteKeysId(data.placeId)
+            Log.i("dataResponse", "TourismPlaceWithCategoryRK : getRemoteKeyForLastItem() = ${remoteKeyForLastItem?.nextKey}")
+            remoteKeyForLastItem
         }
     }
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceNearestRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceWithCategoryRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
-            db.tourismPlaceNearestRemoteKeysDao().getRemoteKeysId(data.placeId)
+            db.tourismPlaceWithCategoryRemoteKeysDao().getRemoteKeysId(data.placeId)
         }
 
 
     }
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TourismPlaceItem>): TourismPlaceNearestRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TourismPlaceItem>): TourismPlaceWithCategoryRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.placeId?.let { id ->
-                db.tourismPlaceNearestRemoteKeysDao().getRemoteKeysId(id)
+                db.tourismPlaceWithCategoryRemoteKeysDao().getRemoteKeysId(id)
             }
         }
     }

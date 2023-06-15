@@ -94,22 +94,22 @@ class TourismPlaceSearchedRemoteMediator(
         return InitializeAction.LAUNCH_INITIAL_REFRESH
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceNearestRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceSearchedRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
-            db.tourismPlaceNearestRemoteKeysDao().getRemoteKeysId(data.placeId)
+            db.tourismPlaceSearchedRemoteKeysDao().getRemoteKeysId(data.placeId)
         }
     }
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceNearestRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, TourismPlaceItem>): TourismPlaceSearchedRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
-            db.tourismPlaceNearestRemoteKeysDao().getRemoteKeysId(data.placeId)
+            db.tourismPlaceSearchedRemoteKeysDao().getRemoteKeysId(data.placeId)
         }
 
 
     }
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TourismPlaceItem>): TourismPlaceNearestRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TourismPlaceItem>): TourismPlaceSearchedRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.placeId?.let { id ->
-                db.tourismPlaceNearestRemoteKeysDao().getRemoteKeysId(id)
+                db.tourismPlaceSearchedRemoteKeysDao().getRemoteKeysId(id)
             }
         }
     }

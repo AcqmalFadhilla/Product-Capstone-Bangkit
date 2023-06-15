@@ -11,4 +11,5 @@ data class TourismPlaceItem(
     val placeRating: Double,
     val isFavoritedPlace: Boolean,
     val placePhotoUrl: String,
+    val placeDistance: Double?,
 ): Parcelable
