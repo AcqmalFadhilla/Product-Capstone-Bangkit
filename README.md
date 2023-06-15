@@ -7,4 +7,4 @@ untuk token MAPS_API_KEY
 pergi ke local.properties
 MAPS_API_KEY='token kamu'
 
-tes
+tes testses
