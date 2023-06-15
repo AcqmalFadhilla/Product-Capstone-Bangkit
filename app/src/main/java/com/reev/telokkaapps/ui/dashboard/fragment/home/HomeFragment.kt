@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -23,10 +22,10 @@ import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
-import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
 import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
+import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.LoadingStateAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
@@ -161,13 +160,6 @@ class HomeFragment : Fragment(){
 
         // Mendapatkan Data Rekomendasi
         binding.layoutHomeFragment.listPlaceLayout.sectionTitle.text = getString(R.string.home_place_list_section)
-
-//        val dummyPlace = DummyPlacesData.dummyPlaces2
-//        val placeListAdapter = PlaceItemListAdapter(dummyPlace)
-//        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-//            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-//            adapter = placeListAdapter
-//        }
         updateTourismPlaceRecomended()
 
     }
@@ -176,44 +168,47 @@ class HomeFragment : Fragment(){
         if (InternetConnection.checkConnection(requireContext())){
             Toast.makeText(requireContext(), "Anda sedang online..", Toast.LENGTH_SHORT ).show()
             Log.i("dataResponse", "Ada Akses Internet")
-                if (latestLongitude == 0.0 && latestLatitude == 0.0 ){
-                    Log.i("dataResponse", "Ada Akses Internet dan lati dan long = 0")
-                    // Mendapatkan tempat wisata berdasarkan kategori favorite dari Cloud API
-                    getDataTourismPlaceWithFavoriteCategoryOnline()
+            if (latestLongitude == 0.0 && latestLatitude == 0.0 ){
+                Log.i("dataResponse", "Ada Akses Internet dan lati dan long = 0")
+                // Mendapatkan tempat wisata berdasarkan kategori favorite dari Cloud API
+                getDataTourismPlaceWithFavoriteCategoryOnline()
 
-                }else {
-                    Log.i("dataResponse", "Ada Akses Internet dan lati dan long bukan 0")
-                    // Mendapatkan tempat wisata hasil rekomendasi dari Cloud API
-                    getDataTourismPlaceRecommendedOnline()
-                }
-            }else{
-                Log.i("dataResponse", "Tidak Ada Akses Internet")
-                Toast.makeText(requireContext(), "Anda sedang offline..", Toast.LENGTH_SHORT ).show()
-
-                if (latestLongitude == 0.0 && latestLatitude == 0.0 ) {
-                    Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon = 0")
-                    // mendapatkan tempat berdasarkan kategori favorite dari database
-                    getDataTourismPlaceWithFavoriteCategoryOffline()
-
-
-                }else{
-                    Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon bukan 0")
-                    // mendapatkan tempat rekomendasi dari database
-                    getDataTourismPlaceRecommendedOffline()
-                }
+            }else {
+                Log.i("dataResponse", "Ada Akses Internet dan lati dan long bukan 0")
+                // Mendapatkan tempat wisata hasil rekomendasi dari Cloud API
+                getDataTourismPlaceRecommendedOnline()
             }
+        }else{
+            Log.i("dataResponse", "Tidak Ada Akses Internet")
+            Toast.makeText(requireContext(), "Anda sedang offline..", Toast.LENGTH_SHORT ).show()
 
+            if (latestLongitude == 0.0 && latestLatitude == 0.0 ) {
+                Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon = 0")
+                // mendapatkan tempat berdasarkan kategori favorite dari database
+                getDataTourismPlaceWithFavoriteCategoryOffline()
+
+            }else{
+                Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon bukan 0")
+                // mendapatkan tempat rekomendasi dari database
+                getDataTourismPlaceRecommendedOffline()
+            }
+        }
     }
     private fun getDataTourismPlaceRecommendedOffline(){
-        Log.i("dataResponse", "Masuk ke getDataTourismPlaceRecommendedOffline()" )
-        viewModel.getTourismPlaceRecomended().observe(viewLifecycleOwner, {
+        viewModel.getAllTourismPlaceNearestSaved(10).observe(viewLifecycleOwner, {
             placeListAdapter = PlaceItemListAdapter(it)
             binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
                 layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                 adapter = placeListAdapter
             }
-        })
+            Toast.makeText(
+                requireContext(),
+                "Berhasil mendapatkan data tempat wisata berdasarkan lokasi terdekat!",
+                Toast.LENGTH_LONG
+            ).show()
 
+
+        })
     }
     private fun getDataTourismPlaceRecommendedOnline(){
         viewModel.getNewTourismPlaceRecomended(
@@ -221,23 +216,16 @@ class HomeFragment : Fragment(){
             longitude = latestLongitude
         ).cachedIn(viewLifecycleOwner.lifecycleScope)
             .observe(viewLifecycleOwner, { data ->
-            placePagingAdapter.addLoadStateListener {loadState->
-                val isNotLoading = when {
-                    loadState.append is LoadState.NotLoading -> true
-                    loadState.prepend is LoadState.NotLoading ->  true
-                    loadState.refresh is LoadState.NotLoading -> true
-                    else -> false
-                }
-                isNotLoading.let {
-                    if (isNotLoading) {
-                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                            adapter = placePagingAdapter
-                            placePagingAdapter.submitData(lifecycle, data)
+                binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                    placePagingAdapter.withLoadStateFooter(
+                        footer = LoadingStateAdapter{
+                            placePagingAdapter.retry()
                         }
-                    }
+                    )
+                    adapter = placePagingAdapter
+                    placePagingAdapter.submitData(lifecycle, data)
                 }
-            }
 
         })
 
@@ -260,28 +248,27 @@ class HomeFragment : Fragment(){
 
     }
     private fun getDataTourismPlaceWithFavoriteCategoryOnline(){
+        Log.i("dataResponse", "Masuk ke fungsi getDataTourismPlaceWithFavoriteCategoryOnline() ")
         viewModel.getTourismCategoriesFavorited().observe(viewLifecycleOwner, {
-            viewModel.getNewTourismPlaceWithCategory(it.categoryName)
+            Log.i("dataResponse", "Kategori yang disukai yaitu : ${it.categoryName}")
+            viewModel.getNewTourismPlaceWithCategory(it.categoryName, it.categoryId)
                 .cachedIn(viewLifecycleOwner.lifecycleScope)
                 .observe(viewLifecycleOwner, { data->
-                placePagingAdapter.submitData(lifecycle, data)
-                placePagingAdapter.addLoadStateListener { loadState ->
-                    val isNotLoading = when {
-                        loadState.append is LoadState.NotLoading -> true
-                        loadState.prepend is LoadState.NotLoading ->  true
-                        loadState.refresh is LoadState.NotLoading -> true
-                        else -> false
-                    }
-                    isNotLoading.let {
-                        if (isNotLoading) {
-                            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                                adapter = placePagingAdapter
-                                placePagingAdapter.submitData(lifecycle, data)
-                            }
+
+                Log.i("dataResponse", "ada indikasi observe pada getNewTourismPlaceWithCategory()")
+                Log.i("dataResponse", "paging data : $data")
+
+                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                            placePagingAdapter.withLoadStateFooter(
+                                footer = LoadingStateAdapter{
+                                    placePagingAdapter.retry()
+                                }
+                            )
+                            adapter = placePagingAdapter
+                            placePagingAdapter.submitData(lifecycle, data)
                         }
-                    }
-                }
+
             })
 
         })

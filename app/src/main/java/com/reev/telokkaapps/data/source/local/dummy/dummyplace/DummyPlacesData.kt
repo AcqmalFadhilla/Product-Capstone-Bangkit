@@ -24,10 +24,7 @@ object DummyPlacesData {
                 placeTags = "Tempat destinasi wisata rekomendasi di makassar",
                 placeReview = "sunset,foto,pemandangan,malam,masjid,sampah,kebersihan,orang,laut,daerah",
                 placeWebsite = "-",
-                placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+                placePhone = "-"
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
         ),
@@ -47,10 +44,7 @@ object DummyPlacesData {
                 placeTags = "Tempat destinasi wisata rekomendasi di makassar",
                 placeReview = "sunset,foto,pemandangan,malam,masjid,sampah,kebersihan,orang,laut,daerah",
                 placeWebsite = "-",
-                placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+                placePhone = "-"
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
         ),
@@ -70,10 +64,7 @@ object DummyPlacesData {
                 placeTags = "Tempat destinasi wisata rekomendasi di makassar",
                 placeReview = "sunset,foto,pemandangan,malam,masjid,sampah,kebersihan,orang,laut,daerah",
                 placeWebsite = "-",
-                placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+                placePhone = "-"
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
         ),
@@ -93,10 +84,7 @@ object DummyPlacesData {
                 placeTags = "Tempat destinasi wisata rekomendasi di makassar",
                 placeReview = "sunset,foto,pemandangan,malam,masjid,sampah,kebersihan,orang,laut,daerah",
                 placeWebsite = "-",
-                placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+                placePhone = "-"
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
         ),
@@ -116,10 +104,7 @@ object DummyPlacesData {
                 placeTags = "Tempat destinasi wisata rekomendasi di makassar",
                 placeReview = "sunset,foto,pemandangan,malam,masjid,sampah,kebersihan,orang,laut,daerah",
                 placeWebsite = "-",
-                placePhone = "-",
-                isFavorited = false,
-                isRecomended = true,
-                clickCount = 0,
+                placePhone = "-"
             ),
             category = TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
         ),
@@ -132,6 +117,7 @@ object DummyPlacesData {
             placeRating = 4.5,
             isFavoritedPlace = false ,
             placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+            placeDistance = 0.0
         ),TourismPlaceItem(
             placeId = 2,
             placeName = "Anjungan Pantai Losari",
@@ -139,6 +125,7 @@ object DummyPlacesData {
             placeRating = 4.5,
             isFavoritedPlace = false ,
             placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+            placeDistance = 0.0
         ),
         TourismPlaceItem(
             placeId = 3,
@@ -147,6 +134,8 @@ object DummyPlacesData {
             placeRating = 4.5,
             isFavoritedPlace = false ,
             placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+            placeDistance = 0.0
+
         ),
         TourismPlaceItem(
             placeId = 4,
@@ -155,6 +144,8 @@ object DummyPlacesData {
             placeRating = 4.5,
             isFavoritedPlace = false ,
             placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+            placeDistance = 0.0
+
         ),
         TourismPlaceItem(
             placeId = 5,
@@ -163,6 +154,8 @@ object DummyPlacesData {
             placeRating = 4.5,
             isFavoritedPlace = false ,
             placePhotoUrl = "https://lh5.googleusercontent.com/p/AF1QipPo3847T-hK93SxeNvYXdLuUkCQDQOKxYFJoX5-=w408-h306-k-no",
+            placeDistance = 0.0
+
         )
     )
 }

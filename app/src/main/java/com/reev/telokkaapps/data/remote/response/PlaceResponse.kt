@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 
 @Parcelize
-data class DetailPlaceResponse(
+data class PlaceResponse(
 
 	@field:SerializedName("data")
 	val data: List<TourismPlaceResponse>,
@@ -20,7 +20,7 @@ data class DetailPlaceResponse(
 @Entity(tableName = "detail_place")
 
 @Parcelize
-data class DetailTourismPlaceResponse(
+data class TourismPlaceResponse(
 	@PrimaryKey
 	@field:SerializedName("ID")
 	val id: Int,
@@ -65,7 +65,10 @@ data class DetailTourismPlaceResponse(
 	val website: String? = null,
 
 	@field:SerializedName("Phone")
-	val phone: String? = null
+	val phone: String? = null,
+
+	@field:SerializedName("jarak")
+	val distance: Double? = null
 ) : Parcelable {
 
 	fun toTourismPlace() : TourismPlace{
@@ -101,7 +104,7 @@ data class DetailTourismPlaceResponse(
 			placeReview = review,
 			placeWebsite = website,
 			placePhone = phone,
-			placeDistance = null
+			placeDistance = distance
 		)
 	}
 }

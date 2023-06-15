@@ -4,12 +4,13 @@ import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
+import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 
 @Parcelize
 data class ListPlaceResponse(
 
 	@field:SerializedName("data")
-	val data: List<ListPlaceItem>,
+	val data: List<TourismPlace>,
 
 	@field:SerializedName("success")
 	val success: Boolean?

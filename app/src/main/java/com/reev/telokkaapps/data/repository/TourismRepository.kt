@@ -1,27 +1,25 @@
 package com.reev.telokkaapps.data.repository
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
+import androidx.lifecycle.liveData
+import androidx.lifecycle.map
+import androidx.paging.*
 import com.reev.telokkaapps.data.local.database.TourismRoomDatabase
-import com.reev.telokkaapps.data.local.database.dao.DeleteAllTourismPlansAsyncTask
-import com.reev.telokkaapps.data.local.database.dao.TourismCategoryDao
-import com.reev.telokkaapps.data.local.database.dao.TourismPlanDao
-import com.reev.telokkaapps.data.local.database.dao.TourismPlaceDao
+import com.reev.telokkaapps.data.local.database.dao.*
 import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
+import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.data.remote.ApiConfig
 import com.reev.telokkaapps.data.remote.ApiService
-import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceNearestPagingSource
 import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceSearchedPagingSource
 import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceWithCategoryPagingSource
-import com.reev.telokkaapps.data.remote.response.DetailPlaceResponse
-import com.reev.telokkaapps.data.remote.response.DetailTourismPlace
+import com.reev.telokkaapps.data.remote.response.PlaceResponse
+import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import com.reev.telokkaapps.data.remote.response.ListPlaceItem
 import com.reev.telokkaapps.helper.InitialDataSource
 import retrofit2.Call
@@ -30,27 +28,39 @@ import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import com.reev.telokkaapps.data.remote.Result
+import com.reev.telokkaapps.data.remote.remotemediator.TourismPlaceNearestRemoteMediator
+import com.reev.telokkaapps.data.remote.remotemediator.TourismPlaceSearchedRemoteMediator
+import com.reev.telokkaapps.data.remote.remotemediator.TourismPlaceWithCategoryRemoteMediator
 
 class TourismRepository(application: Application) {
     private val mTourismCategoryDao : TourismCategoryDao
     private val mTourismPlanDao : TourismPlanDao
     private val mTourismPlaceDao : TourismPlaceDao
+    private val mTourismPlaceInteractionDao : TourismPlaceInteractionDao
+    private val mTourismPlaceNearestRemoteKeysDao : TourismPlaceNearestRemoteKeysDao
+    private val mTourismPlaceSearchedRemoteKeysDao : TourismPlaceSearchedRemoteKeysDao
+    private val mTourismPlaceWithCategoryRemoteKeysDao : TourismPlaceWithCategoryRemoteKeysDao
     private val apiService : ApiService
+    private val mTourismRoomDatabase : TourismRoomDatabase
 
     private val executorService : ExecutorService = Executors.newSingleThreadExecutor()
 
     init {
-        val db = TourismRoomDatabase.getDatabase(application)
-        mTourismCategoryDao = db.tourismCategoryDao()
-        mTourismPlanDao = db.tourismPlanDao()
-        mTourismPlaceDao = db.tourismPlaceDao()
+        mTourismRoomDatabase = TourismRoomDatabase.getDatabase(application)
+        mTourismCategoryDao = mTourismRoomDatabase.tourismCategoryDao()
+        mTourismPlanDao = mTourismRoomDatabase.tourismPlanDao()
+        mTourismPlaceDao = mTourismRoomDatabase.tourismPlaceDao()
+        mTourismPlaceInteractionDao = mTourismRoomDatabase.tourismPlaceInteractionDao()
+        mTourismPlaceNearestRemoteKeysDao = mTourismRoomDatabase.tourismPlaceNearestRemoteKeysDao()
+        mTourismPlaceSearchedRemoteKeysDao = mTourismRoomDatabase.tourismPlaceSearchedRemoteKeysDao()
+        mTourismPlaceWithCategoryRemoteKeysDao = mTourismRoomDatabase.tourismPlaceWithCategoryRemoteKeysDao()
         apiService = ApiConfig.getApiService()
     }
 
     fun insertAllData() {
         mTourismPlaceDao.insertAll(InitialDataSource.getTourismPlace())
         mTourismCategoryDao.insertAll(InitialDataSource.getTourismCategory())
-        mTourismPlanDao.insertAll(InitialDataSource.getTourismPlan())
+//        mTourismPlanDao.insertAll(InitialDataSource.getTourismPlan())
     }
 
     //////// Query ke database ////////
@@ -109,6 +119,9 @@ class TourismRepository(application: Application) {
 
     // Mendapatkan tempat wisata yang direkomendasikan
     fun getTourismPlaceRecomended() = mTourismPlaceDao.getTourismPlaceRecomended()
+
+    // Mendapatkan tempat wisata rekomendasi yang disimpan
+    fun getAllTourismPlaceNearestSaved(limit: Int) = mTourismPlaceNearestRemoteKeysDao.getAllTourismPlaceNearestSaved(limit)
 
     // Menambahkan tempat wisata
     fun insertTourismPlace(tourismPlace: TourismPlace){
@@ -220,63 +233,60 @@ class TourismRepository(application: Application) {
     fun getDetailTourismPlanWithId(id : Int) = mTourismPlanDao.getDetailTourismPlanWithId(id)
 
     //////// Remote (API) ////////
-    fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double) : LiveData<PagingData<ListPlaceItem>> {
+    @OptIn(ExperimentalPagingApi::class)
+    fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double) : LiveData<PagingData<TourismPlaceItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
+            remoteMediator = TourismPlaceNearestRemoteMediator(mTourismRoomDatabase, apiService, latitude = latitude, longitude = longitude),
+
             pagingSourceFactory = {
-                ListPlaceNearestPagingSource(apiService = apiService, latitide = latitude, longitude = longitude)
+                mTourismPlaceNearestRemoteKeysDao.getTourismPlaceNearest()
             }
         ).liveData
     }
 
-    fun getNewTourismPlaceWithCategory(category: String) : LiveData<PagingData<ListPlaceItem>>{
+    @OptIn(ExperimentalPagingApi::class)
+    fun getNewTourismPlaceWithCategory(category: String, idCategory: Int) : LiveData<PagingData<TourismPlaceItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10
+            ),
+            remoteMediator = TourismPlaceWithCategoryRemoteMediator(mTourismRoomDatabase, apiService, category, idCategory),
+            pagingSourceFactory = {
+                mTourismPlaceWithCategoryRemoteKeysDao.getPlaceTourismWithCategoryPaged(idCategory)
+            }
+        ).liveData
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    fun getNewTourismPlaceSearched(query: String) : LiveData<PagingData<TourismPlaceItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
+            remoteMediator = TourismPlaceSearchedRemoteMediator(mTourismRoomDatabase, apiService,query),
             pagingSourceFactory = {
-                ListPlaceWithCategoryPagingSource(apiService = apiService, category = category)
+                mTourismPlaceDao.getTourismPlaceSearched()
             }
         ).liveData
     }
 
-    fun getNewTourismPlaceSearched(query: String, category: String, city: String, orderRating : Boolean) : LiveData<PagingData<ListPlaceItem>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 5
-            ),
-            pagingSourceFactory = {
-                ListPlaceSearchedPagingSource(apiService = apiService, query = query, category =  category, city = city, orderRating = orderRating)
-            }
-        ).liveData
+    fun getNewDetailTourismPlace(id : Int) : LiveData<Result<List<TourismPlaceDetail>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getPlaceWithId(id)
+            val data = response.data[0].toTourismPlace()
+            mTourismPlaceDao.insert(data)
+        } catch (e: Exception) {
+            Log.d("TourismRepository", "getNewDetailTourismPlace: ${e.message.toString()} ")
+            emit(Result.Error(e.message.toString()))
+        }
+        val localData: LiveData<Result<List<TourismPlaceDetail>>> = mTourismPlaceDao.getDetailTourismPlaceWithId(id).map { Result.Success(it) }
+        emitSource(localData)
     }
 
-    private val result = MediatorLiveData<Result<List<DetailTourismPlace>>>()
-
-    fun getNewDetailTourismPlace(id : Int) : LiveData<Result<List<DetailTourismPlace>>> {
-        result.value = Result.Loading
-        val client = ApiConfig.getApiService().getPlaceWithId(id)
-        client.enqueue(object : Callback<DetailPlaceResponse> {
-            override fun onResponse(
-                call: Call<DetailPlaceResponse>,
-                response: Response<DetailPlaceResponse>
-            ) {
-                if(response.isSuccessful){
-                    result.value = Result.Success(response.body()!!.data)
-                }
-            }
-
-            override fun onFailure(call: Call<DetailPlaceResponse>, t: Throwable) {
-                result.value = Result.Error(t.message.toString())
-            }
-
-        })
-
-        return result
-
-    }
 
 
 

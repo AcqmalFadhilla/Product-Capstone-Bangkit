@@ -107,9 +107,9 @@ class DetailPlanningActivity : AppCompatActivity() {
                         }
 
 
-
                         itemButton.apply {
                             infoTV.text = "klik tombol dibawah jika ingin mengakhiri wisata"
+                            infoTV.isVisible = !plan.planStatus
                             button1.isGone = true
                             button2.isVisible = !plan.planStatus
                             button2.text = "Akhiri Kegiatan Wisata"
