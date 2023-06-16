@@ -30,6 +30,10 @@ class CollectionFragment : Fragment() {
                 Toast.makeText(requireContext(), "Favorite belum difungsikan", Toast.LENGTH_SHORT).show()
             }
 
+            orderBtn.setOnClickListener {
+                Toast.makeText(requireContext(), "Fitur Ticketing belum difungsikan", Toast.LENGTH_SHORT).show()
+            }
+
             settingsBtn.setOnClickListener {
                 Toast.makeText(requireContext(), "Setelan belum difungsikan", Toast.LENGTH_SHORT).show()
             }

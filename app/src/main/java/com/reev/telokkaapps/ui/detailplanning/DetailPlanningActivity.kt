@@ -45,11 +45,15 @@ class DetailPlanningActivity : AppCompatActivity() {
                     fadeOutAnimation.duration = fadeDuration.toLong()
                     backButton.startAnimation(fadeOutAnimation)
                     backButton.visibility = View.INVISIBLE
+                    planningDoneCardView.startAnimation(fadeOutAnimation)
+                    planningDoneCardView.visibility = View.INVISIBLE
                 } else if (scrollY == 0 && backButton.visibility != View.VISIBLE) {
                     val fadeInAnimation = AlphaAnimation(fadeOutAlpha, fadeInAlpha)
                     fadeInAnimation.duration = fadeDuration.toLong()
                     backButton.startAnimation(fadeInAnimation)
                     backButton.visibility = View.VISIBLE
+                    planningDoneCardView.startAnimation(fadeInAnimation)
+                    planningDoneCardView.visibility = View.VISIBLE
                 }
             }
         }
@@ -104,8 +108,16 @@ class DetailPlanningActivity : AppCompatActivity() {
                                 intent.data = Uri.parse(mapUrl)
                                 startActivity(intent)
                             }
-                        }
 
+                            // Pesan Ticket
+                            orderTicketButton.setOnClickListener {
+                                Toast.makeText(
+                                    this@DetailPlanningActivity,
+                                    "Pemesanan Tiket Belum Tersedia",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
 
                         itemButton.apply {
                             infoTV.text = "klik tombol dibawah jika ingin mengakhiri wisata"

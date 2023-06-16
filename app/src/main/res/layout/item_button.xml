@@ -40,7 +40,7 @@
             android:text="Button2"
             android:textColor="@color/main_background"
 
-            android:backgroundTint="@color/danger_backgound"
+            android:backgroundTint="@color/danger_background"
             android:visibility="gone"/>
 
         <Button
