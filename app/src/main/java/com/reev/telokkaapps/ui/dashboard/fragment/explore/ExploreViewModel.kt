@@ -13,8 +13,8 @@ class ExploreViewModel(app : Application) : ViewModel() {
     private val mTourismRepository: TourismRepository = TourismRepository(app)
     fun getPlaceTourismAndCategory() = mTourismRepository.getPlaceTourismAndCategory()
 
-    fun getNewTourismPlaceSearched(query : String, category: String, city : String, orderRating: Boolean) : LiveData<PagingData<TourismPlaceItem>> {
-        return mTourismRepository.getNewTourismPlaceSearched( query = query)
+    fun getNewTourismPlaceSearched(query : String, idCategory: Int?, city : String?, orderRating: Boolean?) : LiveData<PagingData<TourismPlaceItem>> {
+        return mTourismRepository.getNewTourismPlaceSearched( query = query, idCategory = idCategory, city = city, orderRating =  orderRating)
     }
 
 }

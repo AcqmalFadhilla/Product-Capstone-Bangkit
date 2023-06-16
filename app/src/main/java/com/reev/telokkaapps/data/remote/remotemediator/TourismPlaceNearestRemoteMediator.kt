@@ -62,6 +62,7 @@ class TourismPlaceNearestRemoteMediator(
                     db.tourismPlaceNearestRemoteKeysDao().deleteRemoteKeys()
                     db.tourismPlaceInteractionDao().unRecommendAllTourismPlace()
                 }
+                db.tourismPlaceDao().insertAll(data)
                 val newInteractionData = mutableListOf<TourismPlaceInteraction>()
                 for (j in data){
                     newInteractionData.add(
@@ -74,11 +75,12 @@ class TourismPlaceNearestRemoteMediator(
                         )
                     )
                 }
-                db.tourismPlaceInteractionDao().insertAll(newInteractionData)
 
                 if (page == 1){
                     db.tourismPlaceInteractionDao().unRecommendAllTourismPlace()
                 }
+                db.tourismPlaceInteractionDao().insertAll(newInteractionData)
+
 
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -86,7 +88,7 @@ class TourismPlaceNearestRemoteMediator(
                     TourismPlaceNearestRemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 db.tourismPlaceNearestRemoteKeysDao().insertAll(keys)
-                db.tourismPlaceDao().insertAll(data)
+
                 data.forEach {
                     db.tourismPlaceInteractionDao().recommendTourismPlace(it.placeId)
                 }

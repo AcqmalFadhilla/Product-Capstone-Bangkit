@@ -14,14 +14,14 @@ object InitialDataSource {
     }
     fun getTourismCategory(): List<TourismCategory>{
         return listOf(
-            TourismCategory(1, "Taman", R.drawable.img_1_taman,false),
-            TourismCategory(2, "Air Terjun", R.drawable.img_2_air_terjun, false),
-            TourismCategory(3, "Museum", R.drawable.img_3_museum ,false),
-            TourismCategory(4, "Pantai",R.drawable.img_4_pantai,  false, ),
-            TourismCategory(5, "Permandian", R.drawable.img_5_permandian, false),
-            TourismCategory(6, "Religi", R.drawable.img_6_religi,false),
-            TourismCategory(7, "Danau", R.drawable.img_8_danau,false),
-            TourismCategory(8, "Alam", R.drawable.img_10_alam,false),
+            TourismCategory(1, "taman", R.drawable.img_1_taman,false),
+            TourismCategory(2, "air terjun", R.drawable.img_2_air_terjun, false),
+            TourismCategory(3, "museum", R.drawable.img_3_museum ,false),
+            TourismCategory(4, "pantai",R.drawable.img_4_pantai,  false, ),
+            TourismCategory(5, "permandian", R.drawable.img_5_permandian, false),
+            TourismCategory(6, "religi", R.drawable.img_6_religi,false),
+            TourismCategory(7, "danau", R.drawable.img_8_danau,false),
+            TourismCategory(8, "alam", R.drawable.img_10_alam,false),
         )
     }
     fun getTourismPlace() : List<TourismPlace>{
@@ -355,30 +355,30 @@ object InitialDataSource {
 
     fun getCityNames(): List<String> {
         return listOf(
-            "Makassar",
-            "Bantaeng",
-            "Bone",
-            "Bulukumba",
-            "Barru",
-            "Enrekang",
-            "Gowa",
-            "Jeneponto",
-            "Kepulauan Selayar",
-            "Luwu",
-            "Luwu Timur",
-            "Luwu Utara",
-            "Maros",
-            "Pangkajene dan Kepulauan",
-            "Pinrang",
-            "Sidenreng Rappang",
-            "Sinjai",
-            "Soppeng",
-            "Takalar",
-            "Tana Toraja",
-            "Toraja Utara",
-            "Wajo",
-            "Palopo",
-            "Pare-Pare"
+            "makassar",
+            "bantaeng",
+            "bone",
+            "bulukumba",
+            "barru",
+            "enrekang",
+            "gowa",
+            "jeneponto",
+            "kepulauan selayar",
+            "luwu",
+            "luwu timur",
+            "luwu utara",
+            "maros",
+            "kabupaten pangkajene dan kepulauan",
+            "pinrang",
+            "sidenreng rappang",
+            "sinjai",
+            "soppeng",
+            "takalar",
+            "tana toraja",
+            "toraja utara",
+            "wajo",
+            "palopo",
+            "parepare"
         )
     }
 

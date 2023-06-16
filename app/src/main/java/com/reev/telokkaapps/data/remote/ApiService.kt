@@ -27,12 +27,6 @@ interface ApiService {
         @Query("Data") data: Int,
     ) :  PlaceResponse
 
-    @GET("place/filter")
-    suspend fun search(
-        @Query("query") query : String,
-        @Query("Page") page: Int,
-        @Query("Data") data: Int,
-    ) : PlaceResponse
 
 
 

@@ -3,7 +3,6 @@ package com.reev.telokkaapps.data.repository
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.paging.*
@@ -14,20 +13,10 @@ import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.TourismPlan
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
-import com.reev.telokkaapps.data.remote.ApiConfig
-import com.reev.telokkaapps.data.remote.ApiService
-import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceSearchedPagingSource
-import com.reev.telokkaapps.data.remote.pagingsource.ListPlaceWithCategoryPagingSource
-import com.reev.telokkaapps.data.remote.response.PlaceResponse
-import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
-import com.reev.telokkaapps.data.remote.response.ListPlaceItem
+import com.reev.telokkaapps.data.remote.*
 import com.reev.telokkaapps.helper.InitialDataSource
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import com.reev.telokkaapps.data.remote.Result
 import com.reev.telokkaapps.data.remote.remotemediator.TourismPlaceNearestRemoteMediator
 import com.reev.telokkaapps.data.remote.remotemediator.TourismPlaceSearchedRemoteMediator
 import com.reev.telokkaapps.data.remote.remotemediator.TourismPlaceWithCategoryRemoteMediator
@@ -41,6 +30,7 @@ class TourismRepository(application: Application) {
     private val mTourismPlaceSearchedRemoteKeysDao : TourismPlaceSearchedRemoteKeysDao
     private val mTourismPlaceWithCategoryRemoteKeysDao : TourismPlaceWithCategoryRemoteKeysDao
     private val apiService : ApiService
+    private val apiService2 : ApiServiceForModel
     private val mTourismRoomDatabase : TourismRoomDatabase
 
     private val executorService : ExecutorService = Executors.newSingleThreadExecutor()
@@ -55,6 +45,7 @@ class TourismRepository(application: Application) {
         mTourismPlaceSearchedRemoteKeysDao = mTourismRoomDatabase.tourismPlaceSearchedRemoteKeysDao()
         mTourismPlaceWithCategoryRemoteKeysDao = mTourismRoomDatabase.tourismPlaceWithCategoryRemoteKeysDao()
         apiService = ApiConfig.getApiService()
+        apiService2 = ApiConfigForModel.getApiService()
     }
 
     fun insertAllData() {
@@ -261,14 +252,42 @@ class TourismRepository(application: Application) {
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getNewTourismPlaceSearched(query: String) : LiveData<PagingData<TourismPlaceItem>> {
+    fun getNewTourismPlaceSearched(query: String, idCategory: Int?, city: String?, orderRating : Boolean?) : LiveData<PagingData<TourismPlaceItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = TourismPlaceSearchedRemoteMediator(mTourismRoomDatabase, apiService,query),
+            remoteMediator = TourismPlaceSearchedRemoteMediator(mTourismRoomDatabase, apiService2,query),
             pagingSourceFactory = {
-                mTourismPlaceDao.getTourismPlaceSearched()
+                if (idCategory != null && city!= null && orderRating != null){
+                    Log.i("filterring", "getTourismPlaceSearchedWithOrderRatingASC(categoryId = idCategory, city = city)" )
+                    if(!orderRating) mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingASC(categoryId = idCategory, city = city)
+                    else mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingDESC(categoryId = idCategory, city = city)
+                }else if(idCategory != null && city!= null){
+                    Log.i("filterring", "getTourismPlaceSearched(categoryId = idCategory, city = city)" )
+                    mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearched(categoryId = idCategory, city = city)
+                }else if(idCategory != null && orderRating != null){
+                    Log.i("filterring", "getTourismPlaceSearchedWithOrderRatingASC(categoryId = idCategory)" )
+                    if(!orderRating) mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingASC(categoryId = idCategory)
+                    else mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingDESC(categoryId = idCategory)
+                }else if(city != null && orderRating != null){
+                    Log.i("filterring", "getTourismPlaceSearchedWithOrderRatingASC(city = city)" )
+                    if(!orderRating) mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingASC(city = city)
+                    else mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingDESC(city = city)
+                }else if(idCategory != null){
+                    Log.i("filterring", "getTourismPlaceSearched(categoryId = idCategory)" )
+                    mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearched(categoryId = idCategory)
+                }else if(city != null){
+                    Log.i("filterring", "getTourismPlaceSearched(city = city)" )
+                    mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearched(city = city)
+                }else if(orderRating != null){
+                    Log.i("filterring", "getTourismPlaceSearchedWithOrderRatingASC(city = city)" )
+                    if(!orderRating) mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingASC()
+                    else mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearchedWithOrderRatingDESC()
+                }else{
+                    Log.i("filterring", "getTourismPlaceSearched()" )
+                    mTourismPlaceSearchedRemoteKeysDao.getTourismPlaceSearched()
+                }
             }
         ).liveData
     }
@@ -286,8 +305,4 @@ class TourismRepository(application: Application) {
         val localData: LiveData<Result<List<TourismPlaceDetail>>> = mTourismPlaceDao.getDetailTourismPlaceWithId(id).map { Result.Success(it) }
         emitSource(localData)
     }
-
-
-
-
 }

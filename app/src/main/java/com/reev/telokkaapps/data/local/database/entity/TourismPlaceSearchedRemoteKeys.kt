@@ -7,7 +7,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "place_searched_remote_keys")
 data class TourismPlaceSearchedRemoteKeys(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "orderr")
+    val orderr : Int = 0,
+
     @ColumnInfo(name = "id")
     val id : Int,
 
@@ -15,5 +18,7 @@ data class TourismPlaceSearchedRemoteKeys(
     val prevKey : Int?,
 
     @ColumnInfo(name = "nextKey")
-    val nextKey : Int?
+    val nextKey : Int?,
+
+
 )

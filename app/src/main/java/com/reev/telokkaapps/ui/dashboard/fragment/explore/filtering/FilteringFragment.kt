@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,9 +17,9 @@ import com.reev.telokkaapps.helper.InitialDataSource
 class FilteringFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentFilteringBinding
 
-    public var category : String = ""
-    public var city : String = ""
-    public var orderRating : Boolean = true
+    public var city : String? = null
+    public var idCategory : Int? = null
+    public var orderRating : Boolean? = null
 
     override fun onResume() {
         super.onResume()
@@ -50,20 +51,36 @@ class FilteringFragment : BottomSheetDialogFragment() {
                 Toast.makeText(requireContext(), "Berhasil menerapkan filter", Toast.LENGTH_SHORT).show()
 
                 // Aksi untuk menyimpan kota/kabupaten yang dipilih
-                city = cityFilter.text.toString()
+
+                var listCities = InitialDataSource.getCityNames()
+                for (i in 0.. listCities.size - 1){
+                    if (listCities[i].equals(cityFilter.text.toString())) city = cityFilter.text.toString()
+
+                }
 
                 // Aksi untuk menyimpan kategori yang dipilih
-                category = categoryFilter.text.toString()
+                var j = 1
+                var listCategory = InitialDataSource.getTourismCategoryNames()
+                for (i in 0.. listCategory.size - 1){
+                    if (listCategory[i].equals(categoryFilter.text.toString())) idCategory = i + 1
+
+                }
+
 
                 // Aksi untuk menyimpan urutan rating yang dipilih
                 val selectedRadioButtonId = radioGroupRating.checkedRadioButtonId
+
                 val isSelectedLowRating = selectedRadioButtonId == R.id.radioButtonLowRating
+                val isSelectedHighRating = selectedRadioButtonId == R.id.radioButtonHighRating
                 if (isSelectedLowRating) {
                     orderRating = false
                 }
+                if (isSelectedHighRating) {
+                    orderRating = true
+                }
                 Log.i("dataFilter", "city = $city" )
-                Log.i("dataFilter", "category = $category" )
-                Log.i("dataFilter", "orderRating = $orderRating" )
+                Log.i("dataFilter", "categoryId = ${idCategory.toString()}" )
+                Log.i("dataFilter", "orderRating = $orderRating")
                 dismiss()
             }
         }

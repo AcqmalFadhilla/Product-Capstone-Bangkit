@@ -1,5 +1,6 @@
 package com.reev.telokkaapps.data.remote.remotemediator
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -12,12 +13,14 @@ import com.reev.telokkaapps.data.local.database.entity.TourismPlaceNearestRemote
 import com.reev.telokkaapps.data.local.database.entity.TourismPlaceSearchedRemoteKeys
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
 import com.reev.telokkaapps.data.remote.ApiService
+import com.reev.telokkaapps.data.remote.ApiServiceForModel
 
 @OptIn(ExperimentalPagingApi::class)
 class TourismPlaceSearchedRemoteMediator(
     private val db: TourismRoomDatabase,
-    private val apiService: ApiService,
+    private val apiService: ApiServiceForModel,
     private val query: String
+
 ) : RemoteMediator<Int, TourismPlaceItem>() {
 
     override suspend fun load(
@@ -26,6 +29,7 @@ class TourismPlaceSearchedRemoteMediator(
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH ->{
+                Log.i("refresh", "TourismPlaceSearchedRemoteMediator refreshing....")
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKeys?.nextKey?.minus(1) ?: INITIAL_PAGE_INDEX
             }
@@ -45,16 +49,18 @@ class TourismPlaceSearchedRemoteMediator(
 
         try {
             val data = mutableListOf<TourismPlace>()
-            val responseData = apiService.search(page = page, data = state.config.pageSize, query = query).data
+            val responseData = apiService.search(page = page, data = state.config.pageSize, query = query)
             responseData.forEach{
                 data.add(it.toTourismPlace())
             }
 
-            val endOfPaginationReached = data.isEmpty()
+//            val endOfPaginationReached = data.isEmpty()
 
             db.withTransaction {
                 if (loadType == LoadType.REFRESH) {
+                    Log.i("refresh", "TourismPlaceSearchedRemoteMediator deleteRemoteKeys....")
                     db.tourismPlaceSearchedRemoteKeysDao().deleteRemoteKeys()
+                    Log.i("refresh", "TourismPlaceSearchedRemoteMediator unSearchAllTourismPlace....")
                     db.tourismPlaceInteractionDao().unSearchAllTourismPlace()
                 }
 
@@ -73,9 +79,11 @@ class TourismPlaceSearchedRemoteMediator(
                 db.tourismPlaceInteractionDao().insertAll(newInteractionData)
 
                 val prevKey = if (page == 1) null else page - 1
-                val nextKey = if (endOfPaginationReached) null else page + 1
-                val keys = responseData.map {
-                    TourismPlaceSearchedRemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
+                val nextKey = null
+                val keys = mutableListOf<TourismPlaceSearchedRemoteKeys>()
+                for (i in 0 .. responseData.size-1) {
+                    val newData = TourismPlaceSearchedRemoteKeys(orderr = i, id = responseData[i].id, prevKey = prevKey, nextKey = nextKey )
+                    keys.add(newData)
                 }
                 db.tourismPlaceSearchedRemoteKeysDao().insertAll(keys)
                 db.tourismPlaceDao().insertAll(data)
@@ -83,8 +91,9 @@ class TourismPlaceSearchedRemoteMediator(
                     db.tourismPlaceInteractionDao().searchTourismPlace(it.placeId)
                 }
             }
-            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+            return MediatorResult.Success(endOfPaginationReached = true)
         } catch (exception: Exception) {
+            Log.i("dataResponse", "TourismPlaceSearched exception: $exception")
             return MediatorResult.Error(exception)
         }
 
