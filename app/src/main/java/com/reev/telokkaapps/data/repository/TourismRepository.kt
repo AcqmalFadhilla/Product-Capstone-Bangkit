@@ -186,6 +186,13 @@ class TourismRepository(application: Application) {
         }
     }
 
+    // Menghapus data rencana wisata dengan id
+    fun deleteTourismPlanWithId(id: Int){
+        executorService.execute{
+            mTourismPlanDao.deleteTourismPlanWithId(id)
+        }
+    }
+
     // Menghapus seluruh data rencana wisata
     fun deleteAllTourismPlan(){
         DeleteAllTourismPlansAsyncTask(mTourismPlanDao).execute()

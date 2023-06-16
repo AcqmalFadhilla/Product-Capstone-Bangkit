@@ -165,7 +165,7 @@ class HomeFragment : Fragment(),
     private fun updateTourismPlaceRecomended() {
         Log.i("dataResponse", "Masuk ke  fungsi updateTourismPlaceRecomended()")
         if (InternetConnection.checkConnection(requireContext())){
-            Toast.makeText(requireContext(), "Anda sedang online..", Toast.LENGTH_SHORT ).show()
+//            Toast.makeText(requireContext(), "Anda sedang online..", Toast.LENGTH_SHORT ).show()
             Log.i("dataResponse", "Ada Akses Internet")
             if (latestLongitude == 0.0 && latestLatitude == 0.0 ){
                 Log.i("dataResponse", "Ada Akses Internet dan lati dan long = 0")
@@ -179,7 +179,7 @@ class HomeFragment : Fragment(),
             }
         }else{
             Log.i("dataResponse", "Tidak Ada Akses Internet")
-            Toast.makeText(requireContext(), "Anda sedang offline..", Toast.LENGTH_SHORT ).show()
+//            Toast.makeText(requireContext(), "Anda sedang offline..", Toast.LENGTH_SHORT ).show()
 
             if (latestLongitude == 0.0 && latestLatitude == 0.0 ) {
                 Log.i("dataResponse", "Tidak Ada Akses Internet dan lat dan ,lon = 0")
@@ -237,11 +237,11 @@ class HomeFragment : Fragment(),
                     layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                     adapter = placeListAdapter
                 }
-                Toast.makeText(
-                    requireContext(),
-                    "Berhasil mendapatkan data tempat wisata berdasarkan kategori favorite yaitu ${favoritedCategory.categoryName}",
-                    Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Berhasil mendapatkan data tempat wisata berdasarkan kategori favorite yaitu ${favoritedCategory.categoryName}",
+//                    Toast.LENGTH_LONG
+//                ).show()
             })
         })
 

@@ -11,12 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
+import com.reev.telokkaapps.data.local.database.entity.TourismCategory
+import com.reev.telokkaapps.data.local.database.entity.TourismPlan
 import com.reev.telokkaapps.data.local.database.model.TourismPlanItem
 import com.reev.telokkaapps.databinding.ItemPlanningBinding
+import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
 import com.reev.telokkaapps.ui.detailplanning.DetailPlanningActivity
 import com.reev.telokkaapps.utility.Constant
 
-class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>) :
+class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>, private val listener: PlanningItemListAdapter.OnDeleteItemClickListener) :
     RecyclerView.Adapter<PlanningItemListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -67,10 +70,15 @@ class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>) :
                     Log.i("dataResponse", "Mencoba untuk menghapus data planning")
                     Toast.makeText(itemView.context, "Mencoba menghapus ${item.planTitle}", Toast.LENGTH_SHORT).show()
                     Toast.makeText(itemView.context, "Fitur belum difungsikan", Toast.LENGTH_SHORT).show()
-                    // buat aksi untuk menghapus data planning
+                    listener.onDeleteClick(item)
                 }
             }
         }
+    }
+    interface OnDeleteItemClickListener {
+        fun onDeleteClick(plan: TourismPlanItem)
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

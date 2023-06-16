@@ -27,6 +27,9 @@ interface TourismPlanDao{
     @Query("DELETE FROM tourism_plan")
     fun deleteAllTourismPlan()
 
+    @Query("DELETE FROM tourism_plan WHERE planId = :id")
+    fun deleteTourismPlanWithId(id: Int)
+
     @Query("SELECT * from tourism_plan WHERE planId = :id")
     fun getTourismPlanWithId(id: Int) : LiveData<TourismPlan>
 

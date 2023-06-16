@@ -96,11 +96,11 @@ class DetailPlanningActivity : AppCompatActivity() {
                             operationalHourTextView.text = "-" //belum difungsikan
 
                             openMapButton.setOnClickListener {
-                                Toast.makeText(
-                                    this@DetailPlanningActivity,
-                                    "Buka Map",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+//                                Toast.makeText(
+//                                    this@DetailPlanningActivity,
+//                                    "Buka Map",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
 
                                 val mapUrl = plan.placeMapUrl
 
@@ -117,7 +117,10 @@ class DetailPlanningActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
+
                         }
+                        planningDoneCardView.isVisible = plan.planStatus
 
                         itemButton.apply {
                             infoTV.text = "klik tombol dibawah jika ingin mengakhiri wisata"
@@ -131,11 +134,11 @@ class DetailPlanningActivity : AppCompatActivity() {
                                         .setTitle("Yakin untuk mengakhiri wisata?")
                                         .setMessage("Data akan dihapuskan setelah anda mengakhiri wisata")
                                         .setPositiveButton("Ya, Akhiri wisata") { _, _ ->
-                                            Toast.makeText(
-                                                this@DetailPlanningActivity,
-                                                "Akhiri Wisata berhasi",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+//                                            Toast.makeText(
+//                                                this@DetailPlanningActivity,
+//                                                "Akhiri Wisata berhasi",
+//                                                Toast.LENGTH_SHORT
+//                                            ).show()
                                             viewModel.updateDoneStatusOfTourismPlan(plan.planId, true)
                                             finish()
                                         }
