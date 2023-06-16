@@ -17,4 +17,8 @@ class ExploreViewModel(app : Application) : ViewModel() {
         return mTourismRepository.getNewTourismPlaceSearched( query = query, idCategory = idCategory, city = city, orderRating =  orderRating)
     }
 
+    fun getNewTourismPlaceWithCategory(category: String, idCategory: Int) : LiveData<PagingData<TourismPlaceItem>> {
+        return mTourismRepository.getNewTourismPlaceWithCategory(category = category, idCategory = idCategory)
+    }
+
 }

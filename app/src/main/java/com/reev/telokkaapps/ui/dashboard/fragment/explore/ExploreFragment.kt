@@ -12,8 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.databinding.FragmentExploreBinding
@@ -24,7 +22,7 @@ import com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering.FilteringFra
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAdapter
 
 
-class ExploreFragment : Fragment(){
+class ExploreFragment() : Fragment(){
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
     private lateinit var placePagingAdapter: PlaceItemPagingAdapter
@@ -68,15 +66,14 @@ class ExploreFragment : Fragment(){
         binding.apply{// untuk filter
             filteringFragment = FilteringFragment()
 
+
             itemSearchBanner.filterButton.setOnClickListener {
                 // buat aksi untuk memunculkan item filter
-                Toast.makeText(requireContext(), "Buka Filter", Toast.LENGTH_SHORT).show()
                 filteringFragment.show(childFragmentManager, "FilteringDialog")
             }
 
 
-            // untuk item list
-            listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
+
 
             // Aksi ketika ikon search diklik
             itemSearchBanner.searchField.setStartIconOnClickListener {
@@ -98,6 +95,42 @@ class ExploreFragment : Fragment(){
                 }
             }
         }
+
+        if (arguments != null) {
+            val categoryidd = arguments?.getInt(ID_CATEGORY_TO_SHOW)
+            val categoryNamee = arguments?.getString(NAME_CATEGORY_TO_SHOW)
+            // untuk item list
+            if (categoryidd != null && categoryNamee != null) {
+                if (InternetConnection.checkConnection(requireContext())) {
+                    binding.tvMessageNotFound1.visibility = View.GONE
+                    viewModel.getNewTourismPlaceWithCategory(category = categoryNamee, idCategory = categoryidd)
+                        .observe(viewLifecycleOwner, { data ->
+
+                            binding.listSearchPlaceLayout.itemRecyclerView.apply {
+                                layoutManager = StaggeredGridLayoutManager(
+                                    2,
+                                    StaggeredGridLayoutManager.VERTICAL
+                                )
+                                adapter = placePagingAdapter
+                                placePagingAdapter.submitData(lifecycle, data)
+                            }
+
+                        })
+                }else{
+                    binding.listSearchPlaceLayout.itemRecyclerView.visibility = View.GONE
+                    binding.listSearchPlaceLayout.sectionTitle.visibility = View.GONE
+                    binding.tvMessageNotFound1.visibility = View.VISIBLE
+                }
+            }
+
+            binding.listSearchPlaceLayout.sectionTitle.text = "Kategori $categoryNamee"
+        }else{
+            binding.tvMessageNotFound1.visibility = View.GONE
+            binding.listSearchPlaceLayout.itemRecyclerView.visibility = View.VISIBLE
+            binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
+            binding.listSearchPlaceLayout.sectionTitle.visibility = View.VISIBLE
+
+        }
 //        childFragmentManager.setFragmentResultListener(FILTERING_DATA, this){key, bunddle->
 //            idCategory = bunddle.getInt("idCategory")
 //            city = bunddle.getString("city")
@@ -108,8 +141,6 @@ class ExploreFragment : Fragment(){
     }
 
     private fun searchingHandler(){
-        Toast.makeText(requireContext(), "Mencari...", Toast.LENGTH_SHORT).show()
-
         city = filteringFragment.city
         idCategory = filteringFragment.idCategory
         orderRating = filteringFragment.orderRating
@@ -124,6 +155,13 @@ class ExploreFragment : Fragment(){
         if (searchText.isEmpty()){
             Toast.makeText(requireContext(), "Silahkan masukkan tempat wisata atau aktivitas yang ingin Anda cari!", Toast.LENGTH_SHORT).show()
         }else {
+            // untuk item list
+            binding.tvMessageNotFound1.visibility = View.GONE
+            binding.listSearchPlaceLayout.itemRecyclerView.visibility = View.VISIBLE
+            binding.listSearchPlaceLayout.sectionTitle.text = "Hasil Pencarian"
+            binding.listSearchPlaceLayout.sectionTitle.visibility = View.VISIBLE
+
+
             getNewData(
                 query = searchText,
                 idCategory = idCategory,
@@ -160,7 +198,8 @@ class ExploreFragment : Fragment(){
     }
 
     companion object{
-        public val FILTERING_DATA : String = "filter_request_key"
+        public val ID_CATEGORY_TO_SHOW : String = "id_category_to_show"
+        public val NAME_CATEGORY_TO_SHOW : String = "name_category_to_show"
     }
 
 

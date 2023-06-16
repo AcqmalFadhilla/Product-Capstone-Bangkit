@@ -228,7 +228,7 @@ class TourismRepository(application: Application) {
     fun getNewTourismPlaceRecomended(latitude: Double, longitude: Double) : LiveData<PagingData<TourismPlaceItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 5
+                pageSize = 100
             ),
             remoteMediator = TourismPlaceNearestRemoteMediator(mTourismRoomDatabase, apiService, latitude = latitude, longitude = longitude),
 
@@ -242,7 +242,7 @@ class TourismRepository(application: Application) {
     fun getNewTourismPlaceWithCategory(category: String, idCategory: Int) : LiveData<PagingData<TourismPlaceItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10
+                pageSize = 100
             ),
             remoteMediator = TourismPlaceWithCategoryRemoteMediator(mTourismRoomDatabase, apiService, category, idCategory),
             pagingSourceFactory = {
@@ -255,7 +255,7 @@ class TourismRepository(application: Application) {
     fun getNewTourismPlaceSearched(query: String, idCategory: Int?, city: String?, orderRating : Boolean?) : LiveData<PagingData<TourismPlaceItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 5
+                pageSize = 100
             ),
             remoteMediator = TourismPlaceSearchedRemoteMediator(mTourismRoomDatabase, apiService2,query),
             pagingSourceFactory = {

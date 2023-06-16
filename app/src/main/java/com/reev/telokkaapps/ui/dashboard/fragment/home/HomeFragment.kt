@@ -21,9 +21,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.entity.LocationHistory
+import com.reev.telokkaapps.data.local.database.entity.TourismCategory
 import com.reev.telokkaapps.data.source.local.dummy.dummycategory.CategoryDataSource
 import com.reev.telokkaapps.databinding.FragmentHomeBinding
 import com.reev.telokkaapps.helper.InternetConnection
+import com.reev.telokkaapps.ui.dashboard.fragment.explore.ExploreFragment
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.CategoryItemListAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.LoadingStateAdapter
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
@@ -31,7 +33,8 @@ import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAd
 import com.reev.telokkaapps.ui.dashboard.fragment.home.minimap.MinimapFragment
 
 
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment(),
+    CategoryItemListAdapter.OnCategoryItemClickListener{
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
@@ -140,16 +143,9 @@ class HomeFragment : Fragment(){
 
         // Mendapatkan list kategori
         binding.layoutHomeFragment.listCategory.sectionTitle.text = getString(R.string.home_category_section)
-        val dummyCategory = CategoryDataSource.dummyCategories
-        val categoryItemListAdapter = CategoryItemListAdapter(dummyCategory)
-
-        binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = categoryItemListAdapter
-        }
 
         viewModel.getAllTourismCategories().observe(viewLifecycleOwner, {
-            val categoryItemListAdapter = CategoryItemListAdapter(it)
+            val categoryItemListAdapter = CategoryItemListAdapter(it, this)
 
             binding.layoutHomeFragment.listCategory.itemRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -258,21 +254,31 @@ class HomeFragment : Fragment(){
                 Log.i("dataResponse", "ada indikasi observe pada getNewTourismPlaceWithCategory()")
                 Log.i("dataResponse", "paging data : $data")
 
-                        binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
-                            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                            placePagingAdapter.withLoadStateFooter(
-                                footer = LoadingStateAdapter{
-                                    placePagingAdapter.retry()
-                                }
-                            )
-                            adapter = placePagingAdapter
-                            placePagingAdapter.submitData(lifecycle, data)
+                binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.apply {
+                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                    placePagingAdapter.withLoadStateFooter(
+                        footer = LoadingStateAdapter{
+                            placePagingAdapter.retry()
                         }
-
+                    )
+                    adapter = placePagingAdapter
+                    placePagingAdapter.submitData(lifecycle, data)
+                }
             })
-
         })
-
+    }
+    // Listener untuk list kategori
+    override fun onCategoryClick(category: TourismCategory) {
+        val fragmentManager = parentFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val exploreFragment = ExploreFragment()
+        val bundle = Bundle()
+        bundle.putInt(ExploreFragment.ID_CATEGORY_TO_SHOW, category.categoryId)
+        bundle.putString(ExploreFragment.NAME_CATEGORY_TO_SHOW, category.categoryName)
+        exploreFragment.arguments = bundle
+        fragmentTransaction.replace(R.id.fragmentContainer, exploreFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
 }

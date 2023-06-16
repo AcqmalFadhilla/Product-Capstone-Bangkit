@@ -16,6 +16,15 @@
             <include
                 android:id="@+id/itemSearchBanner"
                 layout="@layout/item_searching_banner" />
+
+            <TextView
+                android:id="@+id/tv_message_not_found_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data tidak ditemukan!"
+                android:layout_margin="20dp"
+                android:layout_gravity="center"/>
+
             <include
                 android:id="@+id/listSearchPlaceLayout"
                 layout="@layout/layout_section_list_item"/>
