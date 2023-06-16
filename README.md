@@ -8,7 +8,7 @@
     https://backendcloud-dot-capstone-telokka.et.r.appspot.com/ 
 1. Detail Lokasi
 
-* URL
+* URL 
      ```markdown
      /place/placeId/:ID
      ```
