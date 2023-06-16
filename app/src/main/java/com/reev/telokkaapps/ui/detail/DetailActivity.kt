@@ -12,7 +12,6 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
-import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 import com.reev.telokkaapps.databinding.ActivityDetailBinding
 import com.reev.telokkaapps.helper.InternetConnection
 import com.reev.telokkaapps.ui.formplanning.FormPlanningActivity
@@ -25,6 +24,9 @@ class DetailActivity : AppCompatActivity() {
 
     private var placeId : Int?  = null
     private var dataTourismPlace : TourismPlaceDetail?  = null
+
+    // Untuk Favorite
+    private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,12 +148,35 @@ class DetailActivity : AppCompatActivity() {
                     intent.data = Uri.parse(mapUrl)
                     startActivity(intent)
                 }
+
+                // untuk fungsi favorite
+                favoriteColorBtnHandler(isFavorite)
                 favoriteButton.setOnClickListener {
-                    Toast.makeText(this@DetailActivity, "Fitur ini belum dapat digunakan", Toast.LENGTH_SHORT).show()
+                    isFavorite = !isFavorite
+                    favoriteColorBtnHandler(isFavorite)
+
+                    // Buat Toast + Aksi Bila diperlukan (untuk simpan data ke database? idk)
+                    val message = if (isFavorite) {
+                        "Ditandai sebagai favorit"
+                        // Buat aksi untuk menambahkan favorit
+                    } else {
+                        "Tidak ditandai sebagai favorit"
+                        // Buat aksi untuk menghapus favorit
+                    }
+                    Toast.makeText(this@DetailActivity, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
+    }
+
+    private fun favoriteColorBtnHandler(isFavorite: Boolean? = false) {
+        val cardView = binding.layoutActivityDetail.favoriteButton
+        if (isFavorite == true) {
+            cardView.setCardBackgroundColor(ContextCompat.getColor(this@DetailActivity, R.color.danger_background))
+        } else {
+            cardView.setCardBackgroundColor(ContextCompat.getColor(this@DetailActivity, R.color.secondary_text_color))
+        }
     }
 
 }

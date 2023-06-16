@@ -96,7 +96,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/danger_backgound"
+            app:cardBackgroundColor="@color/danger_background"
             app:cardCornerRadius="15dp">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

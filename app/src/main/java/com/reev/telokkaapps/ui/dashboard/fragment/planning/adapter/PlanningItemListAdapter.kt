@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -61,6 +62,13 @@ class PlanningItemListAdapter(private val dataList: List<TourismPlanItem>) :
                 val date = item.planDate
                 placeNameTextView.text = "Tujuan : $placeName"
                 planningDateTextView.text = "Jadwal : $date"
+
+                deletePlanningButton.setOnClickListener {
+                    Log.i("dataResponse", "Mencoba untuk menghapus data planning")
+                    Toast.makeText(itemView.context, "Mencoba menghapus ${item.planTitle}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(itemView.context, "Fitur belum difungsikan", Toast.LENGTH_SHORT).show()
+                    // buat aksi untuk menghapus data planning
+                }
             }
         }
     }
