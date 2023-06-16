@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.reev.telokkaapps.databinding.FragmentCollectionBinding
 import com.reev.telokkaapps.ui.aboutus.AboutUsActivity
 import com.reev.telokkaapps.ui.detailplanning.DetailPlanningActivity
+import com.reev.telokkaapps.ui.favoriteplace.FavoritePlaceActivity
 
 
 class CollectionFragment : Fragment() {
@@ -27,7 +28,10 @@ class CollectionFragment : Fragment() {
 
         binding.apply {
             favoriteBtn.setOnClickListener {
-                Toast.makeText(requireContext(), "Favorite belum difungsikan", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Beralih ke Halaman favorite", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(requireContext(), FavoritePlaceActivity::class.java)
+                requireContext().startActivity(intent)
             }
 
             orderBtn.setOnClickListener {
