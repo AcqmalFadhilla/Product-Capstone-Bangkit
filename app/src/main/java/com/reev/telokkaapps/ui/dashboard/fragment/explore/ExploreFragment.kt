@@ -12,6 +12,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.reev.telokkaapps.R
 import com.reev.telokkaapps.databinding.FragmentExploreBinding
@@ -61,7 +63,7 @@ class ExploreFragment() : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        placePagingAdapter = PlaceItemPagingAdapter()
+        initPagingAdapter()
 
         binding.apply{// untuk filter
             filteringFragment = FilteringFragment()
@@ -195,6 +197,13 @@ class ExploreFragment() : Fragment(){
             })
         }
 
+    }
+    private fun initPagingAdapter(){
+        placePagingAdapter = PlaceItemPagingAdapter()
+        placePagingAdapter.addLoadStateListener {loadState->
+            binding.listSearchPlaceLayout.itemRecyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
+            binding.listSearchPlaceLayout.progressBarHome.isVisible = loadState.source.refresh is LoadState.Loading
+        }
     }
 
     companion object{

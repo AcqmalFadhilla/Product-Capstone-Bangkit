@@ -16,6 +16,15 @@
         android:text="Judul Sectionmu"
         android:paddingTop="8dp" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_home"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginVertical="20dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itemRecyclerView"
         android:layout_width="match_parent"

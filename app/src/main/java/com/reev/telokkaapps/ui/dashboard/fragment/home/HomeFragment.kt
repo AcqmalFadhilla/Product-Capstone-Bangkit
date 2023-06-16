@@ -13,7 +13,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -65,7 +67,8 @@ class HomeFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        placePagingAdapter = PlaceItemPagingAdapter()
+
+        initPagingAdapter()
 
         // set minimap
         minimapFragment = MinimapFragment()
@@ -261,6 +264,7 @@ class HomeFragment : Fragment(),
                             placePagingAdapter.retry()
                         }
                     )
+
                     adapter = placePagingAdapter
                     placePagingAdapter.submitData(lifecycle, data)
                 }
@@ -280,5 +284,11 @@ class HomeFragment : Fragment(),
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
-
+    private fun initPagingAdapter(){
+        placePagingAdapter = PlaceItemPagingAdapter()
+        placePagingAdapter.addLoadStateListener {loadState->
+            binding.layoutHomeFragment.listPlaceLayout.itemRecyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
+            binding.layoutHomeFragment.listPlaceLayout.progressBarHome.isVisible = loadState.source.refresh is LoadState.Loading
+        }
+    }
 }
