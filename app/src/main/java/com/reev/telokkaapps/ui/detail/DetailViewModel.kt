@@ -15,7 +15,9 @@ class DetailViewModel (
 
     fun getDetailTourismPlace(id: Int) = mTourismRepository.getDetailTourismPlaceWithId(id)
 
-
+    fun updateFavoriteStatusOfTourismPlace(id: Int, statusFavorite: Boolean){
+        mTourismRepository.updateFavoriteStatusOfTourismPlace(id, statusFavorite)
+    }
 
 
 

@@ -147,7 +147,16 @@ class DetailActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 favoriteButton.setOnClickListener {
-                    Toast.makeText(this@DetailActivity, "Fitur ini belum dapat digunakan", Toast.LENGTH_SHORT).show()
+                    if (data.isFavoritedPlace){
+                        viewModel.updateFavoriteStatusOfTourismPlace(data.placeId, false)
+                        Toast.makeText(this@DetailActivity, "Batal menyukai tempat wisata ini", Toast.LENGTH_SHORT).show()
+                        // tambahkan code untuk mengubah warna button
+
+                    }else{
+                        viewModel.updateFavoriteStatusOfTourismPlace(data.placeId, true)
+                        Toast.makeText(this@DetailActivity, "Menyukai tempat wisata ini", Toast.LENGTH_SHORT).show()
+                        // tambahkan code untuk mengubah warna button
+                    }
                 }
             }
         }
