@@ -116,6 +116,8 @@ class DetailActivity : AppCompatActivity() {
     }
     private fun updateInformation(data: TourismPlaceDetail){
 
+        isFavorite = data.isFavoritedPlace
+
         binding.apply {
             layoutActivityDetail.apply{
 
@@ -152,27 +154,16 @@ class DetailActivity : AppCompatActivity() {
                 // untuk fungsi favorite
                 favoriteColorBtnHandler(isFavorite)
                 favoriteButton.setOnClickListener {
-                    if (data.isFavoritedPlace){
+                    if (isFavorite){
                         viewModel.updateFavoriteStatusOfTourismPlace(data.placeId, false)
                         Toast.makeText(this@DetailActivity, "Batal menyukai tempat wisata ini", Toast.LENGTH_SHORT).show()
-                        // tambahkan code untuk mengubah warna button
 
                     }else{
                         viewModel.updateFavoriteStatusOfTourismPlace(data.placeId, true)
                         Toast.makeText(this@DetailActivity, "Menyukai tempat wisata ini", Toast.LENGTH_SHORT).show()
-                        // tambahkan code untuk mengubah warna button
                     }
                     isFavorite = !isFavorite
                     favoriteColorBtnHandler(isFavorite)
-
-                    // Buat Toast + Aksi Bila diperlukan (untuk simpan data ke database? idk)
-                    val message = if (isFavorite) {
-                        "Ditandai sebagai favorit"
-                        // Buat aksi untuk menambahkan favorit
-                    } else {
-                        "Tidak ditandai sebagai favorit"
-                        // Buat aksi untuk menghapus favorit
-                    }
                 }
             }
         }

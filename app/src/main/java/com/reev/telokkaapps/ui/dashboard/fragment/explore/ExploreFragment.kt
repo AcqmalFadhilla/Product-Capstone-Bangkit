@@ -24,7 +24,7 @@ import com.reev.telokkaapps.ui.dashboard.fragment.explore.filtering.FilteringFra
 import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemPagingAdapter
 
 
-class ExploreFragment() : Fragment(){
+class ExploreFragment : Fragment(){
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
     private lateinit var placePagingAdapter: PlaceItemPagingAdapter
@@ -73,9 +73,6 @@ class ExploreFragment() : Fragment(){
                 // buat aksi untuk memunculkan item filter
                 filteringFragment.show(childFragmentManager, "FilteringDialog")
             }
-
-
-
 
             // Aksi ketika ikon search diklik
             itemSearchBanner.searchField.setStartIconOnClickListener {
@@ -133,12 +130,6 @@ class ExploreFragment() : Fragment(){
             binding.listSearchPlaceLayout.sectionTitle.visibility = View.VISIBLE
 
         }
-//        childFragmentManager.setFragmentResultListener(FILTERING_DATA, this){key, bunddle->
-//            idCategory = bunddle.getInt("idCategory")
-//            city = bunddle.getString("city")
-//            orderRating = bunddle.getBoolean("city")
-//
-//        }
 
     }
 
