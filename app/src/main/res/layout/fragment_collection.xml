@@ -60,6 +60,32 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/order_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/blue_500"
+            card_view:cardCornerRadius="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:padding="15dp"
+                android:gravity="center_vertical"
+                android:text="Daftar Pemesanan Tiket"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_chevron_right"
+                card_view:drawableStartCompat="@drawable/ic_order"
+                card_view:drawableTint="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/settings_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

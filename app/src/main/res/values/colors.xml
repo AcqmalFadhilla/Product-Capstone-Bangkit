@@ -19,6 +19,8 @@
     <color name="secondary_warning_background">#FFF4E0</color>
     <color name="danger_background">#E15656</color>
     <color name="secondary_danger_backgorund">#FFF7F7</color>
+    <color name="success_background">#7BBB71</color>
+    <color name="secondary_success_backgorund">#EAFFE7</color>
 
     <color name="custom_tint">#8A8A8A</color>
 </resources>
