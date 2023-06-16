@@ -27,7 +27,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tempat Wisata Favorite Saya"
+                    android:text="Wisata Favorit"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold"

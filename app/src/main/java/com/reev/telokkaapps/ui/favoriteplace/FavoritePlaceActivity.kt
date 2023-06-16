@@ -3,7 +3,12 @@ package com.reev.telokkaapps.ui.favoriteplace
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.reev.telokkaapps.data.source.local.dummy.dummyplace.DummyPlacesData
 import com.reev.telokkaapps.databinding.ActivityFavoritePlaceBinding
+import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdapter
+import com.reev.telokkaapps.ui.favoriteplace.adapter.FavoritePlaceListAdapter
 
 class FavoritePlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoritePlaceBinding
@@ -17,7 +22,15 @@ class FavoritePlaceActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // untuk item list
-        binding.listPlanningLayout.sectionTitle.text = "Jadwal Kegiatan Wisata Anda"
+        binding.listPlanningLayout.sectionTitle.text = "Daftar Wisata Favorit Anda"
+
+        val dummyPlace = DummyPlacesData.dummyPlaces
+        val placeListAdapter = FavoritePlaceListAdapter(dummyPlace)
+
+        binding.listPlanningLayout.itemRecyclerView.apply {
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            adapter = placeListAdapter
+        }
 
     }
 
