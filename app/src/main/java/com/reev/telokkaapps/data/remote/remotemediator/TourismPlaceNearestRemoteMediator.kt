@@ -70,7 +70,6 @@ class TourismPlaceNearestRemoteMediator(
                         placeId = j.placeId,
                         isFavorited = false,
                         isRecommended = true,
-                        isSearched = false,
                         clickCount = 0
                         )
                     )

@@ -20,9 +20,6 @@ data class TourismPlaceInteraction(
     @ColumnInfo(name = "isRecommended")
     var isRecommended : Boolean,
 
-    @ColumnInfo(name = "isSearched")
-    var isSearched : Boolean,
-
     @ColumnInfo(name = "clickCount")
     var clickCount : Int = 0
 ) : Parcelable

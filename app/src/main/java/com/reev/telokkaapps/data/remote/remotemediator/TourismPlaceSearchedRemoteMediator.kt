@@ -60,8 +60,6 @@ class TourismPlaceSearchedRemoteMediator(
                 if (loadType == LoadType.REFRESH) {
                     Log.i("refresh", "TourismPlaceSearchedRemoteMediator deleteRemoteKeys....")
                     db.tourismPlaceSearchedRemoteKeysDao().deleteRemoteKeys()
-                    Log.i("refresh", "TourismPlaceSearchedRemoteMediator unSearchAllTourismPlace....")
-                    db.tourismPlaceInteractionDao().unSearchAllTourismPlace()
                 }
 
                 val newInteractionData = mutableListOf<TourismPlaceInteraction>()
@@ -71,11 +69,11 @@ class TourismPlaceSearchedRemoteMediator(
                         placeId = j.placeId,
                         isFavorited = false,
                         isRecommended = false,
-                        isSearched = true,
                         clickCount = 0
                         )
                     )
                 }
+                db.tourismPlaceDao().insertAll(data)
                 db.tourismPlaceInteractionDao().insertAll(newInteractionData)
 
                 val prevKey = if (page == 1) null else page - 1
@@ -86,10 +84,6 @@ class TourismPlaceSearchedRemoteMediator(
                     keys.add(newData)
                 }
                 db.tourismPlaceSearchedRemoteKeysDao().insertAll(keys)
-                db.tourismPlaceDao().insertAll(data)
-                data.forEach {
-                    db.tourismPlaceInteractionDao().searchTourismPlace(it.placeId)
-                }
             }
             return MediatorResult.Success(endOfPaginationReached = true)
         } catch (exception: Exception) {

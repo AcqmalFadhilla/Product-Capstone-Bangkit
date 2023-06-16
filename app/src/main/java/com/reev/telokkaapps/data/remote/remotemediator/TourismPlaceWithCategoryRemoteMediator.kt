@@ -18,7 +18,6 @@ class TourismPlaceWithCategoryRemoteMediator(
     private val category: String,
     private val categoryId: Int
 ) : RemoteMediator<Int, TourismPlaceItem>() {
-
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, TourismPlaceItem>
@@ -69,16 +68,15 @@ class TourismPlaceWithCategoryRemoteMediator(
                             placeId = j.placeId,
                             isFavorited = false,
                             isRecommended = false,
-                            isSearched = false,
                             clickCount = 0
                         )
                     )
                 }
-
                 if (page == 1){
                     db.tourismPlaceDao().deleteTourismPlaceWithCategoryId(categoryId)
                 }
-
+                db.tourismPlaceDao().insertAll(data)
+                db.tourismPlaceInteractionDao().insertAll(newInteractionData)
 
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -86,16 +84,10 @@ class TourismPlaceWithCategoryRemoteMediator(
                     TourismPlaceWithCategoryRemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 db.tourismPlaceWithCategoryRemoteKeysDao().insertAll(keys)
-                db.tourismPlaceDao().insertAll(data)
-                db.tourismPlaceInteractionDao().insertAll(newInteractionData)
-
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: Exception) {
-
             Log.i("dataResponse", "exception : ${exception.message}")
-
-
             return MediatorResult.Error(exception)
         }
 
@@ -117,8 +109,6 @@ class TourismPlaceWithCategoryRemoteMediator(
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
             db.tourismPlaceWithCategoryRemoteKeysDao().getRemoteKeysId(data.placeId)
         }
-
-
     }
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TourismPlaceItem>): TourismPlaceWithCategoryRemoteKeys? {
         return state.anchorPosition?.let { position ->
