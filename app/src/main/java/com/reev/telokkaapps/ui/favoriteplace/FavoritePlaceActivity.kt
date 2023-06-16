@@ -12,11 +12,13 @@ import com.reev.telokkaapps.ui.favoriteplace.adapter.FavoritePlaceListAdapter
 
 class FavoritePlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoritePlaceBinding
+    private lateinit var viewModel: FavoritePlaceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoritePlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = FavoritePlaceViewModel(application)
 
         // Menampilkan tombol kembali di action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -24,13 +26,16 @@ class FavoritePlaceActivity : AppCompatActivity() {
         // untuk item list
         binding.listPlanningLayout.sectionTitle.text = "Daftar Wisata Favorit Anda"
 
-        val dummyPlace = DummyPlacesData.dummyPlaces
-        val placeListAdapter = FavoritePlaceListAdapter(dummyPlace)
+        viewModel.getAllTourismPlaceFavorited().observe(this, {
+            binding.listPlanningLayout.itemRecyclerView.apply {
+                val placeListAdapter = FavoritePlaceListAdapter(it)
 
-        binding.listPlanningLayout.itemRecyclerView.apply {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            adapter = placeListAdapter
-        }
+                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                adapter = placeListAdapter
+            }
+        })
+
+
 
     }
 

@@ -19,7 +19,7 @@ import com.reev.telokkaapps.ui.dashboard.fragment.home.adapter.PlaceItemListAdap
 import com.reev.telokkaapps.ui.detail.DetailActivity
 import com.reev.telokkaapps.utility.Constant
 
-class FavoritePlaceListAdapter(private val dataList: List<PlaceAndTourismCategory>) :
+class FavoritePlaceListAdapter(private val dataList: List<TourismPlaceItem>) :
     RecyclerView.Adapter<FavoritePlaceListAdapter.ViewHolder>() {
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -29,15 +29,19 @@ class FavoritePlaceListAdapter(private val dataList: List<PlaceAndTourismCategor
                 itemView.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
+
                         val place = dataList[position]
                         place.let {
-                            Toast.makeText(itemView.context, "Mencoba menghapus ${place.tourismPlace.placeName}", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(itemView.context, DetailActivity::class.java).apply {
+                                putExtra(Constant.DETAIL_PLACE, it.placeId)
+                            }
+                            itemView.context.startActivity(intent)
                         }
                     }
                 }
             }
 
-            fun bind(item: PlaceAndTourismCategory) {
+            fun bind(item: TourismPlaceItem) {
                 binding.apply{
 
                     val color = ContextCompat.getColor(binding.root.context , R.color.blue_200)
@@ -49,13 +53,13 @@ class FavoritePlaceListAdapter(private val dataList: List<PlaceAndTourismCategor
                     drawable.start()
 
                     Glide.with(itemView.context)
-                        .load(item.tourismPlace.placePhotoUrl)
+                        .load(item.placePhotoUrl)
                         .placeholder(drawable)
                         .into(placeImg)
 
-                    placeName.text = item.tourismPlace.placeName
-                    placeCategory.text = "-"
-                    placeRating.text = item.tourismPlace.placeRating.toString()
+                    placeName.text = item.placeName
+                    placeCategory.text = item.placeCategory
+                    placeRating.text = item.placeRating.toString()
                 }
             }
         }

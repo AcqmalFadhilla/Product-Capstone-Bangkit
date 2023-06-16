@@ -83,35 +83,35 @@ class DetailActivity : AppCompatActivity() {
 
     }
     private fun getData(id: Int){
-        if (InternetConnection.checkConnection(applicationContext)){
-            viewModel.getNewDetailTourismPlace(id).observe(this, { result->
-                if (result != null){
-                    when(result){
-                        is Result.Loading -> {
-                            // Tampilan ketika Loading
-                            binding.itemButton.button2.isClickable = false
-                        }
-                        is Result.Success ->{
-                            val data = result.data[0]
-                            placeId = data.placeId
-                            dataTourismPlace = data
-                            updateInformation(data)
-                            binding.itemButton.button2.isClickable = false
-                        }
-                        is Result.Error -> {
-                            Toast.makeText(this, "Terjadi kesalahan ${result.error}", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            })
-        }else{
+//        if (InternetConnection.checkConnection(applicationContext)){
+//            viewModel.getNewDetailTourismPlace(id).observe(this, { result->
+//                if (result != null){
+//                    when(result){
+//                        is Result.Loading -> {
+//                            // Tampilan ketika Loading
+//                            binding.itemButton.button2.isClickable = false
+//                        }
+//                        is Result.Success ->{
+//                            val data = result.data[0]
+//                            placeId = data.placeId
+//                            dataTourismPlace = data
+//                            updateInformation(data)
+//                            binding.itemButton.button2.isClickable = false
+//                        }
+//                        is Result.Error -> {
+//                            Toast.makeText(this, "Terjadi kesalahan ${result.error}", Toast.LENGTH_LONG).show()
+//                        }
+//                    }
+//                }
+//            })
+//        }else{
             viewModel.getDetailTourismPlace(id).observe(this,{list->
                 var data = list.get(0)
                 dataTourismPlace = data
                 updateInformation(data)
             })
 
-        }
+//        }
 
     }
     private fun updateInformation(data: TourismPlaceDetail){
