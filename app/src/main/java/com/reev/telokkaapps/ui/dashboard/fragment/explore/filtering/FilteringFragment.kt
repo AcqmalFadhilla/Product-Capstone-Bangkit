@@ -48,7 +48,6 @@ class FilteringFragment : BottomSheetDialogFragment() {
         binding.apply {
 
             filterConfirmationButton.setOnClickListener {
-                Toast.makeText(requireContext(), "Berhasil menerapkan filter", Toast.LENGTH_SHORT).show()
 
                 // Aksi untuk menyimpan kota/kabupaten yang dipilih
 

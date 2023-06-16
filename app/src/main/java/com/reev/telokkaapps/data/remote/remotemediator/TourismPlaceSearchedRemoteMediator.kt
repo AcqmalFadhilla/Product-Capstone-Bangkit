@@ -9,10 +9,8 @@ import androidx.room.withTransaction
 import com.reev.telokkaapps.data.local.database.TourismRoomDatabase
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.entity.TourismPlaceInteraction
-import com.reev.telokkaapps.data.local.database.entity.TourismPlaceNearestRemoteKeys
 import com.reev.telokkaapps.data.local.database.entity.TourismPlaceSearchedRemoteKeys
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
-import com.reev.telokkaapps.data.remote.ApiService
 import com.reev.telokkaapps.data.remote.ApiServiceForModel
 
 @OptIn(ExperimentalPagingApi::class)

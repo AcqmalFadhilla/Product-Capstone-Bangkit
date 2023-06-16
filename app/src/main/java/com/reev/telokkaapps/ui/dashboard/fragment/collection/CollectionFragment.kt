@@ -28,7 +28,6 @@ class CollectionFragment : Fragment() {
 
         binding.apply {
             favoriteBtn.setOnClickListener {
-                Toast.makeText(requireContext(), "Beralih ke Halaman favorite", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(requireContext(), FavoritePlaceActivity::class.java)
                 requireContext().startActivity(intent)

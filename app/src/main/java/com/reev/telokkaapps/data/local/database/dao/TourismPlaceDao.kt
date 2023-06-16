@@ -1,13 +1,11 @@
 package com.reev.telokkaapps.data.local.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.reev.telokkaapps.data.local.database.entity.TourismPlace
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceDetail
 import com.reev.telokkaapps.data.local.database.model.TourismPlaceItem
-import com.reev.telokkaapps.data.remote.response.TourismPlaceResponse
 
 @Dao
 interface TourismPlaceDao {

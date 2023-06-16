@@ -1,7 +1,5 @@
 package com.reev.telokkaapps.data.local.database.model
 
-import java.net.Inet4Address
-
 data class TourismPlanDetail(
     val planId : Int,
     val planTitle : String,

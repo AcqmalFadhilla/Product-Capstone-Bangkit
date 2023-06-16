@@ -1,11 +1,5 @@
 package com.reev.telokkaapps.utility
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.reev.telokkaapps.data.repository.PlaceRepository
-import com.reev.telokkaapps.ui.dashboard.fragment.home.HomeViewModel
-import com.reev.telokkaapps.ui.dashboard.fragment.planning.PlanningViewModel
-import com.reev.telokkaapps.ui.detail.DetailViewModel
 import com.reev.telokkaapps.ui.formplanning.FormPlanningViewModel
 
 //class ViewModelFactory(private val repository: PlaceRepository)
