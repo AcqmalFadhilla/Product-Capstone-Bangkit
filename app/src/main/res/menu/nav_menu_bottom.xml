@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:title="@string/nav_beranda"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/exploreFragment"
+        android:title="@string/nav_explore"
+        android:icon="@drawable/ic_explore"/>
+    <item
+        android:id="@+id/planningFragment"
+        android:title="@string/nav_planning"
+        android:icon="@drawable/ic_planning"/>
+    <item
+        android:id="@+id/collectionFragment"
+        android:title="@string/nav_collection"
+        android:icon="@drawable/ic_collection"/>
+</menu>
