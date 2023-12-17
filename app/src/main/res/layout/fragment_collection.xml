@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.dashboard.fragment.collection.CollectionFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="231dp"
+            android:layout_height="152dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/te_lokka" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Version 1.0 beta" />
+
+        <View
+            android:id="@+id/v_divider2"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginVertical="30dp"
+            android:background="@color/secondary_text_color"/>
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/favorite_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/blue_500"
+            card_view:cardCornerRadius="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:padding="15dp"
+                android:gravity="center_vertical"
+                android:text="Favorit"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_chevron_right"
+                card_view:drawableStartCompat="@drawable/ic_love"
+                card_view:drawableTint="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/order_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/blue_500"
+            card_view:cardCornerRadius="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:padding="15dp"
+                android:gravity="center_vertical"
+                android:text="Daftar Pemesanan Tiket"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_chevron_right"
+                card_view:drawableStartCompat="@drawable/ic_order"
+                card_view:drawableTint="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/settings_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/blue_500"
+            card_view:cardCornerRadius="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:padding="15dp"
+                android:gravity="center_vertical"
+                android:text="Setelan"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_chevron_right"
+                card_view:drawableStartCompat="@drawable/ic_settings"
+                card_view:drawableTint="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/about_us_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/blue_500"
+            card_view:cardCornerRadius="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:padding="15dp"
+                android:gravity="center_vertical"
+                android:text="Tentang Kami"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                card_view:drawableEndCompat="@drawable/ic_chevron_right"
+                card_view:drawableStartCompat="@drawable/ic_info"
+                card_view:drawableTint="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>
